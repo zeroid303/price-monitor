@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+
+# 크롤링 결과 (로컬 데이터)
+output/
+
+# 로그
+*.log
+
+# 임시/디버그 파일
+output/_*.txt

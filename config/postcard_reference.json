@@ -1,0 +1,611 @@
+{
+  "description": "2사 엽서 용지 매칭 참조 데이터. 명함천국 기준으로 비즈하우스 엽서 용지 매칭.",
+  "updated_at": "2026-03-23",
+  "crawled_dates": {
+    "ecard21": "2026-03-23",
+    "bizhows": "2026-03-23"
+  },
+  "price_basis": {
+    "ecard21": "200매 양면칼라 100x148mm 기준 (VAT 포함)",
+    "bizhows": "200매 102x152mm 기준 (VAT 별도)"
+  },
+  "size_note": "명함천국 100x148mm = 비즈하우스 102x152mm (동일 규격 취급, 약간의 재단 여유 차이)",
+  "papers": [
+    {
+      "paper_id": "postcard_marshmallow_209",
+      "paper_name_ko": "머쉬멜로우 209g",
+      "paper_type": "marshmallow",
+      "weight_gsm": 209,
+      "coating": "비코팅",
+      "material_group": "marshmallow",
+      "match_confidence": "high",
+      "ecard21": {
+        "paper_code": "ppk33",
+        "paper_name": "머쉬멜로우 209g / 비코팅",
+        "size": "100 x 148 mm",
+        "quantity": 200,
+        "price_200": 48000
+      },
+      "bizhows": {
+        "paper_seq": 120688,
+        "paper_name": "머쉬멜로우 209g",
+        "size": "102x152mm",
+        "quantity": 200,
+        "price_200": 37700
+      },
+      "note": "동일 용지. 명함천국 VAT포함, 비즈하우스 VAT별도(VAT포함 시 41,470원)."
+    },
+    {
+      "paper_id": "postcard_bannuvo_250_rendezvous_240",
+      "paper_name_ko": "반누보화이트 250g / 랑데뷰 240g",
+      "paper_type": "bannuvo_rendezvous",
+      "weight_gsm": "250/240",
+      "coating": "비코팅",
+      "material_group": "bannuvo_rendezvous",
+      "match_confidence": "partial",
+      "ecard21": {
+        "paper_code": "ppkhr",
+        "paper_name": "반누보화이트 250g / 비코팅",
+        "size": "100 x 148 mm",
+        "quantity": 200,
+        "price_200": 60000
+      },
+      "bizhows": {
+        "paper_seq": 120687,
+        "paper_name": "랑데뷰 240g",
+        "size": "102x152mm",
+        "quantity": 200,
+        "price_200": 40000
+      },
+      "note": "반누보=랑데뷰 동일 계열(삼화제지). 평량 차이(250g vs 240g). 명함천국 VAT포함, 비즈하우스 VAT별도(VAT포함 시 44,000원)."
+    },
+    {
+      "paper_id": "postcard_hwirare_216_linen_216",
+      "paper_name_ko": "휘라레 216g / 린넨커버 216g",
+      "paper_type": "linen_vellure",
+      "weight_gsm": 216,
+      "coating": "비코팅",
+      "material_group": "linen_vellure",
+      "match_confidence": "high",
+      "ecard21": {
+        "paper_code": "ppk30",
+        "paper_name": "휘라레 216g / 비코팅",
+        "size": "100 x 148 mm",
+        "quantity": 200,
+        "price_200": 48000
+      },
+      "bizhows": {
+        "paper_seq": 129789,
+        "paper_name": "린넨커버 216g",
+        "size": "102x152mm",
+        "quantity": 200,
+        "price_200": 48400
+      },
+      "note": "휘라레=린넨커버 동일 계열(십자 격자 엠보싱). 동일 평량. 명함천국 VAT포함, 비즈하우스 VAT별도(VAT포함 시 53,240원)."
+    },
+    {
+      "paper_id": "postcard_concept_285_250",
+      "paper_name_ko": "컨셉 285g / 컨셉 블루펄 250g",
+      "paper_type": "concept_bluepearl",
+      "weight_gsm": "285/250",
+      "coating": "비코팅",
+      "material_group": "concept_bluepearl",
+      "match_confidence": "partial",
+      "ecard21": {
+        "paper_code": "ppkfd",
+        "paper_name": "컨셉 285g / 비코팅",
+        "size": "100 x 148 mm",
+        "quantity": 200,
+        "price_200": 64000
+      },
+      "bizhows": {
+        "paper_seq": 129791,
+        "paper_name": "컨셉 블루펄 250g",
+        "size": "102x152mm",
+        "quantity": 200,
+        "price_200": 49100
+      },
+      "note": "같은 컨셉 블루펄 계열이나 평량 차이(285g vs 250g). 명함천국 VAT포함, 비즈하우스 VAT별도(VAT포함 시 54,010원)."
+    },
+    {
+      "paper_id": "postcard_stardream_240_starlight_200",
+      "paper_name_ko": "스타드림 240g / 스타라이트 펄 200g",
+      "paper_type": "stardream",
+      "weight_gsm": "240/200",
+      "coating": "비코팅",
+      "material_group": "stardream_pearl",
+      "match_confidence": "partial",
+      "ecard21": {
+        "paper_code": "ppk37",
+        "paper_name": "스타드림 240g / 비코팅",
+        "size": "100 x 148 mm",
+        "quantity": 200,
+        "price_200": 64000
+      },
+      "bizhows": {
+        "paper_seq": 129790,
+        "paper_name": "스타라이트 펄 200g",
+        "size": "102x152mm",
+        "quantity": 200,
+        "price_200": 45300
+      },
+      "note": "스타드림/스타라이트 모두 메탈릭 펄지 계열. 브랜드/평량 차이(240g vs 200g). 명함천국 VAT포함, 비즈하우스 VAT별도(VAT포함 시 49,830원)."
+    },
+    {
+      "paper_id": "postcard_snow_216_coated_art250",
+      "paper_name_ko": "스노우화이트 216g 코팅 / 아트지 250g",
+      "paper_type": "coated_white",
+      "weight_gsm": "216/250",
+      "coating": "코팅",
+      "material_group": "coated_white",
+      "match_confidence": "partial",
+      "ecard21": {
+        "paper_code": "ppk16",
+        "paper_name": "스노우화이트 216g / 코팅 [일반코팅명함]",
+        "size": "100 x 148 mm",
+        "quantity": 200,
+        "price_200": 36000
+      },
+      "bizhows": {
+        "paper_seq": 120685,
+        "paper_name": "아트지 250g",
+        "size": "102x152mm",
+        "quantity": 200,
+        "price_200": 19500
+      },
+      "note": "코팅 백색지 계열. 스노우화이트 코팅과 아트지 모두 양면코팅 백색지. 용지/평량 다름. 명함천국 VAT포함, 비즈하우스 VAT별도(VAT포함 시 21,450원)."
+    },
+    {
+      "paper_id": "postcard_snow_300_matte_art300",
+      "paper_name_ko": "스노우화이트 300g 무광코팅 / 아트지 300g",
+      "paper_type": "coated_white",
+      "weight_gsm": 300,
+      "coating": "무광코팅",
+      "material_group": "coated_white_300",
+      "match_confidence": "partial",
+      "ecard21": {
+        "paper_code": "ppk18",
+        "paper_name": "스노우화이트 300g / 무광코팅",
+        "size": "100 x 148 mm",
+        "quantity": 200,
+        "price_200": 48000
+      },
+      "bizhows": {
+        "paper_seq": 129787,
+        "paper_name": "아트지 300g",
+        "size": "102x152mm",
+        "quantity": 200,
+        "price_200": 20500
+      },
+      "note": "코팅 백색지 300g 계열. 스노우화이트 무광코팅과 아트지 모두 코팅 백색지. 명함천국 VAT포함, 비즈하우스 VAT별도(VAT포함 시 22,550원)."
+    },
+    {
+      "paper_id": "postcard_nuvo_209",
+      "paper_name_ko": "누브지 209g",
+      "paper_type": "nuovo",
+      "weight_gsm": 209,
+      "coating": "비코팅",
+      "material_group": "nuovo",
+      "match_confidence": "ecard21_only",
+      "ecard21": {
+        "paper_code": "ppk31",
+        "paper_name": "1위. 누브지 209g / 비코팅",
+        "size": "100 x 148 mm",
+        "quantity": 200,
+        "price_200": 48000
+      },
+      "bizhows": null,
+      "note": "명함천국 인기 1위 용지. 비즈하우스에 대응 용지 없음."
+    },
+    {
+      "paper_id": "postcard_extra_nuvo_350",
+      "paper_name_ko": "엑스트라 누브 350g",
+      "paper_type": "nuovo",
+      "weight_gsm": 350,
+      "coating": "비코팅",
+      "material_group": "nuovo",
+      "match_confidence": "ecard21_only",
+      "ecard21": {
+        "paper_code": "ppkc6",
+        "paper_name": "2위. 엑스트라 누브 350g / 비코팅",
+        "size": "100 x 148 mm",
+        "quantity": 200,
+        "price_200": 70400
+      },
+      "bizhows": null,
+      "note": "명함천국 인기 2위. 비즈하우스에 대응 용지 없음."
+    },
+    {
+      "paper_id": "postcard_scotland_220",
+      "paper_name_ko": "스코틀랜드 220g",
+      "paper_type": "scotland",
+      "weight_gsm": 220,
+      "coating": "비코팅",
+      "material_group": "scotland",
+      "match_confidence": "ecard21_only",
+      "ecard21": {
+        "paper_code": "ppk34",
+        "paper_name": "스코틀랜드 220g / 비코팅",
+        "size": "100 x 148 mm",
+        "quantity": 200,
+        "price_200": 56000
+      },
+      "bizhows": null,
+      "note": "비즈하우스에 엽서 대응 용지 없음."
+    },
+    {
+      "paper_id": "postcard_yupo_250",
+      "paper_name_ko": "유포지 250g",
+      "paper_type": "yupo",
+      "weight_gsm": 250,
+      "coating": "비코팅",
+      "material_group": "yupo",
+      "match_confidence": "ecard21_only",
+      "ecard21": {
+        "paper_code": "ppk38",
+        "paper_name": "유포지 250g / 비코팅",
+        "size": "100 x 148 mm",
+        "quantity": 200,
+        "price_200": 56000
+      },
+      "bizhows": null,
+      "note": "합성지(방수). 비즈하우스 엽서에 없음."
+    },
+    {
+      "paper_id": "postcard_kicala_metallic_200",
+      "paper_name_ko": "키칼라메탈릭 200g",
+      "paper_type": "kicala_metallic",
+      "weight_gsm": 200,
+      "coating": "비코팅",
+      "material_group": "kicala_metallic",
+      "match_confidence": "ecard21_only",
+      "ecard21": {
+        "paper_code": "ppk39",
+        "paper_name": "키칼라메탈릭 200g / 비코팅",
+        "size": "100 x 148 mm",
+        "quantity": 200,
+        "price_200": 64000
+      },
+      "bizhows": null,
+      "note": "비즈하우스 엽서에 없음."
+    },
+    {
+      "paper_id": "postcard_grace_256",
+      "paper_name_ko": "그레이스 256g",
+      "paper_type": "grace",
+      "weight_gsm": 256,
+      "coating": "비코팅",
+      "material_group": "grace",
+      "match_confidence": "ecard21_only",
+      "ecard21": {
+        "paper_code": "ppk35",
+        "paper_name": "그레이스 256g / 비코팅",
+        "size": "100 x 148 mm",
+        "quantity": 200,
+        "price_200": 48000
+      },
+      "bizhows": null,
+      "note": "비즈하우스 엽서에 없음."
+    },
+    {
+      "paper_id": "postcard_crystal_pearl_235",
+      "paper_name_ko": "크리스탈펄 235g",
+      "paper_type": "crystal_pearl",
+      "weight_gsm": 235,
+      "coating": "비코팅",
+      "material_group": "crystal_pearl",
+      "match_confidence": "ecard21_only",
+      "ecard21": {
+        "paper_code": "ppknm",
+        "paper_name": "크리스탈펄(팝셋대체) 235g / 비코팅",
+        "size": "100 x 148 mm",
+        "quantity": 200,
+        "price_200": 64000
+      },
+      "bizhows": null,
+      "note": "비즈하우스 엽서에 없음."
+    },
+    {
+      "paper_id": "postcard_stargold_250",
+      "paper_name_ko": "스타골드 250g",
+      "paper_type": "stargold",
+      "weight_gsm": 250,
+      "coating": "비코팅",
+      "material_group": "stargold",
+      "match_confidence": "ecard21_only",
+      "ecard21": {
+        "paper_code": "ppk79",
+        "paper_name": "스타골드 250g / 비코팅",
+        "size": "100 x 148 mm",
+        "quantity": 200,
+        "price_200": 56000
+      },
+      "bizhows": null,
+      "note": "비즈하우스 엽서에 없음."
+    },
+    {
+      "paper_id": "postcard_chameleon_200",
+      "paper_name_ko": "카멜레온 200g",
+      "paper_type": "chameleon",
+      "weight_gsm": 200,
+      "coating": "비코팅",
+      "material_group": "chameleon",
+      "match_confidence": "ecard21_only",
+      "ecard21": {
+        "paper_code": "ppk81",
+        "paper_name": "카멜레온 200g / 비코팅",
+        "size": "100 x 148 mm",
+        "quantity": 200,
+        "price_200": 56000
+      },
+      "bizhows": null,
+      "note": "비즈하우스 엽서에 없음."
+    },
+    {
+      "paper_id": "postcard_kicala_gold_200",
+      "paper_name_ko": "키칼라골드 200g",
+      "paper_type": "kicala_gold",
+      "weight_gsm": 200,
+      "coating": "비코팅",
+      "material_group": "kicala_gold",
+      "match_confidence": "ecard21_only",
+      "ecard21": {
+        "paper_code": "ppk98",
+        "paper_name": "키칼라골드 200g / 비코팅",
+        "size": "100 x 148 mm",
+        "quantity": 200,
+        "price_200": 64000
+      },
+      "bizhows": null,
+      "note": "비즈하우스 엽서에 없음."
+    },
+    {
+      "paper_id": "postcard_kraft_250",
+      "paper_name_ko": "크라프트팩 250g",
+      "paper_type": "kraft",
+      "weight_gsm": 250,
+      "coating": "비코팅",
+      "material_group": "kraft",
+      "match_confidence": "ecard21_only",
+      "ecard21": {
+        "paper_code": "ppkh7",
+        "paper_name": "크라프트팩 250g / 비코팅",
+        "size": "100 x 148 mm",
+        "quantity": 200,
+        "price_200": 48000
+      },
+      "bizhows": null,
+      "note": "비즈하우스 엽서에 없음."
+    },
+    {
+      "paper_id": "postcard_arte_310",
+      "paper_name_ko": "아르떼 310g",
+      "paper_type": "arte",
+      "weight_gsm": 310,
+      "coating": "비코팅",
+      "material_group": "arte",
+      "match_confidence": "ecard21_only",
+      "ecard21": {
+        "paper_code": "ppkw5",
+        "paper_name": "아르떼 310g / 비코팅",
+        "size": "100 x 148 mm",
+        "quantity": 200,
+        "price_200": 60000
+      },
+      "bizhows": null,
+      "note": "비즈하우스 엽서에 없음."
+    },
+    {
+      "paper_id": "postcard_extra_marshmallow_350",
+      "paper_name_ko": "엑스트라 머쉬 350g",
+      "paper_type": "marshmallow",
+      "weight_gsm": 350,
+      "coating": "비코팅",
+      "material_group": "marshmallow",
+      "match_confidence": "ecard21_only",
+      "ecard21": {
+        "paper_code": "ppkc5",
+        "paper_name": "엑스트라 머쉬 350g / 비코팅",
+        "size": "100 x 148 mm",
+        "quantity": 200,
+        "price_200": 70400
+      },
+      "bizhows": null,
+      "note": "비즈하우스 엽서에 없음."
+    },
+    {
+      "paper_id": "postcard_extra_linen_350",
+      "paper_name_ko": "엑스트라 린넨 350g",
+      "paper_type": "linen_vellure",
+      "weight_gsm": 350,
+      "coating": "비코팅",
+      "material_group": "linen_vellure",
+      "match_confidence": "ecard21_only",
+      "ecard21": {
+        "paper_code": "ppkc7",
+        "paper_name": "엑스트라 린넨 350g / 비코팅",
+        "size": "100 x 148 mm",
+        "quantity": 200,
+        "price_200": 70400
+      },
+      "bizhows": null,
+      "note": "비즈하우스 엽서에 없음."
+    },
+    {
+      "paper_id": "postcard_extra_eggwhite_400",
+      "paper_name_ko": "엑스트라 에그화이트 400g",
+      "paper_type": "eggwhite",
+      "weight_gsm": 400,
+      "coating": "비코팅",
+      "material_group": "eggwhite",
+      "match_confidence": "ecard21_only",
+      "ecard21": {
+        "paper_code": "ppkv6",
+        "paper_name": "엑스트라 에그화이트 400g / 비코팅",
+        "size": "100 x 148 mm",
+        "quantity": 200,
+        "price_200": 70400
+      },
+      "bizhows": null,
+      "note": "비즈하우스 엽서에 없음."
+    },
+    {
+      "paper_id": "postcard_extra_stardream_340",
+      "paper_name_ko": "엑스트라 스타드림 340g",
+      "paper_type": "stardream",
+      "weight_gsm": 340,
+      "coating": "비코팅",
+      "material_group": "stardream",
+      "match_confidence": "ecard21_only",
+      "ecard21": {
+        "paper_code": "ppkc8",
+        "paper_name": "엑스트라 스타드림 340g / 비코팅",
+        "size": "100 x 148 mm",
+        "quantity": 200,
+        "price_200": 70400
+      },
+      "bizhows": null,
+      "note": "비즈하우스 엽서에 없음."
+    },
+    {
+      "paper_id": "postcard_extra_tintoretto_350",
+      "paper_name_ko": "엑스트라 띤또레또 350g",
+      "paper_type": "tintoretto",
+      "weight_gsm": 350,
+      "coating": "비코팅",
+      "material_group": "felt_tintoretto",
+      "match_confidence": "ecard21_only",
+      "ecard21": {
+        "paper_code": "ppkdc",
+        "paper_name": "엑스트라 띤또레또 350g / 비코팅",
+        "size": "100 x 148 mm",
+        "quantity": 200,
+        "price_200": 70400
+      },
+      "bizhows": null,
+      "note": "비즈하우스 엽서에 없음."
+    },
+    {
+      "paper_id": "postcard_extra_mattewhite_350",
+      "paper_name_ko": "엑스트라 매트화이트 350g",
+      "paper_type": "matte_white",
+      "weight_gsm": 350,
+      "coating": "비코팅",
+      "material_group": "matte_white",
+      "match_confidence": "ecard21_only",
+      "ecard21": {
+        "paper_code": "ppkfe",
+        "paper_name": "엑스트라 매트화이트 350g / 비코팅",
+        "size": "100 x 148 mm",
+        "quantity": 200,
+        "price_200": 70400
+      },
+      "bizhows": null,
+      "note": "비즈하우스 엽서에 없음."
+    },
+    {
+      "paper_id": "postcard_snow_250_uncoated",
+      "paper_name_ko": "스노우화이트 250g 비코팅",
+      "paper_type": "snow_white",
+      "weight_gsm": 250,
+      "coating": "비코팅",
+      "material_group": "snow_uncoated",
+      "match_confidence": "ecard21_only",
+      "ecard21": {
+        "paper_code": "ppk17_1",
+        "paper_name": "스노우화이트 250g / 비코팅",
+        "size": "100 x 148 mm",
+        "quantity": 200,
+        "price_200": 36000
+      },
+      "bizhows": null,
+      "note": "비즈하우스 엽서에 없음."
+    },
+    {
+      "paper_id": "postcard_snow_250_matte",
+      "paper_name_ko": "스노우화이트 250g 무광코팅",
+      "paper_type": "snow_white",
+      "weight_gsm": 250,
+      "coating": "무광코팅",
+      "material_group": "snow_coated_matte",
+      "match_confidence": "ecard21_only",
+      "ecard21": {
+        "paper_code": "ppk17",
+        "paper_name": "스노우화이트 250g / 무광코팅",
+        "size": "100 x 148 mm",
+        "quantity": 200,
+        "price_200": 40000
+      },
+      "bizhows": null,
+      "note": "비즈하우스 엽서에 없음."
+    },
+    {
+      "paper_id": "postcard_snow_300_gloss",
+      "paper_name_ko": "스노우화이트 300g 유광코팅",
+      "paper_type": "snow_white",
+      "weight_gsm": 300,
+      "coating": "유광코팅",
+      "material_group": "snow_coated_gloss",
+      "match_confidence": "ecard21_only",
+      "ecard21": {
+        "paper_code": "ppks7",
+        "paper_name": "스노우화이트 300g / 유광코팅",
+        "size": "100 x 148 mm",
+        "quantity": 200,
+        "price_200": 48000
+      },
+      "bizhows": null,
+      "note": "비즈하우스 엽서에 없음."
+    },
+    {
+      "paper_id": "postcard_snow_400_matte",
+      "paper_name_ko": "스노우화이트 400g 무광코팅",
+      "paper_type": "snow_white",
+      "weight_gsm": 400,
+      "coating": "무광코팅",
+      "material_group": "snow_coated_matte",
+      "match_confidence": "ecard21_only",
+      "ecard21": {
+        "paper_code": "ppkt5",
+        "paper_name": "스노우화이트 400g / 무광코팅",
+        "size": "100 x 148 mm",
+        "quantity": 200,
+        "price_200": 56000
+      },
+      "bizhows": null,
+      "note": "비즈하우스 엽서에 없음."
+    },
+    {
+      "paper_id": "postcard_rendezvous_310",
+      "paper_name_ko": "랑데뷰 310g",
+      "paper_type": "bannuvo_rendezvous",
+      "weight_gsm": 310,
+      "coating": "비코팅",
+      "material_group": "bannuvo_rendezvous",
+      "match_confidence": "bizhows_only",
+      "ecard21": null,
+      "bizhows": {
+        "paper_seq": 129788,
+        "paper_name": "랑데뷰 310g",
+        "size": "102x152mm",
+        "quantity": 200,
+        "price_200": 44000
+      },
+      "note": "비즈하우스에만 있는 랑데뷰 310g. 명함천국에 대응 용지 없음."
+    }
+  ],
+  "summary": {
+    "total_ecard21_papers": 29,
+    "total_bizhows_papers": 8,
+    "matched_pairs": 7,
+    "ecard21_only": 22,
+    "bizhows_only": 1,
+    "match_details": {
+      "high": 2,
+      "partial": 5,
+      "ecard21_only": 22,
+      "bizhows_only": 1
+    }
+  },
+  "vat_note": "명함천국 가격은 VAT 포함, 비즈하우스 가격은 VAT 별도. 비즈하우스 VAT 포함가 = 표시가격 x 1.1"
+}

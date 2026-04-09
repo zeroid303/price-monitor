@@ -1,0 +1,206 @@
+{
+  "description": "2사 전단지 용지 매칭 참조 데이터. 명함천국(ecard21) vs 비즈하우스(bizhows) 전단지 가격 비교.",
+  "updated_at": "2026-03-23",
+  "crawled_dates": {
+    "ecard21": "2026-03-23",
+    "bizhows": "2026-03-23"
+  },
+  "price_basis": {
+    "ecard21_일반합판": "4000매, 양면 칼라, A4 기준",
+    "ecard21_고급독판": "500매, 양면 칼라, A4 기준",
+    "bizhows_대량특가": "4000매, 양면, A4 기준",
+    "bizhows_소량고급": "500매, 양면, A4 기준"
+  },
+  "matching_rules": {
+    "quantity_matching": "같은 수량끼리 비교: 4000매↔4000매, 500매↔500매",
+    "paper_matching": "아트지↔아트지, 스노우지↔스노우지, 모조지↔모조지",
+    "bizhows_discount": "할인가 있으면 할인가 사용"
+  },
+  "matches": [
+    {
+      "match_id": "4000_아트지_90g",
+      "paper_type": "아트지",
+      "paper_weight": "90g",
+      "quantity": 4000,
+      "ecard21": {
+        "product": "일반 합판 전단지",
+        "paper_name": "아트지 90g",
+        "paper_code": "ppk90",
+        "price": 68900
+      },
+      "bizhows": {
+        "product": "대량 특가 전단지 (양면)",
+        "paper_name": "일반 광택용지 (아트지 90g)",
+        "price": 79300,
+        "original_price": 79300,
+        "discount_price": null
+      },
+      "price_diff": 10400,
+      "ecard21_cheaper": true,
+      "match_confidence": "high"
+    },
+    {
+      "match_id": "4000_아트지_150g",
+      "paper_type": "아트지",
+      "paper_weight": "150g",
+      "quantity": 4000,
+      "ecard21": {
+        "product": null,
+        "paper_name": null,
+        "paper_code": null,
+        "price": null,
+        "note": "일반합판/프리미엄/리플렛/마이볼/대량용에 아트지 150g 4000매 제품 없음"
+      },
+      "bizhows": {
+        "product": "대량 특가 전단지 (양면)",
+        "paper_name": "고급 광택용지 (아트지 150g)",
+        "price": 123590,
+        "original_price": 123590,
+        "discount_price": null
+      },
+      "price_diff": null,
+      "ecard21_cheaper": null,
+      "match_confidence": "bizhows_only_at_4000"
+    },
+    {
+      "match_id": "4000_모조지_80g",
+      "paper_type": "모조지",
+      "paper_weight": "80g",
+      "quantity": 4000,
+      "ecard21": {
+        "product": "일반 합판 전단지",
+        "paper_name": "모조지 80g",
+        "paper_code": "ppkt3",
+        "price": 84000
+      },
+      "bizhows": {
+        "product": "대량 특가 전단지 (양면)",
+        "paper_name": "모조지 80g",
+        "price": 102320,
+        "original_price": 127900,
+        "discount_price": 102320
+      },
+      "price_diff": 18320,
+      "ecard21_cheaper": true,
+      "match_confidence": "high"
+    },
+    {
+      "match_id": "500_아트지_150g",
+      "paper_type": "아트지",
+      "paper_weight": "150g",
+      "quantity": 500,
+      "ecard21": {
+        "product": "고급 독판 전단지",
+        "paper_name": "아트지 150g",
+        "paper_code": "ppk05",
+        "price": 146000
+      },
+      "bizhows": {
+        "product": "소량 고급 전단지 (양면)",
+        "paper_name": "아트지 150g (고급 광택용지)",
+        "price": 99170,
+        "original_price": 99170,
+        "discount_price": null
+      },
+      "price_diff": -46830,
+      "ecard21_cheaper": false,
+      "match_confidence": "high"
+    },
+    {
+      "match_id": "500_스노우지_150g",
+      "paper_type": "스노우지",
+      "paper_weight": "150g",
+      "quantity": 500,
+      "ecard21": {
+        "product": "고급 독판 전단지",
+        "paper_name": "스노우화이트 150g",
+        "paper_code": "ppk14",
+        "price": 146000
+      },
+      "bizhows": {
+        "product": "소량 고급 전단지 (양면)",
+        "paper_name": "스노우지 150g (고급 무광택용지)",
+        "price": 99170,
+        "original_price": 99170,
+        "discount_price": null
+      },
+      "price_diff": -46830,
+      "ecard21_cheaper": false,
+      "match_confidence": "high"
+    },
+    {
+      "match_id": "500_모조지_150g",
+      "paper_type": "모조지",
+      "paper_weight": "150g",
+      "quantity": 500,
+      "ecard21": {
+        "product": "고급 독판 전단지",
+        "paper_name": "모조지 150g",
+        "paper_code": "ppk23",
+        "price": 146000
+      },
+      "bizhows": {
+        "product": "소량 고급 전단지 (양면)",
+        "paper_name": "모조지 150g",
+        "price": 128200,
+        "original_price": 128200,
+        "discount_price": null
+      },
+      "price_diff": -17800,
+      "ecard21_cheaper": false,
+      "match_confidence": "high"
+    }
+  ],
+  "unmatched_ecard21": {
+    "일반_합판_4000매": {
+      "note": "비즈하우스에 대응 용지 없음 (일반합판은 아트지90g, 모조지80g만 있음 - 둘 다 매칭됨)"
+    },
+    "고급_독판_500매_매칭안됨": [
+      {"paper": "아트지 100g", "price": 137000},
+      {"paper": "아트지 120g", "price": 141000},
+      {"paper": "아트지 180g", "price": 152000},
+      {"paper": "아트지 200g", "price": 156000},
+      {"paper": "아트지 250g", "price": 165000},
+      {"paper": "아트지 300g", "price": 174000},
+      {"paper": "스노우화이트 100g", "price": 137000},
+      {"paper": "스노우화이트 120g", "price": 141000},
+      {"paper": "스노우화이트 180g", "price": 152000},
+      {"paper": "스노우화이트 200g", "price": 156000},
+      {"paper": "스노우화이트 250g", "price": 165000},
+      {"paper": "스노우화이트 300g", "price": 174000},
+      {"paper": "모조지 80g", "price": 134000},
+      {"paper": "모조지 100g", "price": 138000},
+      {"paper": "모조지 120g", "price": 141000},
+      {"paper": "모조지 180g", "price": 151000},
+      {"paper": "모조지 220g", "price": 159000},
+      {"paper": "모조지 260g", "price": 166000}
+    ],
+    "프리미엄_에코_전단지_4000매": {
+      "paper": "프리미엄 에코전단지 90g",
+      "price": 88000,
+      "note": "비즈하우스에 대응 제품 없음"
+    },
+    "테이블_세팅지_4000매": {
+      "paper": "모조지 80g",
+      "price": 84000,
+      "note": "비즈하우스에 대응 제품 없음"
+    },
+    "문어발_전단지_4000매": {
+      "note": "비즈하우스 문어발 전단지 없음 (수량 불일치 제품도 없음)",
+      "papers": ["아트지 100~300g", "스노우화이트 100~300g", "모조지 80~260g"]
+    },
+    "문고리_전단지_4000매": {
+      "note": "비즈하우스 문고리 전단지 없음",
+      "papers": ["아트지 150~300g", "스노우화이트 150~300g", "모조지 150~260g"]
+    }
+  },
+  "comparison_summary": {
+    "총_매칭_수": 5,
+    "비교불가_비즈하우스만": 1,
+    "4000매_매칭": 2,
+    "500매_매칭": 3,
+    "ecard21_저렴": 2,
+    "bizhows_저렴": 3,
+    "비고": "4000매 기준 명함천국이 저렴, 500매 기준 비즈하우스가 저렴"
+  }
+}

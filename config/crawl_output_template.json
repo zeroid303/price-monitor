@@ -1,0 +1,49 @@
+{
+  "_description": "크롤러 output 통일 구조 템플릿. 새 크롤러 작성 시 이 형식에 맞춰서 output을 저장.",
+  "_save_path": "output/{company}_card_now.json (크롤링 시 now -> past 로테이션 후 now에 저장)",
+  "_save_logic": "크롤링 시작: now.json -> past.json 복사 / 크롤링 완료: 새 결과 -> now.json 덮어쓰기",
+
+  "company": "bizhows",
+  "crawled_at": "2026-04-03 10:30",
+  "items": [
+    {
+      "product": "기본명함",
+      "category": "일반명함",
+      "paper_name": "스노우 250g",
+      "coating": "없음",
+      "color_mode": "양면칼라",
+      "size": "90x50",
+      "qty": 200,
+      "price": 6300,
+      "price_vat_included": false,
+      "options": {
+        "side": "양면",
+        "corner": "없음"
+      }
+    }
+  ],
+
+  "_field_guide": {
+    "company": "회사 식별자: ecard21 / bizhows / swadpia / naple / printcity",
+    "crawled_at": "크롤링 완료 시각 (YYYY-MM-DD HH:MM)",
+    "items": "가격 레코드 배열",
+    "items[].product": "제품명 (기본명함, 고급지명함, 에폭시명함 등)",
+    "items[].category": "상위 카테고리 (일반명함, 독특한명함, 에폭시 등)",
+    "items[].paper_name": "용지명 (card_reference.json의 crawl_key와 매칭되는 값)",
+    "items[].coating": "코팅 (없음 / 무광코팅 / 유광코팅 / 벨벳코팅 / 코팅). 같은 용지 + 다른 코팅이면 별도 행.",
+    "items[].color_mode": "인쇄도수 (양면칼라 / 단면칼라 / 양면8도 등)",
+    "items[].size": "사이즈 mm (90x50 / 86x54 등)",
+    "items[].qty": "수량 (정수). 200매 기준. 200매 없으면 실제 수량 기재.",
+    "items[].price": "가격 (정수, 원). 문자열 아님.",
+    "items[].price_vat_included": "true=VAT포함 / false=VAT별도. 비즈하우스만 false, 나머지 true.",
+    "items[].options": "추가 옵션 (회사별로 다름). 후가공, 둥근모서리, 에폭시 등. 없으면 {} 또는 생략."
+  },
+
+  "_company_notes": {
+    "ecard21": "자사. VAT포함. output: ecard21_whitelist_prices.json (덮어쓰기, past/now 미사용)",
+    "bizhows": "경쟁사. VAT별도(price_vat_included=false). 대시보드에서 x1.1 환산.",
+    "swadpia": "경쟁사. VAT포함. 일반지명함은 200매 없음(최소 500매), qty에 실제 수량 기재.",
+    "naple": "경쟁사. VAT포함. 배송비 제외 금액으로 저장. 카드명함은 86x54mm.",
+    "printcity": "자사(프린트딜계열). VAT포함(총결제액). 코팅별로 별도 행."
+  }
+}
