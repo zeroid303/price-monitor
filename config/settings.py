@@ -10,7 +10,3 @@ HISTORY_FILE = os.path.join(OUTPUT_DIR, "price_history.json")
 # ── 가격 변동 감지 임계값 ─────────────────────────────────
 # 가격이 이 비율(%) 이상 변동하면 알림
 PRICE_CHANGE_THRESHOLD = 5.0   # 5% 이상 변동 시 알림
-
-# ── 스케줄 설정 ───────────────────────────────────────────
-SCHEDULE_DAY = "wednesday"
-SCHEDULE_TIME = "10:00"

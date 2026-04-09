@@ -1,22 +1,19 @@
 """
-가격 모니터링 스케줄러 v3
+가격 모니터링 v3
 - 5개 제품 카테고리 병렬 크롤링: 명함, 스티커, 봉투, 전단지, 엽서
 - 각 카테고리별 reference.json 기반 매칭 + 히스토리 비교
 
 사용법:
-  python scheduler.py              # 스케줄러 시작 (매주 수 10:00)
-  python scheduler.py --now        # 즉시 1회 전체 실행
-  python scheduler.py --now card   # 명함만 실행
-  python scheduler.py --now sticker # 스티커만 실행
-  python scheduler.py --now envelope # 봉투만 실행
+  python scheduler.py              # 전체 실행
+  python scheduler.py card         # 명함만 실행
+  python scheduler.py sticker      # 스티커만 실행
+  python scheduler.py envelope     # 봉투만 실행
 """
 import sys
 import os
 import re
-import time
 import json
 import logging
-import schedule
 from datetime import datetime
 
 sys.path.insert(0, os.path.dirname(__file__))
@@ -25,9 +22,6 @@ from config.settings import PRICE_CHANGE_THRESHOLD, OUTPUT_DIR
 
 BASE_DIR = os.path.dirname(__file__)
 HISTORY_FILE = os.path.join(OUTPUT_DIR, "price_history_v3.json")
-
-SCHEDULE_DAY = "tuesday"
-SCHEDULE_TIME = "14:30"
 
 logging.basicConfig(
     level=logging.INFO,
@@ -666,32 +660,8 @@ def job(categories=None):
 def main():
     os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-    if "--now" in sys.argv:
-        # 특정 카테고리만 실행 가능: --now card, --now sticker, --now envelope
-        args = [a for a in sys.argv[1:] if a != "--now"]
-        categories = args if args else None
-        logger.info("즉시 실행 모드")
-        job(categories)
-        return
-
-    # 스케줄 등록
-    day_map = {
-        "monday": schedule.every().monday,
-        "tuesday": schedule.every().tuesday,
-        "wednesday": schedule.every().wednesday,
-        "thursday": schedule.every().thursday,
-        "friday": schedule.every().friday,
-    }
-    scheduler = day_map.get(SCHEDULE_DAY, schedule.every().wednesday)
-    scheduler.at(SCHEDULE_TIME).do(job)
-
-    logger.info(f"스케줄러 시작: 매주 {SCHEDULE_DAY} {SCHEDULE_TIME}")
-    logger.info(f"카테고리: 명함, 스티커, 봉투, 전단지, 엽서 (2개씩 병렬)")
-    logger.info("종료하려면 Ctrl+C")
-
-    while True:
-        schedule.run_pending()
-        time.sleep(60)
+    categories = sys.argv[1:] if len(sys.argv) > 1 else None
+    job(categories)
 
 
 if __name__ == "__main__":
