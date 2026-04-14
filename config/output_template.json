@@ -1,0 +1,65 @@
+{
+  "_description": "크롤러 output 통일 구조 템플릿. common_mapping_rule.json의 매칭축·정규화 규칙과 1:1 정합.",
+  "_save_path": "output/{company}_{category}_now.json (크롤링 시 now -> past 로테이션 후 now에 저장)",
+  "_save_logic": "크롤링 시작: now.json -> past.json 복사 / 크롤링 완료: 새 결과 -> now.json 덮어쓰기",
+  "_match_axes_ref": "common_mapping_rule.json의 _match_axes.axes 참조. items[]는 (paper_name, coating, print_mode, size, qty) 5축으로 매칭됨.",
+
+  "company": "printcity",
+  "crawled_at": "2026-04-14 10:30",
+  "items": [
+    {
+      "product": "일반 명함",
+      "category": "옵셋인쇄",
+      "paper_name": "스노우화이트-250g",
+      "coating": "비코팅",
+      "print_mode": "양면칼라",
+      "size": "90x50",
+      "qty": 200,
+      "price": 6300,
+      "price_vat_included": true,
+      "options": {}
+    }
+  ],
+
+  "_field_guide": {
+    "company": "회사 식별자: ecard21 / printcity / bizhows / naple / swadpia / wowpress / dtpia",
+    "crawled_at": "크롤링 완료 시각 (YYYY-MM-DD HH:MM)",
+    "items": "가격 레코드 배열. (paper_name, coating, print_mode, size, qty) 조합당 한 행.",
+
+    "items[].product": "사이트의 제품명 원문 (일반 명함 / 기본명함 / 고급지명함 등). 사이트마다 작명 다름 — 정규화 X, 그대로 저장.",
+    "items[].category": "사이트의 상위 카테고리 원문 (옵셋인쇄 / 디지털인쇄 / 일반명함 등). 매칭에 안 쓰이는 메타.",
+
+    "items[].paper_name": "[매칭축] 용지명. 사이트 raw 표기 그대로 저장 (예: 스노우화이트-250g, 스노우 250g). swadpia/wowpress는 paper_name에 코팅 토큰이 박혀 있으면 매칭 단계에서 추출됨.",
+    "items[].coating": "[매칭축] 정규화 4종: 비코팅 / 무광코팅 / 유광코팅 / 벨벳코팅. 4종 외(부분코팅/홀로그램 등)는 base coating + options에 별도 키로 저장.",
+    "items[].print_mode": "[매칭축] 정규화 4종: 양면칼라 / 단면칼라 / 양면백색1도 / 단면백색1도. 양면8도=양면칼라, 단면4도=단면칼라.",
+    "items[].size": "[매칭축] 정규화 'WxH' mm 정수 (예: 90x50, 86x54). 단위·접두어 모두 제거.",
+    "items[].qty": "[매칭축] 수량 정수. 100/200/500/1000/2000 등. ref와 정확히 같아야 매칭.",
+
+    "items[].price": "가격 정수 (원). 문자열 X.",
+    "items[].price_vat_included": "true=VAT포함 / false=VAT별도. 사이트 기본값은 common_mapping_rule.json sites.{name}.vat_included 참조.",
+    "items[].options": "매칭축 외 부가 정보. 비어 있으면 {}. 예: { partial_coating: '앞면' } / { hologram: '도트' } / { foil: '금박' } / { corner: '둥근' }"
+  },
+
+  "_normalization_quick_ref": {
+    "_note": "전체 정의는 common_mapping_rule.json._normalization 참조. 아래는 빈도 높은 변환만 요약.",
+    "coating": {
+      "비코팅":   ["없음", "안함", "코팅없음", "무코팅"],
+      "무광코팅": ["무광", "양면무광코팅", "단면무광"],
+      "유광코팅": ["유광", "코팅", "양면유광코팅", "단면유광"],
+      "벨벳코팅": ["양면벨벳코팅"]
+    },
+    "print_mode": {
+      "양면칼라":    ["양면", "양면8도", "양면8도(형광CMYK)", "양면4도", "양면인쇄"],
+      "단면칼라":    ["단면", "단면8도", "단면4도"],
+      "양면백색1도": ["양면백색"],
+      "단면백색1도": ["단면백색"]
+    },
+    "to_options": {
+      "_description": "정규화 4종 외 값은 base 값으로 두고 options에 boolean/식별값으로 보존. 옵션이 하나만 있으면 boolean(true), 여러 종류면 식별값.",
+      "부분코팅-앞면":            { "coating_base": "비코팅", "options": { "partial_coating": true } },
+      "홀로그램코팅 도트-양면":   { "coating_base": "비코팅", "options": { "hologram": "도트" } },
+      "홀로그램코팅 심플-양면":   { "coating_base": "비코팅", "options": { "hologram": "심플" } },
+      "양면8도_단면금박 (color_mode 내)": { "print_mode_base": "양면칼라", "options": { "foil": "단면금박" } }
+    }
+  }
+}

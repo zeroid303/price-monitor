@@ -1,0 +1,182 @@
+{
+  "_description": "사이트별 매칭 규칙·VAT 정책 + 전역 정규화 규칙. 새 사이트 추가, VAT 변경, 매칭 방식 변경 시 이 파일만 수정.",
+
+  "_schema": {
+    "name": "사람용 표시명 (한글)",
+    "ownership": "self(자사) | competitor",
+    "base_url": "사이트 루트 URL. 대시보드 출처 표시·링크에 사용.",
+    "match_by": "reference 매칭 키로 쓸 필드. paper_code(정확매칭) 또는 crawl_key(부분문자열).",
+    "match_method": "exact | substring",
+    "vat_included": "[필수] true=가격이 VAT 포함 / false=별도(대시보드에서 x1.1 환산). output items[].price_vat_included가 있으면 그 값이 우선.",
+    "dashboard_excluded": "true면 대시보드 크롤링·표시 모두 제외. 생략 시 false.",
+    "paper_name_extract": "paper_name에 다른 필드 정보가 인코딩돼 있는 사이트용 정규식 추출 규칙. 매칭 전에 사이트별 전처리로 적용.",
+    "tech": "selenium | playwright | http (참고용, 매칭에는 영향 없음)"
+  },
+
+  "_defaults": {
+    "_description": "전역 매칭 기본값. 사이트별 설정에 없으면 이 값 적용.",
+    "match_method": "substring",
+    "qty_default": 200
+  },
+
+  "_match_axes": {
+    "_description": "모든 사이트·모든 제품 공통 매칭 축. ref/output 양쪽에서 정규화 후 (paper_name, coating, print_mode, size, qty) 5개 키로 매칭.",
+    "axes": ["paper_name", "coating", "print_mode", "size", "qty"]
+  },
+
+  "_normalization": {
+    "coating": {
+      "_description": "코팅 = 약품 도포 처리 여부/종류. 면(side) 정보가 섞여 들어와도 종류만 추출.",
+      "default": "비코팅",
+      "allowed": ["비코팅", "무광코팅", "유광코팅", "벨벳코팅"],
+      "aliases": {
+        "비코팅":   ["", "없음", "안함", "코팅없음", "무코팅"],
+        "무광코팅": ["무광", "양면무광코팅", "양면무광", "단면무광"],
+        "유광코팅": ["유광", "코팅", "양면유광코팅", "양면유광", "단면유광"],
+        "벨벳코팅": ["벨벳", "양면벨벳코팅"]
+      },
+      "_alias_notes": {
+        "유광코팅 ← 코팅": "ecard21 '일반코팅명함' 카테고리의 default가 유광. raw 값 '코팅' 단독 = 유광코팅. (스노우화이트 216g 케이스 확인됨)"
+      },
+      "to_options": {
+        "_description": "특수 코팅은 매칭 축에서 빼고 options로 보존. coating 매칭값은 base 값(보통 비코팅)으로 정규화.",
+        "홀로그램코팅 도트-양면":      { "coating_base": "비코팅", "options": { "hologram": "도트" } },
+        "홀로그램코팅 심플-양면":      { "coating_base": "비코팅", "options": { "hologram": "심플" } },
+        "부분코팅-앞면":               { "coating_base": "비코팅", "options": { "partial_coating": true } },
+        "부분코팅-뒷면":               { "coating_base": "비코팅", "options": { "partial_coating": true } },
+        "부분코팅-양면":               { "coating_base": "비코팅", "options": { "partial_coating": true } },
+        "부분UV코팅-앞면":             { "coating_base": "비코팅", "options": { "partial_coating": true } },
+        "부분UV코팅-뒷면":             { "coating_base": "비코팅", "options": { "partial_coating": true } },
+        "부분UV코팅-양면":             { "coating_base": "비코팅", "options": { "partial_coating": true } }
+      }
+    },
+
+    "print_mode": {
+      "_description": "인쇄 면(side) + 색도(color)를 합친 정규화 값. 양면칼라 == 8도. 단면칼라 == 4도. 백색1도는 백색 1색.",
+      "default": "양면칼라",
+      "allowed": ["양면칼라", "단면칼라", "양면백색1도", "단면백색1도"],
+      "aliases": {
+        "양면칼라":    ["", "양면", "양면8도", "양면8도(형광CMYK)", "양면8도(형광CMY+K)", "양면인쇄", "양면4도"],
+        "단면칼라":    ["단면", "단면8도", "단면4도"],
+        "양면백색1도": ["양면백색"],
+        "단면백색1도": ["단면백색"]
+      },
+      "to_options": {
+        "_description": "박/특수 후가공이 color_mode에 섞여 들어온 경우 분리. 박은 현재 매칭 대상 아님 → options.note로 보존.",
+        "양면8도_단면금박": { "_base": "양면칼라", "note": "단면금박" }
+      },
+      "_도수_참고": {
+        "양면칼라": "8도 (=CMYK × 2면)",
+        "단면칼라": "4도",
+        "양면백색1도": "2도",
+        "단면백색1도": "1도"
+      }
+    },
+
+    "size": {
+      "_description": "용지 크기. 가로x세로 mm 정수 형식으로 통일.",
+      "default": "90x50",
+      "format": "{W}x{H}",
+      "allowed_examples": ["90x50", "86x54", "86x52", "90x100"],
+      "_normalize_rules": [
+        "공백·㎜·mm·cm 단위 제거 후 숫자만 추출",
+        "구분자 *, ×, X 모두 x로 통일",
+        "'(가로형)', '(세로형)' 같은 prefix 제거 (방향은 별도 옵션으로 보존 가능)",
+        "'명함', '에폭명함' 같은 product 단어 prefix 제거",
+        "9x10cm → 90x100"
+      ],
+      "regex": "(\\d+)\\s*[x×*X]\\s*(\\d+)\\s*(cm)?",
+      "_note_regex": "위 정규식으로 (W, H, unit) 추출 후 unit==cm이면 ×10."
+    },
+
+    "qty": {
+      "_description": "수량. 정수 매수. 100/200/500/1000매 등 단위 다양화 예정 → 매칭 축으로 사용.",
+      "default": 200,
+      "common_units": [100, 200, 500, 1000, 2000],
+      "_note": "ref와 output 양쪽 모두 같은 qty여야 매칭. ref에 qty가 명시 안 된 paper는 default 200으로 처리."
+    },
+
+    "paper_name_extract": {
+      "_description": "paper_name에 코팅 정보가 인코딩된 사이트용. 매칭 전 전처리.",
+      "applies_to": ["swadpia", "wowpress"],
+      "rules": [
+        {
+          "pattern": "\\((무광코팅|유광코팅|벨벳코팅|무코팅)\\)",
+          "extract_to": "coating",
+          "remove_from_paper_name": true,
+          "examples": {
+            "스노우지(무광코팅) 250g":   { "paper_name": "스노우지 250g",      "coating": "무광코팅" },
+            "스노우지(유광코팅) 300g":   { "paper_name": "스노우지 300g",      "coating": "유광코팅" },
+            "스노우지(무코팅) 250g":     { "paper_name": "스노우지 250g",      "coating": "비코팅" },
+            "스노우지 백색 300g(무광코팅)": { "paper_name": "스노우지 백색 300g", "coating": "무광코팅" }
+          }
+        }
+      ]
+    }
+  },
+
+  "sites": {
+    "ecard21": {
+      "name": "명함천국",
+      "ownership": "self",
+      "base_url": "https://www.ecard21.co.kr",
+      "match_by": "paper_code",
+      "match_method": "exact",
+      "vat_included": true,
+      "dashboard_excluded": true,
+      "tech": "selenium"
+    },
+    "printcity": {
+      "name": "프린트시티",
+      "ownership": "self",
+      "base_url": "https://www.printcity.co.kr",
+      "match_by": "crawl_key",
+      "vat_included": true,
+      "tech": "http"
+    },
+    "bizhows": {
+      "name": "비즈하우스",
+      "ownership": "competitor",
+      "base_url": "https://www.bizhows.com",
+      "match_by": "crawl_key",
+      "vat_included": false,
+      "dashboard_excluded": true,
+      "tech": "playwright"
+    },
+    "naple": {
+      "name": "나플",
+      "ownership": "competitor",
+      "base_url": "https://www.naple.co.kr",
+      "match_by": "crawl_key",
+      "vat_included": true,
+      "dashboard_excluded": true,
+      "tech": "http"
+    },
+    "swadpia": {
+      "name": "성원애드피아",
+      "ownership": "competitor",
+      "base_url": "https://www.swadpia.co.kr",
+      "match_by": "crawl_key",
+      "vat_included": true,
+      "paper_name_extract": true,
+      "tech": "selenium"
+    },
+    "wowpress": {
+      "name": "와우프레스",
+      "ownership": "competitor",
+      "base_url": "https://www.wowpress.co.kr",
+      "match_by": "crawl_key",
+      "vat_included": true,
+      "paper_name_extract": true,
+      "tech": "selenium"
+    },
+    "dtpia": {
+      "name": "디티피아",
+      "ownership": "competitor",
+      "base_url": "https://www.dtpia.co.kr",
+      "match_by": "crawl_key",
+      "vat_included": true,
+      "tech": "selenium"
+    }
+  }
+}
