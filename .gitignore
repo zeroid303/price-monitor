@@ -9,3 +9,6 @@ output/
 
 # 임시/디버그 파일
 output/_*.txt
+
+# Claude Code 런타임 부산물
+.claude/
