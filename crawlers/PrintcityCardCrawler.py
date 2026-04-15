@@ -1,6 +1,6 @@
 """
 프린트시티 명함 크롤러.
-화이트리스트(WHITELIST)에 명시된 (제품 × 용지 × 코팅) 조합만 크롤링.
+config/card_targets.json printcity 섹션의 (제품 × 용지 × 코팅) 조합만 크롤링.
 
 설계 원칙:
   - output은 raw 값 그대로 저장 (coating/print_mode/size 등 사이트 표기 원문).
@@ -14,50 +14,25 @@
 """
 import json
 import os
-import shutil
 import time
 from datetime import datetime
+from pathlib import Path
 
 import requests
 
 
-# ── 화이트리스트: 크롤링 대상 ──
-# papers/coatings 값은 printcity API selectors title과 1:1 일치.
-WHITELIST = [
-    {
-        "product_id": "679c60008db6e006523747ad",
-        "product_name": "일반 명함",
-        "slug": "NameCard",
-        "papers": [
-            "스노우화이트-250g",
-            "스노우화이트-216g",
-            "스노우화이트-300g",
-            "스노우화이트-400g",
-        ],
-        "coatings": ["코팅없음", "양면무광코팅", "양면유광코팅"],
-    },
-    {
-        "product_id": "679c60008db6e006523747b9",
-        "product_name": "고급 명함",
-        "slug": "NameCardUnited",
-        "papers": [
-            "누브지-210g",
-            "반누보화이트-250g",
-            "아르떼 울트라화이트-310g",
-            "Extra 누브-350g",
-            "휘라레-216g",
-        ],
-        "coatings": ["코팅없음"],
-    },
-    {
-        "product_id": "679c60008db6e006523747b6",
-        "product_name": "부분코팅 명함",
-        "slug": "NameCardPartialCoating",
-        "papers": ["스노우화이트-300g"],
-        # 사이트 UI 표기 / API title 양쪽 허용
-        "coatings": ["부분코팅-앞면", "부분UV코팅-앞면"],
-    },
-]
+# ── 타겟 로드: config/card_targets.json printcity 섹션 ──
+_CONFIG_PATH = Path(__file__).resolve().parent.parent / "config" / "card_targets.json"
+
+
+def _load_targets() -> list[dict]:
+    if not _CONFIG_PATH.exists():
+        return []
+    cfg = json.loads(_CONFIG_PATH.read_text(encoding="utf-8"))
+    return cfg.get("printcity", [])
+
+
+TARGETS = _load_targets()
 
 # ── 필터 조건 ──
 TARGET_SIZE_KEYWORDS = ("90X50", "90x50")
@@ -179,8 +154,11 @@ def crawl_all() -> list[dict]:
     print("=" * 60)
     print(f"프린트시티 명함 크롤링 (raw 저장, qty {sorted(TARGET_QTYS)}, size 90x50)")
     print("=" * 60)
+    if not TARGETS:
+        print("⚠ 크롤 타겟 없음 — config/card_targets.json 확인 필요")
+        return []
     all_items = []
-    for spec in WHITELIST:
+    for spec in TARGETS:
         all_items.extend(crawl_product(spec))
         time.sleep(0.5)
     return all_items

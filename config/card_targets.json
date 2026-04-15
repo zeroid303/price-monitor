@@ -1,0 +1,482 @@
+{
+  "_description": "카드 카테고리 크롤 타겟. 사이트별 (제품, 용지 [+ 코팅]) 화이트리스트.",
+  "_schema": {
+    "printcity": "{ product_id, product_name, slug, papers[name list], coatings[name list] }",
+    "bizhows": "{ category, name, slug, code1, code2, code3, papers[{seq, name}] }",
+    "swadpia": "{ category_code, product_code, product_name, paper_size_code, papers[{code, name}], coatings[{name, field, value}], color_modes[{name, value}] }",
+    "wowpress": "{ category, product_name, prod_no, size_value, papers[{paper_no, name, match_as?, actual_weight_g?, note?}] } — 사이트 paper 이름 외에 match_as가 있으면 그 이름으로 출력 (평량 차이 매칭용)",
+    "dtpia": "{ category, product_name, url, page_type(color|small_qty|special|uv), size_value, qtys[], color_modes[], papers[ page_type별 키 + match_as?, actual_weight_g?, note? ] }"
+  },
+  "_filters_common": {
+    "qty": [
+      100,
+      200,
+      500,
+      1000
+    ],
+    "size": "90x50 (90×50mm)"
+  },
+  "printcity": [
+    {
+      "product_id": "679c60008db6e006523747ad",
+      "product_name": "일반 명함",
+      "slug": "NameCard",
+      "papers": [
+        "스노우화이트-250g",
+        "스노우화이트-216g",
+        "스노우화이트-300g",
+        "스노우화이트-400g"
+      ],
+      "coatings": [
+        "코팅없음",
+        "양면무광코팅",
+        "양면유광코팅"
+      ]
+    },
+    {
+      "product_id": "679c60008db6e006523747b9",
+      "product_name": "고급 명함",
+      "slug": "NameCardUnited",
+      "papers": [
+        "누브지-210g",
+        "반누보화이트-250g",
+        "아르떼 울트라화이트-310g",
+        "Extra 누브-350g",
+        "휘라레-216g"
+      ],
+      "coatings": [
+        "코팅없음"
+      ]
+    },
+    {
+      "product_id": "679c60008db6e006523747b6",
+      "product_name": "부분코팅 명함",
+      "slug": "NameCardPartialCoating",
+      "papers": [
+        "스노우화이트-300g"
+      ],
+      "coatings": [
+        "부분코팅-앞면",
+        "부분UV코팅-앞면"
+      ]
+    }
+  ],
+  "bizhows": [
+    {
+      "category": "일반명함",
+      "name": "기본명함",
+      "slug": "5000_200_3501_7",
+      "code1": "5000",
+      "code2": "200",
+      "code3": "3501",
+      "papers": [
+        {
+          "seq": 115824,
+          "name": "프리미엄반누보 250g"
+        },
+        {
+          "seq": 119340,
+          "name": "스노우 250g"
+        }
+      ]
+    },
+    {
+      "category": "일반명함",
+      "name": "프리미엄명함",
+      "slug": "5000_200_3501_8",
+      "code1": "5000",
+      "code2": "200",
+      "code3": "3501",
+      "papers": [
+        {
+          "seq": 119311,
+          "name": "엑스트라 누보 350g"
+        },
+        {
+          "seq": 119307,
+          "name": "무코팅스노우 300g"
+        },
+        {
+          "seq": 119308,
+          "name": "코팅스노우 300g"
+        },
+        {
+          "seq": 119306,
+          "name": "무코팅스노우 400g"
+        },
+        {
+          "seq": 115825,
+          "name": "아르떼 310g"
+        }
+      ]
+    },
+    {
+      "category": "일반명함",
+      "name": "심플명함",
+      "slug": "5000_200_3501_16",
+      "code1": "5000",
+      "code2": "200",
+      "code3": "3501",
+      "papers": [
+        {
+          "seq": 119340,
+          "name": "스노우 250g"
+        },
+        {
+          "seq": 119342,
+          "name": "휘라레 216g"
+        }
+      ]
+    },
+    {
+      "category": "독특한명함",
+      "name": "라운드명함",
+      "slug": "5000_200_3501_900_1",
+      "code1": "5000",
+      "code2": "200",
+      "code3": "3501",
+      "papers": [
+        {
+          "seq": 119341,
+          "name": "스노우지 216g"
+        }
+      ]
+    }
+  ],
+  "swadpia": [
+    {
+      "category_code": "CNC1000",
+      "product_code": "GNC1001",
+      "product_name": "일반지명함",
+      "paper_size_code": "N0100",
+      "papers": [
+        {
+          "code": "SNW250W00",
+          "name": "스노우지 백색 250g"
+        },
+        {
+          "code": "SNW300W00",
+          "name": "스노우지 백색 300g"
+        }
+      ],
+      "coatings": [
+        {
+          "name": "코팅없음",
+          "field": "paper_gloss2",
+          "value": "PAG99"
+        },
+        {
+          "name": "무광코팅",
+          "field": "paper_gloss",
+          "value": "PAG10"
+        },
+        {
+          "name": "유광코팅",
+          "field": "paper_gloss",
+          "value": "PAG20"
+        }
+      ],
+      "color_modes": [
+        {
+          "name": "양면칼라",
+          "value": "CTN40"
+        },
+        {
+          "name": "단면칼라",
+          "value": "CTN10"
+        }
+      ]
+    },
+    {
+      "category_code": "CNC2000",
+      "product_code": "GNC2001",
+      "product_name": "고급지명함",
+      "paper_size_code": "N0100",
+      "papers": [
+        {
+          "code": "ARM310W00",
+          "name": "아르미 울트라화이트 310g"
+        },
+        {
+          "code": "RNC216SW0",
+          "name": "린넨커버(휘라레) 솔라화이트 216g"
+        }
+      ],
+      "coatings": [
+        {
+          "name": "코팅없음",
+          "field": "paper_gloss2",
+          "value": "PAG99"
+        }
+      ],
+      "color_modes": [
+        {
+          "name": "양면칼라",
+          "value": "CTN40"
+        },
+        {
+          "name": "단면칼라",
+          "value": "CTN10"
+        }
+      ]
+    }
+  ],
+  "wowpress": [
+    {
+      "category": "일반명함",
+      "product_name": "일반명함",
+      "prod_no": "40073",
+      "size_value": "5458",
+      "papers": [
+        {
+          "paper_no": 22904,
+          "name": "스노우지(무코팅) 250g"
+        },
+        {
+          "paper_no": 22908,
+          "name": "스노우지(무광코팅) 250g"
+        },
+        {
+          "paper_no": 22907,
+          "name": "스노우지(무광코팅) 219g",
+          "match_as": "스노우지(무광코팅) 216g",
+          "actual_weight_g": 219,
+          "note": "와우프레스 실제 219g, printcity 216g와 매칭"
+        }
+      ]
+    },
+    {
+      "category": "특수지명함",
+      "product_name": "특수지명함",
+      "prod_no": "40070",
+      "size_value": "5458",
+      "papers": [
+        {
+          "paper_no": 20856,
+          "name": "휘라레화이트 216g"
+        },
+        {
+          "paper_no": 20687,
+          "name": "아르떼울트라화이트 310g"
+        },
+        {
+          "paper_no": 20369,
+          "name": "반누보화이트 227g",
+          "match_as": "반누보화이트 250g",
+          "actual_weight_g": 227,
+          "note": "와우프레스 실제 227g, printcity 250g와 매칭 (23g 차이)"
+        }
+      ]
+    },
+    {
+      "category": "프리미엄명함",
+      "product_name": "고평량명함",
+      "prod_no": "40066",
+      "size_value": "5458",
+      "papers": [
+        {
+          "paper_no": 20706,
+          "name": "엑스트라누보 350g"
+        },
+        {
+          "paper_no": 22909,
+          "name": "스노우지(유광코팅) 300g"
+        },
+        {
+          "paper_no": 22911,
+          "name": "스노우지(무광코팅) 300g"
+        },
+        {
+          "paper_no": 22905,
+          "name": "스노우지(무코팅) 300g"
+        },
+        {
+          "paper_no": 22906,
+          "name": "스노우지(무코팅) 400g"
+        }
+      ]
+    }
+  ],
+  "dtpia": [
+    {
+      "category": "일반지명함",
+      "product_name": "일반명함",
+      "url": "https://dtpia.co.kr/Order/Businesscard/Color.aspx",
+      "page_type": "color",
+      "size_value": "CNXT",
+      "qtys": [
+        500,
+        1000
+      ],
+      "color_modes": [
+        {
+          "value": "8",
+          "name": "양면칼라"
+        },
+        {
+          "value": "4",
+          "name": "단면칼라"
+        }
+      ],
+      "papers": [
+        {
+          "coating_select_value": "",
+          "paper_name_out": "스노우지 250g",
+          "coating_out": "코팅없음"
+        },
+        {
+          "coating_select_value": "4",
+          "paper_name_out": "스노우지 250g",
+          "coating_out": "무광코팅"
+        }
+      ]
+    },
+    {
+      "category": "일반지명함",
+      "product_name": "소량명함",
+      "url": "https://dtpia.co.kr/Order/Businesscard/SmallQuantity.aspx",
+      "page_type": "small_qty",
+      "size_value": "TD03",
+      "qtys": [
+        100,
+        200
+      ],
+      "color_modes": [
+        {
+          "value": "8",
+          "name": "양면칼라"
+        },
+        {
+          "value": "4",
+          "name": "단면칼라"
+        }
+      ],
+      "papers": [
+        {
+          "mtrl_01": "RSW",
+          "mtrl_02": "200",
+          "paper_name_out": "스노우지 200g",
+          "match_as": "스노우지 216g",
+          "actual_weight_g": 200,
+          "note": "디티피아 실제 200g, printcity 216g 매칭 (16g 차이)",
+          "coatings": [
+            {
+              "value": "N",
+              "name": "코팅없음"
+            },
+            {
+              "value": "2",
+              "name": "유광코팅"
+            },
+            {
+              "value": "4",
+              "name": "무광코팅"
+            }
+          ]
+        },
+        {
+          "mtrl_01": "RSW",
+          "mtrl_02": "250",
+          "paper_name_out": "스노우지 250g",
+          "coatings": [
+            {
+              "value": "N",
+              "name": "코팅없음"
+            },
+            {
+              "value": "2",
+              "name": "유광코팅"
+            },
+            {
+              "value": "4",
+              "name": "무광코팅"
+            }
+          ]
+        },
+        {
+          "mtrl_01": "RSW",
+          "mtrl_02": "300",
+          "paper_name_out": "스노우지 300g",
+          "coatings": [
+            {
+              "value": "N",
+              "name": "코팅없음"
+            },
+            {
+              "value": "2",
+              "name": "유광코팅"
+            },
+            {
+              "value": "4",
+              "name": "무광코팅"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "category": "고급지명함",
+      "product_name": "고급지명함",
+      "url": "https://dtpia.co.kr/Order/Businesscard/Special.aspx?code=2",
+      "page_type": "special",
+      "size_value": "TCXX",
+      "qtys": [
+        100,
+        200,
+        500,
+        1000
+      ],
+      "color_modes": [
+        {
+          "value": "8",
+          "name": "양면칼라"
+        },
+        {
+          "value": "4",
+          "name": "단면칼라"
+        }
+      ],
+      "papers": [
+        {
+          "mtrl_cd": "RLW230",
+          "mtrl_cdw": "230",
+          "paper_name_out": "럭셔리 반누보 화이트 230g",
+          "match_as": "럭셔리 반누보 화이트 250g",
+          "actual_weight_g": 230,
+          "note": "디티피아 실제 230g, printcity 250g 매칭 (20g 차이)"
+        }
+      ]
+    },
+    {
+      "category": "UV옵셋명함",
+      "product_name": "UV옵셋명함",
+      "url": "https://dtpia.co.kr/Order/Businesscard/Uv.aspx",
+      "page_type": "uv",
+      "size_value": "TUXX",
+      "qtys": [
+        200,
+        1000
+      ],
+      "color_modes": [
+        {
+          "value": "8",
+          "name": "양면칼라"
+        },
+        {
+          "value": "4",
+          "name": "단면칼라"
+        }
+      ],
+      "papers": [
+        {
+          "mtrl_cd": "RRW230",
+          "mtrl_cdw": "230",
+          "paper_name_out": "휘라레 (린넨) 230g",
+          "match_as": "휘라레 (린넨) 216g",
+          "actual_weight_g": 230,
+          "note": "디티피아 실제 230g, printcity 216g 매칭 (14g 차이)"
+        }
+      ]
+    }
+  ]
+}

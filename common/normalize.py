@@ -86,6 +86,66 @@ def _normalize_qty(raw, rule: dict) -> int:
         return rule.get("default", 200)
 
 
+def _normalize_paper_name(raw: str, rule: dict) -> tuple[str, str | None]:
+    """raw paper_name → (canonical paper_name, paper_coating).
+    처리 순서:
+      1. 'Ng' 뒤 노이즈 텍스트 제거 + weight 추출
+      2. '무코팅스노우'/'코팅스노우' prefix 감지 → coating 추출
+      3. '(무광코팅)'/'(유광코팅)'/'(무코팅)' 괄호 토큰 추출
+      4. canonical alias 적용 (longest match)
+      5. '{canonical} {weight}g' 재조립
+    반환: (정규화 paper_name, paper_name에서 발견한 coating 또는 None)
+    """
+    raw = (raw or "").strip()
+    if not raw:
+        return "", None
+
+    paper_coating = None
+
+    # prefix: 무코팅스노우, 코팅스노우 (bizhows)
+    for prefix, canonical_coating in (("무코팅", "비코팅"), ("코팅", "유광코팅")):
+        if raw.startswith(prefix) and len(raw) > len(prefix) and raw[len(prefix)] not in (" ", "("):
+            paper_coating = canonical_coating
+            raw = raw[len(prefix):]
+            break
+
+    # 괄호 토큰: 스노우지(무광코팅) 250g
+    m = re.search(r"\((무광코팅|유광코팅|벨벳코팅|무코팅)\)", raw)
+    if m:
+        tok = m.group(1)
+        paper_coating = "비코팅" if tok == "무코팅" else tok
+        raw = (raw[:m.start()] + raw[m.end():]).strip()
+
+    # noise suffix + weight 추출
+    noise_re = rule.get("noise_suffix_regex", r"(\d+)\s*g.*$")
+    wm = re.search(noise_re, raw)
+    weight = None
+    base = raw
+    if wm:
+        weight = wm.group(1)
+        base = raw[:wm.start()].strip()
+
+    base = re.sub(r"\s+", " ", base).strip()
+
+    # canonical alias (longest match)
+    lookup = {}
+    for canonical, alist in rule.get("aliases", {}).items():
+        lookup[canonical] = canonical
+        for a in alist:
+            lookup[a] = canonical
+    canonical_name = None
+    best_len = 0
+    for alias, canonical in lookup.items():
+        if alias in base and len(alias) > best_len:
+            canonical_name = canonical
+            best_len = len(alias)
+    if not canonical_name:
+        canonical_name = base  # 미매칭 → 원본 유지
+
+    result = f"{canonical_name} {weight}g" if weight else canonical_name
+    return result, paper_coating
+
+
 def apply(item: dict, norm_rule: dict) -> dict:
     """단일 item을 정규화된 dict로 변환. 원본 훼손 안 함.
 
@@ -109,9 +169,17 @@ def apply(item: dict, norm_rule: dict) -> dict:
     out = deepcopy(item)
     options = dict(out.get("options") or {})
 
-    # coating
+    # paper_name (+ 내부에서 발견한 coating 힌트)
+    paper_rule = norm_rule.get("paper_name", {})
+    paper_val, paper_coating = _normalize_paper_name(out.get("paper_name", ""), paper_rule)
+    out["paper_name"] = paper_val
+
+    # coating — paper_name에서 추출된 coating이 있으면 우선, 없으면 원본 coating 필드 정규화
     coating_rule = norm_rule.get("coating", {})
-    c_val, c_opts = _normalize_coating(out.get("coating", ""), coating_rule)
+    if paper_coating:
+        c_val, c_opts = paper_coating, {}
+    else:
+        c_val, c_opts = _normalize_coating(out.get("coating", ""), coating_rule)
     out["coating"] = c_val
     options.update(c_opts)
 

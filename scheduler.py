@@ -35,7 +35,10 @@ CATEGORIES = {
         "rule_path": os.path.join(CONFIG_DIR, "card_mapping_rule.json"),
         "crawlers": [
             ("printcity", "crawlers.PrintcityCardCrawler", "crawl_all", "save"),
-            # TODO: swadpia, wowpress, dtpia 등 신규 스키마로 마이그레이션 후 추가
+            ("bizhows",   "crawlers.BizhowsCardCrawler",   "crawl_all", "save"),
+            ("swadpia",   "crawlers.SwadpiaCardCrawler",   "crawl_all", "save"),
+            ("wowpress",  "crawlers.WowpressCardCrawler",  "crawl_all", "save"),
+            ("dtpia",     "crawlers.DtpiaCardCrawler",     "crawl_all", "save"),
         ],
     },
     # TODO: sticker, envelope, flyer, postcard — 각 크롤러 신규 스키마로 마이그레이션 후 추가
