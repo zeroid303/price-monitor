@@ -3,13 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>경쟁사 가격 모니터링 - 명함</title>
+    <title>경쟁사 가격 모니터링</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', -apple-system, sans-serif; background: #f5f6fa; color: #2d3436; font-size: 13px; }
-        .header { background: #2d3436; color: white; padding: 14px 24px; }
-        .header h1 { font-size: 17px; font-weight: 600; }
-        .container { max-width: 1400px; margin: 16px auto; padding: 0 16px; }
+        body { font-family: 'Segoe UI', -apple-system, sans-serif; background: #f5f6fa; color: #2d3436; font-size: 13px; display: flex; min-height: 100vh; }
+
+        /* 사이드바 */
+        .sidebar { width: 180px; background: #f8f9fa; border-right: 1px solid #e9ecef; padding-top: 0; flex-shrink: 0; position: fixed; height: 100vh; overflow-y: auto; }
+        .sidebar-title { padding: 16px 18px; font-size: 12px; font-weight: 600; color: #888; border-bottom: 1px solid #e9ecef; }
+        .sidebar-nav { list-style: none; padding: 8px 0; }
+        .sidebar-nav li { }
+        .sidebar-nav a { display: block; padding: 10px 18px; color: #666; text-decoration: none; font-size: 14px; font-weight: 500; border-left: 3px solid transparent; }
+        .sidebar-nav a:hover { background: #e9ecef; color: #2d3436; }
+        .sidebar-nav a.active { color: #2d3436; font-weight: 700; border-left-color: #0984e3; background: #e3f2fd; }
+
+        /* 메인 컨텐츠 */
+        .main { flex: 1; margin-left: 180px; }
+        .container { margin: 32px; padding: 0 32px; }
 
         .controls { background: white; border-radius: 8px; padding: 14px 18px; margin-bottom: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
         .controls-row { display: flex; align-items: center; gap: 14px; }
@@ -37,136 +47,163 @@
         table.grid thead .site-source a:hover { text-decoration: underline; }
         table.grid .row-side { background: #fafafa; font-weight: 600; text-align: center; color: #555; vertical-align: middle; width: 60px; }
         table.grid .row-qty { background: #fcfcfc; text-align: center; color: #777; width: 70px; }
+        table.grid .row-size { background: #fcfcfc; text-align: center; color: #555; font-weight: 500; width: 80px; }
         table.grid .price { text-align: right; font-variant-numeric: tabular-nums; color: #2d3436; }
         table.grid .price.empty { color: #ddd; text-align: center; }
         table.grid .price.base { background: #f7fbff; }
+        table.grid .ea-note { font-size: 10px; color: #999; display: block; }
 
         .loading { text-align: center; padding: 60px; color: #999; }
         .empty { text-align: center; padding: 40px; color: #bbb; }
 
-        /* 탭 */
         .tabs { display: flex; gap: 4px; margin-bottom: 12px; }
         .tab { background: white; border: none; padding: 10px 20px; border-radius: 8px 8px 0 0; font-size: 13px; font-weight: 600; color: #999; cursor: pointer; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
         .tab.active { color: #2d3436; border-bottom: 2px solid #2d3436; }
         .change-count { background: #d63031; color: white; padding: 1px 6px; border-radius: 10px; font-size: 10px; margin-left: 4px; }
         .change-count:empty { display: none; }
 
-        /* 변동 테이블 */
         table.changes { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
         table.changes th, table.changes td { padding: 10px 14px; border-bottom: 1px solid #f5f5f5; font-size: 12.5px; text-align: left; }
         table.changes thead th { background: #fafafa; color: #888; font-weight: 600; }
         table.changes td.price { text-align: right; font-variant-numeric: tabular-nums; }
-        .change-up { color: #27ae60; }    /* 인상 = 자사에 유리 (초록) */
-        .change-down { color: #d63031; }  /* 인하 = 자사에 위험 (빨강) */
+        .change-up { color: #27ae60; }
+        .change-down { color: #d63031; }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>경쟁사 가격 모니터링 — 명함</h1>
+    <!-- 사이드바 -->
+    <div class="sidebar">
+        <div class="sidebar-title">가격 모니터링</div>
+        <ul class="sidebar-nav" id="sidebarNav">
+            <li><a href="#" data-category="card" class="active">명함</a></li>
+            <li><a href="#" data-category="sticker">스티커</a></li>
+        </ul>
     </div>
 
-    <div class="container">
-        <div class="controls">
-            <div class="controls-row">
-                <button class="btn-update" id="btnUpdate" onclick="startCrawl()">가격 업데이트</button>
-                <div class="progress-wrap">
-                    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-                    <div class="progress-text" id="progressText">대기 중</div>
+    <!-- 메인 -->
+    <div class="main">
+        <div class="container">
+            <div class="controls">
+                <div class="controls-row">
+                    <button class="btn-update" id="btnUpdate" onclick="startCrawl()">가격 업데이트</button>
+                    <div class="progress-wrap">
+                        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+                        <div class="progress-text" id="progressText"></div>
+                    </div>
                 </div>
+                <div class="meta-line" id="metaLine"></div>
             </div>
-            <div class="meta-line">
-                <span>사이즈: 90x50mm</span>
-                <span>인쇄: 양면칼라(8도) / 단면칼라(4도)</span>
-                <span>매수: 100 / 200 / 500 / 1000</span>
-                <span>VAT: 포함 (비즈하우스만 별도, 대시보드 제외)</span>
-                <span>평량 오차: ±25g 허용 (예: 와우프레스 반누보 227g↔250g, 디티피아 휘라레 230g↔216g 등)</span>
-                <span>디티피아: 100/200매는 소량명함, 500/1000매는 일반명함 가격 (옵셋 인쇄 추정)</span>
-                <span class="updated-at" id="updatedAt"></span>
+
+            <div class="tabs">
+                <button class="tab active" id="tabCompare" onclick="switchTab('compare')">가격 비교</button>
+                <button class="tab" id="tabChanges" onclick="switchTab('changes')">가격 변동 <span class="change-count" id="changeCount"></span></button>
             </div>
-        </div>
 
-        <div class="tabs">
-            <button class="tab active" id="tabCompare" onclick="switchTab('compare')">가격 비교</button>
-            <button class="tab" id="tabChanges" onclick="switchTab('changes')">가격 변동 <span class="change-count" id="changeCount"></span></button>
-        </div>
-
-        <div id="panelCompare">
-            <div id="grids">
-                <div class="loading">로딩 중...</div>
+            <div id="panelCompare">
+                <div id="grids"><div class="loading">로딩 중...</div></div>
             </div>
-        </div>
 
-        <div id="panelChanges" style="display:none;">
-            <table class="changes">
-                <thead>
-                    <tr>
-                        <th>사이트</th>
-                        <th>용지</th>
-                        <th>코팅</th>
-                        <th>면</th>
-                        <th>매수</th>
-                        <th class="price" id="thPast">이전 가격</th>
-                        <th class="price" id="thNow">현재 가격</th>
-                        <th class="price">변동</th>
-                        <th class="price">변동률</th>
-                    </tr>
-                </thead>
-                <tbody id="changesBody">
-                    <tr><td colspan="9" style="text-align:center;padding:40px;color:#ccc;">변동 데이터 없음</td></tr>
-                </tbody>
-            </table>
+            <div id="panelChanges" style="display:none;">
+                <table class="changes">
+                    <thead>
+                        <tr>
+                            <th>사이트</th>
+                            <th>용지</th>
+                            <th>코팅</th>
+                            <th>사이즈</th>
+                            <th>매수</th>
+                            <th class="price" id="thPast">이전 가격</th>
+                            <th class="price" id="thNow">현재 가격</th>
+                            <th class="price">변동</th>
+                            <th class="price">변동률</th>
+                        </tr>
+                    </thead>
+                    <tbody id="changesBody">
+                        <tr><td colspan="9" style="text-align:center;padding:40px;color:#ccc;">변동 데이터 없음</td></tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
     <script>
+    let currentCategory = location.hash.replace('#', '') || 'card';
+
+    const META = {
+        card: `<span>사이즈: 90x50mm</span>
+               <span>인쇄: 양면칼라(8도) / 단면칼라(4도)</span>
+               <span>매수: 100 / 200 / 500 / 1000</span>
+               <span>평량 오차: ±25g 허용</span>
+               <span>비즈하우스는 VAT 미포함이라서 가격 1.1배 보정</span>
+               <span class="updated-at" id="updatedAt"></span>`,
+        sticker: `<span>형태: 원형 도무송</span>
+                  <span>매수: 1000매 고정</span>
+                  <span>사이즈: 45x45mm ~ 95x95mm</span>
+                  <span>평량 오차: ±25g 허용</span>
+                  <span class="updated-at" id="updatedAt"></span>`,
+    };
+
+    const TITLES = { card: '명함', sticker: '스티커' };
+
     function fmt(n) {
         if (n == null) return '';
         return Number(n).toLocaleString();
     }
 
-    function renderGrids(data) {
-        const sites = data.sites;
-        const sides = data.sides;
-        const qtys = data.qtys;
+    // ── 사이드바 클릭 ──
+    document.getElementById('sidebarNav').addEventListener('click', (e) => {
+        const a = e.target.closest('a[data-category]');
+        if (!a) return;
+        e.preventDefault();
+        const cat = a.dataset.category;
+        if (cat === currentCategory) return;
+        currentCategory = cat;
+        location.hash = cat;
+        document.querySelectorAll('.sidebar-nav a').forEach(el => el.classList.remove('active'));
+        a.classList.add('active');
+        document.getElementById('metaLine').innerHTML = META[cat] || '';
+        loadData();
+        loadChanges();
+    });
 
-        if (!data.papers.length) {
-            document.getElementById('grids').innerHTML = '<div class="empty">데이터 없음. "가격 업데이트" 클릭으로 크롤링하세요.</div>';
+    // ── 명함 그리드 렌더링 ──
+    function renderCardGrids(data) {
+        const { sites, sides, qtys, papers } = data;
+        if (!papers.length) {
+            document.getElementById('grids').innerHTML = '<div class="empty">데이터 없음</div>';
             return;
         }
-
         let html = '';
-        for (const paper of data.papers) {
+        for (const paper of papers) {
             const tag = paper.partial_coating ? '<span class="partial-tag">부분코팅</span>' : '';
             html += `<div class="paper-card">
                 <div class="paper-title">${tag}${paper.paper_name} <span style="color:#888;font-weight:400;">${paper.coating}</span></div>
-                <table class="grid">
-                    <thead>
-                        <tr>
-                            <th rowspan="2" colspan="2">면 / 매수</th>`;
+                <table class="grid"><thead><tr>
+                    <th rowspan="2" colspan="2">면 / 매수</th>`;
             for (const site of sites) {
-                const siteData = paper.sites[site.id];
-                const product = siteData ? siteData.product : '';
-                const url = siteData ? siteData.url : site.base_url;
+                const sd = paper.sites[site.id];
+                const product = sd ? sd.product : '';
+                const url = sd ? sd.url : site.base_url;
+                const vatTag = site.vat_adjusted ? ' <span style="color:#888;font-size:11px;">(VAT ×1.1 보정)</span>' : '';
+                const rawPaper = sd ? (sd.raw_paper_name || '') : '';
                 html += `<th>
-                    <div class="site-name">${site.name}</div>
+                    <div class="site-name">${site.name}${vatTag}</div>
                     <div class="site-source">
                         ${product ? product + '<br>' : ''}
+                        ${rawPaper ? `<span style="color:#b45309;font-size:11px;">${rawPaper}</span><br>` : ''}
                         ${url ? `<a href="${url}" target="_blank" rel="noopener">${(() => { const u = new URL(url); return u.host + u.pathname; })()}</a>` : ''}
                     </div>
                 </th>`;
             }
             html += `</tr></thead><tbody>`;
-
             for (const side of sides) {
                 qtys.forEach((qty, i) => {
                     html += '<tr>';
-                    if (i === 0) {
-                        html += `<td class="row-side" rowspan="${qtys.length}">${side}</td>`;
-                    }
+                    if (i === 0) html += `<td class="row-side" rowspan="${qtys.length}">${side}</td>`;
                     html += `<td class="row-qty">${qty}</td>`;
                     for (const site of sites) {
-                        const siteData = paper.sites[site.id];
-                        const price = siteData ? siteData.prices[side]?.[String(qty)] : null;
+                        const sd = paper.sites[site.id];
+                        const price = sd ? sd.prices[side]?.[String(qty)] : null;
                         const isBase = site.ownership === 'self';
                         const cls = price == null ? 'price empty' : (isBase ? 'price base' : 'price');
                         html += `<td class="${cls}">${price == null ? '-' : fmt(price)}</td>`;
@@ -174,18 +211,74 @@
                     html += '</tr>';
                 });
             }
-
             html += `</tbody></table></div>`;
         }
         document.getElementById('grids').innerHTML = html;
-        document.getElementById('updatedAt').textContent = data.updated_at ? `최종 업데이트: ${data.updated_at}` : '';
     }
 
+    // ── 스티커 그리드 렌더링 ──
+    function renderStickerGrids(data) {
+        const { sites, sizes, papers } = data;
+        if (!papers.length) {
+            document.getElementById('grids').innerHTML = '<div class="empty">데이터 없음. "가격 업데이트"로 크롤링하세요.</div>';
+            return;
+        }
+        let html = '';
+        for (const paper of papers) {
+            html += `<div class="paper-card">
+                <div class="paper-title">${paper.paper_name} <span style="color:#888;font-weight:400;">${paper.coating}</span></div>
+                <table class="grid"><thead><tr>
+                    <th>사이즈</th>`;
+            for (const site of sites) {
+                const sd = paper.sites[site.id];
+                const product = sd ? sd.product : '';
+                const url = sd ? sd.url : site.base_url;
+                const vatTag = site.vat_adjusted ? ' <span style="color:#888;font-size:11px;">(VAT ×1.1 보정)</span>' : '';
+                const rawPaper = sd ? (sd.raw_paper_name || '') : '';
+                html += `<th>
+                    <div class="site-name">${site.name}${vatTag}</div>
+                    <div class="site-source">
+                        ${product ? product + '<br>' : ''}
+                        ${rawPaper ? `<span style="color:#b45309;font-size:11px;">${rawPaper}</span><br>` : ''}
+                        ${url ? `<a href="${url}" target="_blank" rel="noopener">${(() => { const u = new URL(url); return u.host + u.pathname; })()}</a>` : ''}
+                    </div>
+                </th>`;
+            }
+            html += `</tr></thead><tbody>`;
+            for (const size of sizes) {
+                html += `<tr><td class="row-size">${size}</td>`;
+                for (const site of sites) {
+                    const sd = paper.sites[site.id];
+                    const priceData = sd ? sd.prices[size] : null;
+                    const price = priceData ? priceData.price : null;
+                    const ea = priceData ? priceData.ea : 1;
+                    const isBase = site.ownership === 'self';
+                    const cls = price == null ? 'price empty' : (isBase ? 'price base' : 'price');
+                    let display = price == null ? '-' : fmt(price);
+                    if (ea > 1 && price != null) {
+                        display += `<span class="ea-note">(${ea}EA 보정)</span>`;
+                    }
+                    html += `<td class="${cls}">${display}</td>`;
+                }
+                html += '</tr>';
+            }
+            html += `</tbody></table></div>`;
+        }
+        document.getElementById('grids').innerHTML = html;
+    }
+
+    // ── 데이터 로드 ──
     async function loadData() {
         try {
-            const resp = await fetch('/api/data/grid');
+            const resp = await fetch(`/api/data/grid?category=${currentCategory}`);
             const data = await resp.json();
-            renderGrids(data);
+            if (data.type === 'sticker') {
+                renderStickerGrids(data);
+            } else {
+                renderCardGrids(data);
+            }
+            const updEl = document.getElementById('updatedAt');
+            if (updEl) updEl.textContent = data.updated_at ? `최종 업데이트: ${data.updated_at}` : '';
         } catch (e) {
             document.getElementById('grids').innerHTML = `<div class="empty">로딩 실패: ${e}</div>`;
         }
@@ -193,7 +286,7 @@
 
     async function loadChanges() {
         try {
-            const resp = await fetch('/api/data/changes');
+            const resp = await fetch(`/api/data/changes?category=${currentCategory}`);
             const data = await resp.json();
             const changes = data.changes || [];
             document.getElementById('changeCount').textContent = changes.length > 0 ? changes.length : '';
@@ -203,18 +296,16 @@
                 document.getElementById('changesBody').innerHTML = '<tr><td colspan="9" style="text-align:center;padding:40px;color:#ccc;">가격 변동 없음</td></tr>';
                 return;
             }
-            const side = (pm) => pm.startsWith('양면') ? '양면' : (pm.startsWith('단면') ? '단면' : pm);
             let html = '';
             for (const c of changes) {
                 const cls = c.direction === 'up' ? 'change-up' : 'change-down';
                 const arrow = c.direction === 'up' ? '▲' : '▼';
                 const diffStr = c.diff > 0 ? `+${fmt(c.diff)}` : fmt(c.diff);
-                const partial = c.partial_coating ? '<span class="partial-tag" style="margin-left:4px;">부분코팅</span>' : '';
                 html += `<tr>
                     <td>${c.company_name}</td>
-                    <td>${c.paper_name}${partial}</td>
+                    <td>${c.paper_name}</td>
                     <td>${c.coating}</td>
-                    <td>${side(c.print_mode)}</td>
+                    <td>${c.size}</td>
                     <td>${c.qty}</td>
                     <td class="price">${fmt(c.past_price)}</td>
                     <td class="price">${fmt(c.now_price)}</td>
@@ -223,9 +314,7 @@
                 </tr>`;
             }
             document.getElementById('changesBody').innerHTML = html;
-        } catch (e) {
-            console.error(e);
-        }
+        } catch (e) { console.error(e); }
     }
 
     function switchTab(tab) {
@@ -240,7 +329,11 @@
         btn.disabled = true;
         btn.textContent = '크롤링 중...';
         document.getElementById('progressFill').style.width = '20%';
-        fetch('/api/start', { method: 'POST' });
+        fetch('/api/start', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({category: currentCategory})
+        });
 
         const es = new EventSource('/stream');
         es.onmessage = (event) => {
@@ -250,18 +343,19 @@
                 btn.disabled = false;
                 btn.textContent = '가격 업데이트';
                 document.getElementById('progressFill').style.width = '100%';
-                document.getElementById('progressText').textContent = `완료 (${d.elapsed_sec || 0}초)`;
+                document.getElementById('progressText').textContent = `완료 (${((d.elapsed_sec || 0) / 60).toFixed(1)}분)`;
                 setTimeout(() => {
                     loadData();
                     loadChanges();
                     document.getElementById('progressFill').style.width = '0%';
-                    document.getElementById('progressText').textContent = '대기 중';
+                    document.getElementById('progressText').textContent = '';
                 }, 1200);
                 return;
             }
             const elapsed = d.elapsed_sec || 0;
-            document.getElementById('progressText').textContent = `${d.current} | ${elapsed}초 경과`;
-            document.getElementById('progressFill').style.width = Math.min(20 + elapsed, 90) + '%';
+            const minutes = (elapsed / 60).toFixed(1);
+            document.getElementById('progressText').textContent = `${d.current} | ${minutes}분 경과`;
+            document.getElementById('progressFill').style.width = Math.min(20 + elapsed / 2, 95) + '%';
         };
         es.onerror = () => {
             es.close();
@@ -271,6 +365,11 @@
         };
     }
 
+    // 초기 로드 — hash에 따라 사이드바 활성 + 데이터 로드
+    document.querySelectorAll('.sidebar-nav a').forEach(el => {
+        el.classList.toggle('active', el.dataset.category === currentCategory);
+    });
+    document.getElementById('metaLine').innerHTML = META[currentCategory];
     loadData();
     loadChanges();
     </script>

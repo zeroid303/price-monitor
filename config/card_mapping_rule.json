@@ -177,15 +177,6 @@
       "vat_included": false,
       "tech": "playwright"
     },
-    "naple": {
-      "name": "나플",
-      "ownership": "competitor",
-      "base_url": "https://www.naple.co.kr",
-      "match_by": "crawl_key",
-      "vat_included": true,
-      "dashboard_excluded": true,
-      "tech": "http"
-    },
     "swadpia": {
       "name": "성원애드피아",
       "ownership": "competitor",

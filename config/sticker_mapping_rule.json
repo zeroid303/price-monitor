@@ -1,360 +1,173 @@
 {
-  "description": "3사 스티커 용지(재질) 매칭 참조 데이터. 동일 material_group 기준으로 가격 비교 가능.",
-  "updated_at": "2026-03-19",
-  "crawled_dates": {
-    "ecard21": "2026-03-19",
-    "bizhows": "2026-03-19"
+  "_description": "스티커 카테고리 사이트별 매칭 규칙 + 정규화 규칙. card_mapping_rule.json과 동일 구조.",
+
+  "_defaults": {
+    "match_method": "substring",
+    "qty_default": 1000
   },
-  "price_basis": {
-    "quantity": "1,000매",
-    "ecard21": "1,000매 단면인쇄 기준. 일반컬러 스티커=사각(명함90x55), 도무송 스티커=원형/정사각/직사각/명함 등 5사이즈",
-    "bizhows": "1,000매 싱글규격스티커 기준. 지름6.5cm(65mm) 1사이즈만 크롤링됨. 원형/사각형/직사각형 형태별 동일가격"
+
+  "_match_axes": {
+    "_description": "스티커 매칭 축. 카드와 동일 5축이나, size가 가변이고 options에 shape/ea_per_sheet 추가.",
+    "axes": ["paper_name", "coating", "print_mode", "size", "qty"]
   },
-  "size_comparison_note": "공통 사이즈가 제한적. ecard21은 50mm/60mm 원형, bizhows는 65mm만. bizhows는 65mm 전용.",
-  "common_comparison_sizes": [
-    {
-      "label": "원형 50mm",
-      "ecard21": "원형 50mm (도무송)",
-      "bizhows": "없음 (65mm만)"
-    },
-    {
-      "label": "원형 60mm",
-      "ecard21": "원형 60mm (도무송)",
-      "bizhows": "없음 (65mm만)"
-    },
-    {
-      "label": "원형 65mm",
-      "ecard21": "없음",
-      "bizhows": "지름 6.5cm"
-    },
-    {
-      "label": "명함 90x55 (직사각)",
-      "ecard21": "명함 90x55",
-      "bizhows": "없음"
-    }
-  ],
-  "materials": [
-    {
-      "material_id": "art_gloss_coated_90g",
-      "material_name_ko": "유광코팅 아트지 90g",
-      "material_type": "art_paper",
-      "weight_gsm": 90,
-      "coating": "유광코팅",
-      "adhesive": "일반",
-      "material_group": "art_gloss_coated",
-      "match_confidence": "high",
-      "ecard21": {
-        "paper_code": "ppk28",
-        "paper_name": "유광코팅 스티커(아트지90g)",
-        "product_types": [
-          "일반 컬러 스티커",
-          "도무송 스티커"
-        ]
-      },
-      "bizhows": {
-        "paper": "코팅아트지90g",
-        "paper_seq": 67068,
-        "note": "비즈하우스 코팅아트지 = 유광코팅 아트지. 동일 재질."
-      },
-      "note": "비즈하우스 코팅아트지90g은 명함천국 유광코팅 스티커와 동일. ."
-    },
-    {
-      "material_id": "art_matte_coated_90g",
-      "material_name_ko": "무광코팅 아트지 90g",
-      "material_type": "art_paper",
-      "weight_gsm": 90,
-      "coating": "무광코팅",
-      "adhesive": "일반",
-      "material_group": "art_matte_coated",
-      "match_confidence": "partial",
-      "ecard21": {
-        "paper_code": "ppk28_3",
-        "paper_name": "무광코팅 스티커(아트지90g)",
-        "product_types": [
-          "일반 컬러 스티커",
-          "도무송 스티커"
-        ]
-      },
-      "bizhows": null,
-      "note": "비즈하우스에는 무광코팅 아트지 옵션 없음 (코팅/무코팅만). ."
-    },
-    {
-      "material_id": "art_uncoated_90g",
-      "material_name_ko": "비코팅 아트지 90g (무코팅)",
-      "material_type": "art_paper",
-      "weight_gsm": 90,
-      "coating": "비코팅",
-      "adhesive": "일반",
-      "material_group": "art_uncoated",
-      "match_confidence": "high",
-      "ecard21": {
-        "paper_code": "ppk28_1",
-        "paper_name": "비코팅 스티커(아트지90g)",
-        "product_types": [
-          "일반 컬러 스티커",
-          "도무송 스티커"
-        ]
-      },
-      "bizhows": {
-        "paper": "무코팅아트지90g",
-        "paper_seq": 67069,
-        "note": "동일 재질. 비코팅 = 무코팅."
+
+  "_normalization": {
+    "coating": {
+      "_description": "스티커 코팅. 유광코팅이 기본 비교 조건.",
+      "default": "유광코팅",
+      "allowed": ["비코팅", "무광코팅", "유광코팅"],
+      "aliases": {
+        "비코팅":   ["", "없음", "안함", "코팅없음", "코팅안함", "무코팅"],
+        "무광코팅": ["무광", "무광써멀라미네팅", "무광라미네이팅"],
+        "유광코팅": ["유광", "코팅", "유광써멀라미네팅", "유광라미네이팅", "심플레인보우 코팅"]
       }
     },
-    {
-      "material_id": "art_strong_adhesive_coated_90g",
-      "material_name_ko": "강접 코팅 아트지 90g",
-      "material_type": "art_paper",
-      "weight_gsm": 90,
-      "coating": "코팅",
-      "adhesive": "강접",
-      "material_group": "art_strong_adhesive",
-      "match_confidence": "ecard21_only",
-      "ecard21": {
-        "paper_code": "ppk28_2",
-        "paper_name": "강접 코팅 스티커(아트지90g)",
-        "product_types": [
-          "일반 컬러 스티커",
-          "도무송 스티커"
+
+    "print_mode": {
+      "_description": "스티커 인쇄 도수. 프린트시티만 '양면5도'(CMYK+W), 나머지는 '단면4도'(CMYK) 또는 도수 선택 없음. 대부분 사이트가 도수 UI 없이 고정이므로, 경쟁사 4도 = 프린트시티 5도로 간주하고 비교.",
+      "default": "단면칼라",
+      "allowed": ["양면5도", "단면4도", "단면칼라"],
+      "aliases": {
+        "양면5도":   ["5도", "CMYK+W", "CMYK+백판"],
+        "단면4도":   ["4도", "단면칼라(4도)", "CMYK"],
+        "단면칼라":  ["단면", "단면 칼라", "자유형 도무송"]
+      },
+      "_note": "사이트별 도수 정책이 달라 정확한 1:1 비교는 불가. 프린트시티 5도(화이트 포함)와 경쟁사 4도를 동일 조건으로 비교하는 것으로 합의."
+    },
+
+    "size": {
+      "_description": "스티커 사이즈. 카드와 달리 가변. 'WxH' mm 정수 형식.",
+      "default": "60x60",
+      "format": "{W}x{H}",
+      "allowed_examples": ["40x40", "50x50", "60x60", "70x70", "80x80", "90x90"],
+      "_normalize_rules": [
+        "공백·㎜·mm 단위 제거 후 숫자만 추출",
+        "구분자 *, ×, X 모두 x로 통일"
+      ]
+    },
+
+    "qty": {
+      "default": 1000,
+      "common_units": [500, 1000, 2000, 3000]
+    },
+
+    "paper_name": {
+      "_description": "스티커 용지명 정규화. 전체 문자열 alias 우선 매칭 + 카드와 동일한 분해 로직 fallback.",
+      "canonical": ["초강접아트지 90g", "강접아트지 90g", "강접아트지 80g", "유포지 80g", "모조지 80g", "크라프트 57g", "투명데드롱 25g", "은데드롱 25g"],
+      "aliases": {
+        "초강접아트지 90g": [
+          "초강접아트스티커-90g",
+          "초강접스티커(아트지 90g)",
+          "초강접스티커 (아트지 90g)",
+          "아트지 90g 초강접",
+          "초강접 코팅아트지90g",
+          "초강접아트지 90g",
+          "초강접아트지(유광코팅)"
+        ],
+        "강접아트지 80g": [
+          "강접아트지(유광) 80g",
+          "강접아트지(유광코팅) 80g",
+          "강접아트지(무코팅) 80g"
+        ],
+        "강접아트지 90g": [
+          "강접스티커 (아트지 90g)",
+          "강접스티커(아트지 90g)",
+          "아트스티커(일반강접)-90g",
+          "아트지90g"
+        ],
+        "유포지 80g": [
+          "유포지스티커-80g",
+          "유포지 80g",
+          "유포지 80μ",
+          "유포지80g",
+          "유포지"
+        ],
+        "모조지 80g": [
+          "모조스티커-80g",
+          "모조지스티커-80g",
+          "모조지 80g",
+          "모조지80g",
+          "모조지"
+        ],
+        "크라프트 57g": [
+          "크라프트스티커-57g",
+          "크라프트지 57g",
+          "크라프트지57g (빈티지)",
+          "크라프트 57g",
+          "크라프트지"
+        ],
+        "투명데드롱 25g": [
+          "투명데드롱스티커-25g",
+          "투명데드롱 25g (유광코팅)",
+          "투명 스티커(투명데드롱25g)",
+          "투명데드롱 25",
+          "투명데드롱50g",
+          "투명데드롱"
+        ],
+        "은데드롱 25g": [
+          "은데드롱스티커-25g",
+          "은데드롱 25g (무광코팅)",
+          "은광데드롱50g",
+          "은데드롱 스티커(은데드롱25g)",
+          "은무데드롱 25",
+          "은광데드롱"
         ]
       },
-      "bizhows": null,
-      "note": "명함천국 고유 옵션. 강접착(강접)은 초강접보다 약한 강접착."
-    },
-    {
-      "material_id": "art_super_strong_coated_90g",
-      "material_name_ko": "초강접 코팅 아트지 90g",
-      "material_type": "art_paper",
-      "weight_gsm": 90,
-      "coating": "코팅",
-      "adhesive": "초강접",
-      "material_group": "art_super_strong",
-      "match_confidence": "high",
-      "ecard21": {
-        "paper_code": "ppkdb",
-        "paper_name": "초강접 코팅 스티커(아트지90g)",
-        "product_types": [
-          "일반 컬러 스티커"
-        ],
-        "note": "도무송에서는 초강접 유광코팅/비코팅으로 세분화"
-      },
-      "bizhows": {
-        "paper": "초강접 코팅아트지90g",
-        "paper_seq": 67072,
-        "note": "동일 재질. 초강접 접착."
+      "paper_name_extract": {
+        "_description": "paper_name에 코팅 정보가 인코딩된 경우. 와우프레스 '강접아트지(유광코팅) 80g' → paper_name='강접아트지 80g', coating='유광코팅'",
+        "rules": [
+          {
+            "pattern": "\\((유광코팅|무코팅|유광|무광)\\)",
+            "extract_to": "coating",
+            "remove_from_paper_name": true,
+            "prefix_map": { "무코팅": "비코팅", "유광": "유광코팅", "무광": "무광코팅" }
+          }
+        ]
       }
-    },
-    {
-      "material_id": "art_super_strong_gloss_90g",
-      "material_name_ko": "초강접 유광코팅 아트지 90g",
-      "material_type": "art_paper",
-      "weight_gsm": 90,
-      "coating": "유광코팅",
-      "adhesive": "초강접",
-      "material_group": "art_super_strong",
-      "match_confidence": "partial",
-      "ecard21": {
-        "paper_code": "ppkdb",
-        "paper_name": "초강접 유광코팅 스티커(아트지90g)",
-        "product_types": [
-          "도무송 스티커"
-        ]
-      },
-      "bizhows": {
-        "paper": "초강접 코팅아트지90g",
-        "paper_seq": 67072,
-        "note": "비즈하우스 초강접 코팅아트지 = 유광코팅 추정. 코팅 방식 불명확."
-      },
-      "note": "명함천국 도무송에서 초강접을 유광코팅/비코팅으로 세분화. 비즈하우스는 하나로 통합."
-    },
-    {
-      "material_id": "art_super_strong_uncoated_90g",
-      "material_name_ko": "초강접 비코팅 아트지 90g",
-      "material_type": "art_paper",
-      "weight_gsm": 90,
-      "coating": "비코팅",
-      "adhesive": "초강접",
-      "material_group": "art_super_strong",
-      "match_confidence": "ecard21_only",
-      "ecard21": {
-        "paper_code": "ppkdb",
-        "paper_name": "초강접 비코팅 스티커(아트지90g)",
-        "product_types": [
-          "일반 컬러 스티커",
-          "도무송 스티커"
-        ]
-      },
-      "bizhows": null,
-      "note": "명함천국 고유. 초강접 비코팅은 비즈하우스."
-    },
-    {
-      "material_id": "mojo_80g",
-      "material_name_ko": "모조지 80g",
-      "material_type": "woodfree",
-      "weight_gsm": 80,
-      "coating": "비코팅",
-      "adhesive": "일반",
-      "material_group": "woodfree",
-      "match_confidence": "high",
-      "ecard21": {
-        "paper_code": "ppk19",
-        "paper_name": "모조지 스티커(모조지80g)",
-        "product_types": [
-          "일반 컬러 스티커",
-          "도무송 스티커"
-        ]
-      },
-      "bizhows": {
-        "paper": "모조지80g",
-        "paper_seq": 67073,
-        "note": "동일 재질."
-      },
-      "note": "3사 모두 동일 모조지 80g 계열. ."
-    },
-    {
-      "material_id": "yupo_80g",
-      "material_name_ko": "유포지 80g (PP합성지)",
-      "material_type": "synthetic_pp",
-      "weight_gsm": 80,
-      "coating": "무광",
-      "adhesive": "일반",
-      "material_group": "yupo_pp",
-      "match_confidence": "high",
-      "ecard21": {
-        "paper_code": "ppk71",
-        "paper_name": "유포지 스티커(유포지80g)",
-        "product_types": [
-          "일반 컬러 스티커",
-          "도무송 스티커"
-        ]
-      },
-      "bizhows": {
-        "paper": "유포지80g",
-        "paper_seq": 67071,
-        "note": "동일 재질."
-      },
-      "note": "3사 모두 동일 유포지(PP합성지). . 방수/내수성."
-    },
-    {
-      "material_id": "silver_pet",
-      "material_name_ko": "은광데드롱 (은색 PET)",
-      "material_type": "metallic_pet",
-      "weight_gsm": null,
-      "coating": "유광",
-      "adhesive": "일반",
-      "material_group": "silver_pet",
-      "match_confidence": "partial",
-      "ecard21": {
-        "paper_code": "ppk99",
-        "paper_name": "은데드롱 스티커(은데드롱25g)",
-        "product_types": [
-          "일반 컬러 스티커",
-          "도무송 스티커"
-        ],
-        "note": "25g 두께"
-      },
-      "bizhows": {
-        "paper": "은광데드롱50g",
-        "paper_seq": 71102,
-        "note": "50g 두께. 명함천국 25g보다 두꺼움."
-      },
-      "note": "같은 은색 PET 재질이나 두께(g수) 다름: 명함천국 25g vs 비즈하우스 50g."
-    },
-    {
-      "material_id": "transparent_pet",
-      "material_name_ko": "투명 데드롱 (투명 PET/비닐)",
-      "material_type": "transparent",
-      "weight_gsm": null,
-      "coating": "무광",
-      "adhesive": "일반",
-      "material_group": "transparent",
-      "match_confidence": "partial",
-      "ecard21": {
-        "paper_code": "ppkn8",
-        "paper_name": "투명 스티커(투명데드롱25g)",
-        "product_types": [
-          "일반 컬러 스티커",
-          "도무송 스티커"
-        ],
-        "note": "25g 두께"
-      },
-      "bizhows": {
-        "paper": "투명데드롱50g",
-        "paper_seq": 67074,
-        "note": "50g 두께. 명함천국 25g보다 두꺼움."
-      },
-      "note": "3사 모두 투명 재질 있으나 두께 다름: 명함천국 25g, 비즈하우스 50g."
-    },
-    {
-      "material_id": "kraft_57g",
-      "material_name_ko": "크라프트지 57g",
-      "material_type": "kraft",
-      "weight_gsm": 57,
-      "coating": "비코팅",
-      "adhesive": "일반",
-      "material_group": "kraft",
-      "match_confidence": "high",
-      "ecard21": {
-        "paper_code": "ppkda",
-        "paper_name": "크라프트 스티커(크라프트57g)",
-        "product_types": [
-          "일반 컬러 스티커",
-          "도무송 스티커"
-        ]
-      },
-      "bizhows": {
-        "paper": "크라프트지57g (빈티지)",
-        "paper_seq": 67070,
-        "note": "동일 재질. 비즈하우스는 빈티지 부제 추가."
-      },
-      "note": "명함천국과 비즈하우스 동일 크라프트57g. ."
-    },
-    {
-      "material_id": "hologram",
-      "material_name_ko": "홀로그램",
-      "material_type": "hologram",
-      "weight_gsm": null,
-      "coating": "유광",
-      "adhesive": "일반",
-      "material_group": "hologram",
-      "match_confidence": "partial",
-      "ecard21": null,
-      "bizhows": {
-        "paper": "홀로그램50g",
-        "paper_seq": 71105,
-        "note": "50g 두께"
-      },
-      "note": "명함천국에는 홀로그램 스티커 없음. 비즈하우스와 ."
     }
-  ],
-  "unmatched": [
-    {
-      "company": "bizhows",
-      "paper": "프리미엄투명50g",
-      "paper_seq": 124713,
-      "note": "비즈하우스 고유. 일반 투명데드롱보다 프리미엄 등급. 명함천국.",
-      "price_65mm_circle": 35600
+  },
+
+  "sites": {
+    "printcity": {
+      "name": "프린트시티",
+      "ownership": "self",
+      "base_url": "https://www.printcity.co.kr",
+      "vat_included": true,
+      "tech": "playwright",
+      "_sticker_note": "초강접아트스티커 90g. 양면5도(CMYK+W). 40x40은 2EA/sheet."
     },
-    {
-      "company": "bizhows",
-      "paper": "금광데드롱50g",
-      "paper_seq": 71101,
-      "note": "비즈하우스 고유. 금색 광택 PET.",
-      "price_65mm_circle": 60400
+    "swadpia": {
+      "name": "성원애드피아",
+      "ownership": "competitor",
+      "base_url": "https://www.swadpia.co.kr",
+      "vat_included": true,
+      "tech": "playwright",
+      "_sticker_note": "아트지 90g 초강접. 단면칼라(4도). 유광써멀라미네팅=유광코팅."
     },
-    {
-      "company": "bizhows",
-      "paper": "금무지50g",
-      "paper_seq": 71103,
-      "note": "비즈하우스 고유. 금색 무광 PET.",
-      "price_65mm_circle": 81600
+    "dtpia": {
+      "name": "디티피아",
+      "ownership": "competitor",
+      "base_url": "https://www.dtpia.co.kr",
+      "vat_included": true,
+      "tech": "playwright",
+      "_sticker_note": "초강접스티커(아트지 90g). 자유형 도무송 원형. 유광코팅."
     },
-    {
-      "company": "bizhows",
-      "paper": "은무지50g",
-      "paper_seq": 71104,
-      "note": "비즈하우스 고유. 은색 무광 PET. 명함천국 은데드롱25g은 은광(유광).",
-      "price_65mm_circle": 56700
+    "bizhows": {
+      "name": "비즈하우스",
+      "ownership": "competitor",
+      "base_url": "https://www.bizhows.com",
+      "vat_included": false,
+      "tech": "playwright",
+      "_sticker_note": "초강접 코팅아트지90g. 원형 4.5/5.5/6.5cm만. VAT 별도(×1.1 보정). 7.5~9.5cm 프리셋 없음."
+    },
+    "wowpress": {
+      "name": "와우프레스",
+      "ownership": "competitor",
+      "base_url": "https://www.wowpress.co.kr",
+      "vat_included": true,
+      "paper_name_extract": true,
+      "tech": "playwright",
+      "_sticker_note": "강접아트지(유광코팅) 80g. 초강접 없음, 강접만. 90g 없음, 80g만. 단면칼라."
     }
-  ]
+  }
 }

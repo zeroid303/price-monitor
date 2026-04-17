@@ -1,0 +1,223 @@
+{
+  "_description": "스티커 카테고리 크롤 타겟. 평량 오차 ±25g 허용.",
+  "_filters_common": {
+    "qty": [1000],
+    "shape": "원형",
+    "sizes": ["45x45", "55x55", "65x65", "75x75", "85x85", "95x95"],
+    "weight_tolerance_g": 25
+  },
+  "printcity": [
+    {
+      "product_id": "679c60008db6e006523747d7",
+      "product_name": "도무송 스티커",
+      "slug": "StickerDomusongNew2",
+      "url": "https://www.printcity.co.kr/product/StickerDomusongNew2",
+      "papers": [
+        {"code": "MAT:SST-90", "name": "초강접아트스티커-90g"},
+        {"code": "MAT:SRT-90", "name": "아트스티커(일반강접)-90g"},
+        {"code": "MAT:YUP-80", "name": "유포지스티커-80g"},
+        {"code": "MAT:MOJ-80", "name": "모조스티커-80g"},
+        {"code": "MAT:CRA-80", "name": "크라프트스티커-57g"},
+        {"code": "MAT:TUD-25", "name": "투명데드롱스티커-25g"},
+        {"code": "MAT:EUD-25", "name": "은데드롱스티커-25g"}
+      ],
+      "coatings": [
+        {"code": "COT:GS", "name": "유광코팅"}
+      ],
+      "color_modes": [
+        {"code": "COL:41", "name": "양면5도"}
+      ],
+      "shapes": [
+        {"code": "STT:ROU", "name": "원형", "size_prefix": "SIZ:ROU"}
+      ],
+      "sizes": [
+        {"code": "SIZ:ROU-45X45", "name": "45x45", "ea_per_sheet": 1},
+        {"code": "SIZ:ROU-55X55", "name": "55x55", "ea_per_sheet": 1},
+        {"code": "SIZ:ROU-65X65", "name": "65x65", "ea_per_sheet": 1},
+        {"code": "SIZ:ROU-75X75", "name": "75x75", "ea_per_sheet": 1},
+        {"code": "SIZ:ROU-85X85", "name": "85x85", "ea_per_sheet": 1},
+        {"code": "SIZ:ROU-95X95", "name": "95x95", "ea_per_sheet": 1}
+      ],
+      "qtys": [1000]
+    }
+  ],
+  "bizhows": [
+    {
+      "product_name": "싱글 규격 스티커",
+      "code1": "8000",
+      "code2": "200",
+      "code3": "7101",
+      "mock": "8000_200_7101",
+      "url": "https://www.bizhows.com/ko/v/option?code1=8000&code2=200&code3=7101&mock=8000_200_7101&from=product_list_001",
+      "papers": [
+        {"seq": 67072, "name": "초강접 코팅아트지90g"},
+        {"seq": 67068, "name": "코팅아트지90g"},
+        {"seq": 67069, "name": "무코팅아트지90g"},
+        {"seq": 124713, "name": "프리미엄투명50g"},
+        {"seq": 67071, "name": "유포지80g"},
+        {"seq": 68550, "name": "리무벌아트지90g"}
+      ],
+      "_unavailable_on_page": "모조지80g(67073), 크라프트지57g(67070), 투명데드롱50g(67074), 은광데드롱50g(71102) — API povList에는 있지만 페이지 드롭다운에 없음",
+      "shape_seq": 67039,
+      "shape_name": "원형",
+      "qty_seq": 67060,
+      "target_sizes": ["지름 4.5cm", "지름 5.5cm", "지름 6.5cm"],
+      "_note": "비즈하우스 원형은 4.5/5.5/6.5cm만. VAT 별도."
+    }
+  ],
+  "swadpia": [
+    {
+      "category_code": "CST2000",
+      "product_code": "GST2001",
+      "product_name": "도무송 스티커",
+      "url": "https://www.swadpia.co.kr/goods/goods_view/CST2000/GST2001",
+      "papers": [
+        {"code": "STK090AF0", "name": "아트지 90g 초강접"},
+        {"code": "STK080YP0", "name": "유포지 80μ"},
+        {"code": "STK080VL0", "name": "모조지 80g"},
+        {"code": "STK057CR0", "name": "크라프트 57g"},
+        {"code": "STK025TD0", "name": "투명데드롱 25"},
+        {"code": "STK025SD0", "name": "은무데드롱 25"}
+      ],
+      "coatings": [
+        {"code": "COT70", "name": "유광써멀라미네팅"}
+      ],
+      "color_modes": [
+        {"code": "SPD10", "name": "단면칼라(4도)"}
+      ],
+      "shapes": [
+        {"code": "DMT60", "name": "A타입(원,사각,하트)"}
+      ],
+      "domusong_section": "DMS41",
+      "sizes": [
+        {"mm": 45, "name": "45x45"},
+        {"mm": 55, "name": "55x55"},
+        {"mm": 65, "name": "65x65"},
+        {"mm": 75, "name": "75x75"},
+        {"mm": 85, "name": "85x85"},
+        {"mm": 95, "name": "95x95"}
+      ],
+      "qtys": [1000]
+    }
+  ],
+  "dtpia": [
+    {
+      "product_name": "도무송 스티커",
+      "url": "https://dtpia.co.kr/Order/Sticker/Tomson.aspx",
+      "papers": [
+        {"code": "RS6090", "name": "초강접스티커 (아트지 90g)"},
+        {"code": "RSB002", "name": "강접스티커 (아트지 90g)"},
+        {"code": "RES000", "name": "유포지 80g"},
+        {"code": "RTS000", "name": "투명데드롱 25g (유광코팅)"},
+        {"code": "RSD025", "name": "은데드롱 25g (무광코팅)"}
+      ],
+      "coatings": [
+        {"code": "1", "name": "유광코팅"}
+      ],
+      "color_modes": [
+        {"name": "자유형 도무송 원형"}
+      ],
+      "sizes": [
+        {"mm": 45, "name": "45x45"},
+        {"mm": 55, "name": "55x55"},
+        {"mm": 65, "name": "65x65"},
+        {"mm": 75, "name": "75x75"},
+        {"mm": 85, "name": "85x85"},
+        {"mm": 95, "name": "95x95"}
+      ],
+      "qtys": [1000]
+    }
+  ],
+  "wowpress": [
+    {
+      "product_name": "특수초강접스티커(도무송)",
+      "prod_no": "40617",
+      "url": "https://wowpress.co.kr/ordr/prod/dets?ProdNo=40617",
+      "papers": [
+        {"name": "초강접아트지(유광코팅)"}
+      ],
+      "color_modes": [
+        {"name": "단면칼라"}
+      ],
+      "preset_sizes": [
+        {"name": "45x45", "label": "원형45"},
+        {"name": "55x55", "label": "원형55"},
+        {"name": "65x65", "label": "원형65"}
+      ],
+      "custom_sizes": [
+        {"mm": 75, "name": "75x75"},
+        {"mm": 85, "name": "85x85"},
+        {"mm": 95, "name": "95x95"}
+      ],
+      "qtys": [1000]
+    },
+    {
+      "product_name": "방수스티커(도무송)",
+      "prod_no": "40016",
+      "url": "https://wowpress.co.kr/ordr/prod/dets?ProdNo=40016",
+      "papers": [
+        {"name": "유포지"},
+        {"name": "투명데드롱"}
+      ],
+      "color_modes": [
+        {"name": "단면칼라"}
+      ],
+      "preset_sizes": [
+        {"name": "45x45", "label": "원형45"},
+        {"name": "55x55", "label": "원형55"},
+        {"name": "65x65", "label": "원형65"}
+      ],
+      "custom_sizes": [
+        {"mm": 75, "name": "75x75"},
+        {"mm": 85, "name": "85x85"},
+        {"mm": 95, "name": "95x95"}
+      ],
+      "qtys": [1000]
+    },
+    {
+      "product_name": "광택스티커(도무송)",
+      "prod_no": "40017",
+      "url": "https://wowpress.co.kr/ordr/prod/dets?ProdNo=40017",
+      "papers": [
+        {"name": "은광데드롱"}
+      ],
+      "color_modes": [
+        {"name": "단면칼라"}
+      ],
+      "preset_sizes": [
+        {"name": "45x45", "label": "원형45"},
+        {"name": "55x55", "label": "원형55"},
+        {"name": "65x65", "label": "원형65"}
+      ],
+      "custom_sizes": [
+        {"mm": 75, "name": "75x75"},
+        {"mm": 85, "name": "85x85"},
+        {"mm": 95, "name": "95x95"}
+      ],
+      "qtys": [1000]
+    },
+    {
+      "product_name": "종이스티커(도무송)",
+      "prod_no": "40019",
+      "url": "https://wowpress.co.kr/ordr/prod/dets?ProdNo=40019",
+      "papers": [
+        {"name": "크라프트지"},
+        {"name": "모조지"}
+      ],
+      "color_modes": [
+        {"name": "단면칼라"}
+      ],
+      "preset_sizes": [
+        {"name": "45x45", "label": "원형45"},
+        {"name": "55x55", "label": "원형55"},
+        {"name": "65x65", "label": "원형65"}
+      ],
+      "custom_sizes": [
+        {"mm": 75, "name": "75x75"},
+        {"mm": 85, "name": "85x85"},
+        {"mm": 95, "name": "95x95"}
+      ],
+      "qtys": [1000]
+    }
+  ]
+}

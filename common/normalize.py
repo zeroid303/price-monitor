@@ -87,52 +87,65 @@ def _normalize_qty(raw, rule: dict) -> int:
 
 
 def _normalize_paper_name(raw: str, rule: dict) -> tuple[str, str | None]:
-    """raw paper_name → (canonical paper_name, paper_coating).
+    """용지명 공통 파서. 카드/스티커 모두 동일 로직.
+
     처리 순서:
-      1. 'Ng' 뒤 노이즈 텍스트 제거 + weight 추출
-      2. '무코팅스노우'/'코팅스노우' prefix 감지 → coating 추출
-      3. '(무광코팅)'/'(유광코팅)'/'(무코팅)' 괄호 토큰 추출
-      4. canonical alias 적용 (longest match)
-      5. '{canonical} {weight}g' 재조립
-    반환: (정규화 paper_name, paper_name에서 발견한 coating 또는 None)
+      1. 전체 문자열 alias 매칭 (히트하면 즉시 반환)
+      2. prefix 코팅 추출 ("무코팅아트지" → 비코팅 + "아트지")
+         2-1. prefix 제거 후 전체 문자열 재매칭
+      3. 괄호 코팅 추출 ("(무광코팅)" → 무광코팅)
+      4. weight 분리 ("아트지 250g" → base="아트지", weight=250)
+      5. base alias 매칭 (longest match)
+      6. '{canonical} {weight}g' 재조립
+
+    예:
+      "초강접스티커(아트지 90g)"  → 1번에서 매칭 → ("초강접아트지 90g", None)
+      "무코팅아트지90g"          → 2번 prefix 추출 → ("강접아트지 90g", "비코팅")
+      "스노우지(무광코팅) 250g"  → 3번 괄호 추출 + 4~6번 → ("스노우화이트 250g", "무광코팅")
+      "무코팅스노우 400g"        → 2번 prefix + 4~6번 → ("스노우화이트 400g", "비코팅")
     """
     raw = (raw or "").strip()
     if not raw:
         return "", None
 
-    paper_coating = None
+    lookup = _build_alias_lookup(rule)
 
-    # prefix: 무코팅스노우, 코팅스노우 (bizhows)
-    for prefix, canonical_coating in (("무코팅", "비코팅"), ("코팅", "유광코팅")):
-        if raw.startswith(prefix) and len(raw) > len(prefix) and raw[len(prefix)] not in (" ", "("):
-            paper_coating = canonical_coating
-            raw = raw[len(prefix):]
+    # ── 1. 전체 문자열 alias 매칭 ──
+    if raw in lookup:
+        return lookup[raw], None
+
+    # ── 2. prefix 코팅 추출 ("무코팅아트지90g", "코팅스노우 300g") ──
+    paper_coating = None
+    working = raw
+    for prefix, coat_val in (("무코팅", "비코팅"), ("코팅", "유광코팅")):
+        if working.startswith(prefix) and len(working) > len(prefix) and working[len(prefix)] not in (" ", "("):
+            paper_coating = coat_val
+            working = working[len(prefix):]
             break
 
-    # 괄호 토큰: 스노우지(무광코팅) 250g
-    m = re.search(r"\((무광코팅|유광코팅|벨벳코팅|무코팅)\)", raw)
+    # 2-1. prefix 제거 후 전체 문자열 재매칭
+    if paper_coating and working in lookup:
+        return lookup[working], paper_coating
+
+    # ── 3. 괄호 코팅 추출 ("(무광코팅)", "(무코팅)") ──
+    m = re.search(r"\((무광코팅|유광코팅|벨벳코팅|무코팅)\)", working)
     if m:
         tok = m.group(1)
         paper_coating = "비코팅" if tok == "무코팅" else tok
-        raw = (raw[:m.start()] + raw[m.end():]).strip()
+        working = (working[:m.start()] + working[m.end():]).strip()
 
-    # noise suffix + weight 추출
+    # ── 4. weight 분리 ──
     noise_re = rule.get("noise_suffix_regex", r"(\d+)\s*g.*$")
-    wm = re.search(noise_re, raw)
+    wm = re.search(noise_re, working)
     weight = None
-    base = raw
+    base = working
     if wm:
         weight = wm.group(1)
-        base = raw[:wm.start()].strip()
+        base = working[:wm.start()].strip()
 
     base = re.sub(r"\s+", " ", base).strip()
 
-    # canonical alias (longest match)
-    lookup = {}
-    for canonical, alist in rule.get("aliases", {}).items():
-        lookup[canonical] = canonical
-        for a in alist:
-            lookup[a] = canonical
+    # ── 5. base alias 매칭 (longest match) ──
     canonical_name = None
     best_len = 0
     for alias, canonical in lookup.items():
@@ -140,8 +153,9 @@ def _normalize_paper_name(raw: str, rule: dict) -> tuple[str, str | None]:
             canonical_name = canonical
             best_len = len(alias)
     if not canonical_name:
-        canonical_name = base  # 미매칭 → 원본 유지
+        canonical_name = base
 
+    # ── 6. 재조립 ──
     result = f"{canonical_name} {weight}g" if weight else canonical_name
     return result, paper_coating
 
@@ -194,6 +208,13 @@ def apply(item: dict, norm_rule: dict) -> dict:
 
     # qty
     out["qty"] = _normalize_qty(out.get("qty"), norm_rule.get("qty", {}))
+
+    # price: VAT 포함 가격으로 통일 (raw가 별도면 ×1.1 보정)
+    raw_price = out.get("price")
+    if isinstance(raw_price, (int, float)) and out.get("price_vat_included") is False:
+        out["price"] = round(raw_price * 1.1)
+        out["price_vat_included"] = True
+        options["price_vat_adjusted"] = True  # 보정 흔적 (참고용)
 
     out["options"] = options
     return out

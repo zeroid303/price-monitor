@@ -41,7 +41,17 @@ CATEGORIES = {
             ("dtpia",     "crawlers.DtpiaCardCrawler",     "crawl_all", "save"),
         ],
     },
-    # TODO: sticker, envelope, flyer, postcard — 각 크롤러 신규 스키마로 마이그레이션 후 추가
+    "sticker": {
+        "rule_path": os.path.join(CONFIG_DIR, "sticker_mapping_rule.json"),
+        "crawlers": [
+            ("printcity", "crawlers.PrintcityStickerCrawler", "crawl_all", "save"),
+            ("bizhows",   "crawlers.BizhowsStickerCrawler",   "crawl_all", "save"),
+            ("swadpia",   "crawlers.SwadpiaStickerCrawler",   "crawl_all", "save"),
+            ("dtpia",     "crawlers.DtpiaStickerCrawler",     "crawl_all", "save"),
+            ("wowpress",  "crawlers.WowpressStickerCrawler",  "crawl_all", "save"),
+        ],
+    },
+    # TODO: envelope, flyer, postcard — 각 크롤러 신규 스키마로 마이그레이션 후 추가
 }
 
 

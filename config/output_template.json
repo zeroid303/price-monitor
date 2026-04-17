@@ -1,5 +1,5 @@
 {
-  "_description": "크롤러 output 통일 구조 템플릿. common_mapping_rule.json의 매칭축·정규화 규칙과 1:1 정합.",
+  "_description": "크롤러 output 통일 구조 템플릿. common_mapping_rule.json의 매칭축·정규화 규칙과 1:1 정합. 카드/스티커 등 전 카테고리 공용.",
   "_save_path": "output/{company}_{category}_now.json (크롤링 시 now -> past 로테이션 후 now에 저장)",
   "_save_logic": "크롤링 시작: now.json -> past.json 복사 / 크롤링 완료: 새 결과 -> now.json 덮어쓰기",
   "_match_axes_ref": "common_mapping_rule.json의 _match_axes.axes 참조. items[]는 (paper_name, coating, print_mode, size, qty) 5축으로 매칭됨.",
@@ -8,6 +8,7 @@
   "crawled_at": "2026-04-14 10:30",
   "items": [
     {
+      "_example": "명함",
       "product": "일반 명함",
       "category": "옵셋인쇄",
       "paper_name": "스노우화이트-250g",
@@ -20,6 +21,24 @@
       "url": "https://www.printcity.co.kr/...",
       "url_ok": true,
       "options": {}
+    },
+    {
+      "_example": "스티커",
+      "product": "도무송 스티커",
+      "category": "스티커",
+      "paper_name": "초강접아트스티커-90g",
+      "coating": "코팅없음",
+      "print_mode": "양면5도",
+      "size": "60x60",
+      "qty": 1000,
+      "price": 12400,
+      "price_vat_included": true,
+      "url": "https://www.printcity.co.kr/product/StickerDomusongNew2",
+      "url_ok": true,
+      "options": {
+        "shape": "원형",
+        "ea_per_sheet": 1
+      }
     }
   ],
 
@@ -33,15 +52,17 @@
 
     "items[].paper_name": "[매칭축] 용지명. 사이트 raw 표기 그대로 저장 (예: 스노우화이트-250g, 스노우 250g). swadpia/wowpress는 paper_name에 코팅 토큰이 박혀 있으면 매칭 단계에서 추출됨.",
     "items[].coating": "[매칭축] 정규화 4종: 비코팅 / 무광코팅 / 유광코팅 / 벨벳코팅. 4종 외(부분코팅/홀로그램 등)는 base coating + options에 별도 키로 저장.",
-    "items[].print_mode": "[매칭축] 정규화 4종: 양면칼라 / 단면칼라 / 양면백색1도 / 단면백색1도. 양면8도=양면칼라, 단면4도=단면칼라.",
-    "items[].size": "[매칭축] 정규화 'WxH' mm 정수 (예: 90x50, 86x54). 단위·접두어 모두 제거.",
+    "items[].print_mode": "[매칭축] 카드: 정규화 4종(양면칼라/단면칼라/양면백색1도/단면백색1도). 스티커: 양면5도(CMYK+W)/단면4도(CMYK) — 대부분 사이트가 도수 선택 UI 없이 고정이므로 크롤러에서 사이트별 고정값 저장.",
+    "items[].size": "[매칭축] 정규화 'WxH' mm 정수 (예: 90x50, 60x60). 단위·접두어 모두 제거. 카드: 90x50 고정. 스티커: 사이즈 가변.",
     "items[].qty": "[매칭축] 수량 정수. 100/200/500/1000/2000 등. ref와 정확히 같아야 매칭.",
 
     "items[].price": "가격 정수 (원). 문자열 X.",
     "items[].price_vat_included": "true=VAT포함 / false=VAT별도. 사이트 기본값은 common_mapping_rule.json sites.{name}.vat_included 참조.",
     "items[].url": "[선택] 해당 옵션 조합의 사이트 직링크. 대시보드에서 셀 클릭 시 이동. 없으면 site.base_url로 fallback.",
     "items[].url_ok": "[선택] 직링크가 정상 도달했는지(true=정상 nav, false=오류/타임아웃). 생략 시 true 간주.",
-    "items[].options": "매칭축 외 부가 정보. 비어 있으면 {}. 예: { partial_coating: '앞면' } / { hologram: '도트' } / { foil: '금박' } / { corner: '둥근' }"
+    "items[].options": "매칭축 외 부가 정보. 비어 있으면 {}. 예: { partial_coating: '앞면' } / { hologram: '도트' } / { foil: '금박' } / { corner: '둥근' }",
+    "items[].options.shape": "[스티커] 도무송 형태. 원형 / 정사각 / 직사각 / 타원 / 반원 / 하트 / 자유형. 대시보드에서 shape별 그룹핑에 사용.",
+    "items[].options.ea_per_sheet": "[스티커] 한 판(sheet)당 스티커 개수. price는 sheet 기준이므로, 스티커 1개당 가격 = price / ea_per_sheet. 생략 시 1 간주."
   },
 
   "_normalization_quick_ref": {
@@ -53,10 +74,14 @@
       "벨벳코팅": ["양면벨벳코팅"]
     },
     "print_mode": {
+      "_card": "명함 정규화",
       "양면칼라":    ["양면", "양면8도", "양면8도(형광CMYK)", "양면4도", "양면인쇄"],
       "단면칼라":    ["단면", "단면8도", "단면4도"],
       "양면백색1도": ["양면백색"],
-      "단면백색1도": ["단면백색"]
+      "단면백색1도": ["단면백색"],
+      "_sticker": "스티커 정규화 — 대부분 사이트가 도수 선택 없이 고정. 경쟁사 4도 = 프린트시티 5도(CMYK+W)로 간주.",
+      "양면5도":     ["5도", "CMYK+W", "CMYK+백판"],
+      "단면4도":     ["4도", "단면칼라(4도)", "CMYK"]
     },
     "to_options": {
       "_description": "정규화 4종 외 값은 base 값으로 두고 options에 boolean/식별값으로 보존. 옵션이 하나만 있으면 boolean(true), 여러 종류면 식별값.",
