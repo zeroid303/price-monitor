@@ -84,6 +84,52 @@ def get_price(page: Page) -> int:
         return 0
 
 
+def read_dom_state(page: Page) -> dict:
+    """주문 페이지 현재 선택값의 DOM 실측 — 크롤러 raw 필드 채울 소스.
+
+    반환 키:
+      - paper_name: paperno3 텍스트 + paperno4 텍스트 (공백 연결)
+                    예: "초강접아트지(유광코팅) 100g"
+      - color_text: #pdata_00_colorno 선택 옵션 텍스트 (예: "단면 칼라")
+      - qty:       #spdata_00_ordqty 값 (정수)
+      - size_text: #pdata_00_sizeno 선택 옵션 텍스트 (예: "원형45", "비규격")
+      - shape:     size_text 의 숫자 앞부분 (예: "원형")
+    """
+    state = page.evaluate(
+        """() => {
+            const sel = id => document.getElementById(id);
+            const optText = el => el && el.selectedIndex >= 0
+                ? (el.options[el.selectedIndex]?.textContent?.trim() || '')
+                : '';
+            const val = el => el ? (el.value || '') : '';
+            return {
+                paper3:      optText(sel('spdata_00_paperno3')),
+                paper4:      optText(sel('spdata_00_paperno4')),
+                color_text:  optText(sel('pdata_00_colorno')),
+                qty_val:     val(sel('spdata_00_ordqty')),
+                size_text:   optText(sel('pdata_00_sizeno')),
+            };
+        }"""
+    )
+    p3 = (state.get("paper3") or "").strip()
+    p4 = (state.get("paper4") or "").strip()
+    paper_name = f"{p3} {p4}".strip() if p4 else p3
+    try:
+        qty = int(state.get("qty_val") or "")
+    except (TypeError, ValueError):
+        qty = 0
+    size_text = (state.get("size_text") or "").strip()
+    # "원형45" / "원형55" 등 — 숫자 이전 부분이 shape
+    shape = re.sub(r"\d.*$", "", size_text).strip()
+    return {
+        "paper_name": paper_name,
+        "color_text": (state.get("color_text") or "").strip(),
+        "qty":        qty,
+        "size_text":  size_text,
+        "shape":      shape,
+    }
+
+
 def save_screenshot(page: Page, name: str) -> None:
     path = os.path.join(OUTPUT_DIR, f"{name}.png")
     page.screenshot(path=path, full_page=False)
@@ -92,22 +138,24 @@ def save_screenshot(page: Page, name: str) -> None:
 
 # ─── 기본 옵션 설정 ─────────────────────────────────────────────────────────────
 
-def setup_base_options(page: Page) -> None:
+def setup_base_options(page: Page, paper_name: str | None = None) -> None:
     """
-    용지(첫 번째 옵션) / 단면칼라 / 1000매 / 1건 고정.
-    reqMdmDetail/getTemplate 호출 후 이 옵션들이 초기화될 수 있어
-    사이즈 변경 후에도 재호출해야 함.
-    paperno3/paperno4는 페이지마다 다르므로 첫 번째 옵션을 자동 선택.
+    용지(paper_name 지정 시 그 용지 유지, 없으면 첫 옵션) / 단면칼라 / 1000매 / 1건 고정.
+    reqMdmDetail/getTemplate 호출 후 이 옵션들이 초기화될 수 있어 사이즈 변경 후에도 재호출해야 함.
     """
-    # 용지 paperno3: 첫 번째 옵션 선택
-    page.evaluate(r"""() => {
+    # 용지 paperno3: paper_name 텍스트 매칭 (없으면 첫 옵션)
+    page.evaluate(r"""([paperName]) => {
         const sel = document.getElementById('spdata_00_paperno3');
-        if (sel && sel.options.length > 0) {
-            sel.value = sel.options[0].value;
-            const oc = sel.getAttribute('onchange');
-            if (oc) { try { (new Function('event', oc)).call(sel, null); } catch(e) {} }
+        if (!sel || sel.options.length === 0) return;
+        let opt = null;
+        if (paperName) {
+            opt = [...sel.options].find(o => o.textContent.includes(paperName));
         }
-    }""")
+        if (!opt) opt = sel.options[0];
+        sel.value = opt.value;
+        const oc = sel.getAttribute('onchange');
+        if (oc) { try { (new Function('event', oc)).call(sel, null); } catch(e) {} }
+    }""", [paper_name])
     time.sleep(1.5)
 
     # 용지 paperno4: 첫 번째 옵션 선택
@@ -133,35 +181,56 @@ def setup_base_options(page: Page) -> None:
     set_select_and_trigger(page, "#pdata_00_ordcnt", "1")
     time.sleep(1.0)
 
+    # 칼선(sJob0) 선택 해제 — 사이트가 자동으로 '1개(36101)'를 설정해 추가 후가공비가 붙는 이슈 방지.
+    # 스티커는 도무송 개수 = 칼선 개수이지만 매출 비교는 '칼선 없음(기본)' 기준.
+    page.evaluate(r"""() => {
+        const el = document.getElementById('sJob0') || document.querySelector('select[name="sJob0"]');
+        if (!el) return;
+        el.value = '';
+        const oc = el.getAttribute('onchange');
+        if (oc) { try { (new Function('event', oc)).call(el, null); } catch(e) {} }
+    }""")
+    time.sleep(0.8)
+
 
 # ─── 프리셋 사이즈 크롤링 (40 / 50 / 60) ──────────────────────────────────────
 
-def crawl_preset_size(page: Page, size_mm: int) -> dict:
+def crawl_preset_size(page: Page, size_mm: int, paper_name: str | None = None) -> dict:
     """
-    pdata_00_sizeno select에서 원형XX 값 선택.
-    onchange: reqMdmDetail('Size', value, '0', 'hdata_00_sizeno')
-    → AJAX로 페이지 일부 갱신하므로 4초 대기 후 옵션 재설정.
+    심플한 재설정 흐름 — 이전 setup_base_options 재호출이 가격 계산을 교란시키는 문제 회피.
+    사이즈 변경 후 paperno3/4/color/qty/cnt를 인라인으로 바로 재설정 → fnOrdSummary.
+    sJob0(칼선)은 사이트 자동 '1개' 상태를 유지 (해당 가격이 매출 기준과 일치).
     """
     size_value = PRESET_SIZES[size_mm]
-    size_str   = f"{size_mm}x{size_mm}"
-    print(f"  [preset] 원형{size_mm}  sizeno={size_value}")
+    print(f"  [preset] 원형{size_mm}  sizeno={size_value}  paper={paper_name}")
 
+    # 1) 사이즈 변경 (AJAX)
     page.evaluate(
         """([val]) => {
             const el = document.getElementById('pdata_00_sizeno');
             if (!el) return;
             el.value = val;
-            // onchange: reqMdmDetail('Size', this.value, '0', 'hdata_00_sizeno')
             if (typeof reqMdmDetail === 'function') {
                 reqMdmDetail('Size', val, '0', 'hdata_00_sizeno');
             }
         }""",
         [size_value],
     )
-    time.sleep(4)  # AJAX 완료 대기
+    time.sleep(4)
 
-    # 사이즈 변경 후 옵션 초기화 방지 → 재설정
-    setup_base_options(page)
+    # 2) paperno3: paper loop에서 이미 설정했으므로 크롤_preset_size 안에서는 재설정 안 함.
+    #    (재설정 시 onchange cascade로 가격이 꼬임)
+
+    # 3) 색도 / 수량 / 건수 인라인 재설정
+    set_select_and_trigger(page, "#pdata_00_colorno", "302")
+    time.sleep(0.5)
+    set_select_and_trigger(page, "#spdata_00_ordqty", "1000")
+    time.sleep(0.5)
+    set_select_and_trigger(page, "#pdata_00_ordcnt", "1")
+    time.sleep(0.8)
+
+    # 5) 가격 계산 트리거
+    page.evaluate("() => { if (typeof fnOrdSummary === 'function') fnOrdSummary(); }")
     time.sleep(2)
 
     price = get_price(page)
@@ -169,13 +238,14 @@ def crawl_preset_size(page: Page, size_mm: int) -> dict:
         print(f"  [WARN] 가격 0원 - 스크린샷 저장")
         save_screenshot(page, f"error_preset_{size_mm}")
 
-    print(f"    가격: {price:,}원")
-    return {"price": price}
+    dom = read_dom_state(page)
+    print(f"    가격: {price:,}원  |  DOM: {dom['paper_name']!r} / {dom['color_text']!r} / qty={dom['qty']} / size={dom['size_text']!r}")
+    return {"price": price, "dom": dom}
 
 
 # ─── 비규격 사이즈 크롤링 ─────────────────────────────────────────────────────
 
-def crawl_irregular_size(page: Page, size_mm: int) -> dict:
+def crawl_irregular_size(page: Page, size_mm: int, paper_name: str | None = None) -> dict:
     """
     비규격(6066) 선택 → hdata_00_sizeno_x/y/xx/yy 직접 입력 → fnOrdSummary() 호출.
     작업 사이즈 = 재단 + BLEED(5mm).
@@ -213,14 +283,17 @@ def crawl_irregular_size(page: Page, size_mm: int) -> dict:
     )
     time.sleep(0.5)
 
-    # 3) 기본 옵션 재설정 (용지/색도/수량)
-    setup_base_options(page)
-    time.sleep(1.5)
+    # 3) paperno3/paperno4: paper loop에서 이미 설정됨. 여기선 재설정하지 않음
+    #    (재설정 시 onchange cascade로 가격이 꼬임)
+    set_select_and_trigger(page, "#pdata_00_colorno", "302")
+    time.sleep(0.5)
+    set_select_and_trigger(page, "#spdata_00_ordqty", "1000")
+    time.sleep(0.5)
+    set_select_and_trigger(page, "#pdata_00_ordcnt", "1")
+    time.sleep(0.8)
 
     # 4) 가격 계산 트리거
-    page.evaluate(
-        "() => { if (typeof fnOrdSummary === 'function') fnOrdSummary(); }"
-    )
+    page.evaluate("() => { if (typeof fnOrdSummary === 'function') fnOrdSummary(); }")
     time.sleep(3)
 
     price = get_price(page)
@@ -228,28 +301,41 @@ def crawl_irregular_size(page: Page, size_mm: int) -> dict:
         print(f"  [WARN] 가격 0원 - 스크린샷 저장")
         save_screenshot(page, f"error_irregular_{size_mm}")
 
-    print(f"    가격: {price:,}원")
-    return {"price": price}
+    dom = read_dom_state(page)
+    print(f"    가격: {price:,}원  |  DOM: {dom['paper_name']!r} / {dom['color_text']!r} / qty={dom['qty']} / size={dom['size_text']!r}")
+    return {"price": price, "dom": dom}
 
 
 # ─── 아이템 빌더 ────────────────────────────────────────────────────────────────
 
-def build_item(product_name: str, paper_name: str, url: str, size_str: str, price: int) -> dict:
+def build_item(product_name: str, url: str, size_str: str, price: int, dom: dict | None) -> dict:
+    """raw 아이템 빌더. 가격/사이즈/URL 외 모든 필드는 DOM 실측값을 사용.
+
+    size_str 은 크롤 로직에서 결정된 재단 사이즈 표기("45x45" 등)를 사용 —
+    DOM sizeno 의 "원형45" 라벨은 options.size_dom_label 로 보존.
+
+    raw 필드 원칙: 사이트가 제시하지 않는 필드는 "" 또는 null.
+      - wowpress 스티커는 별도 coating select 가 없어 paper_name 안에 "(유광코팅)"
+        형태로 인코딩됨 → raw.coating = "" (normalize 에서 괄호 추출).
+    """
+    dom = dom or {}
+    qty_dom = int(dom.get("qty") or 0)
     return {
-        "product": product_name,
-        "category": "스티커",
-        "paper_name": paper_name,
-        "coating": "유광코팅",
-        "print_mode": "단면칼라",
-        "size": size_str,
-        "qty": 1000,
-        "price": price,
+        "product":    product_name,
+        "category":   "스티커",
+        "paper_name": dom.get("paper_name") or None,    # DOM, 없으면 null
+        "coating":    None,                               # 별도 coating select 없음 → null
+        "print_mode": dom.get("color_text") or None,    # DOM, 없으면 null
+        "size":       size_str,
+        "qty":        qty_dom or None,                   # DOM 값, 없으면 null
+        "price":      price,
         "price_vat_included": True,
-        "url": url,
-        "url_ok": price > 0,
+        "url":        url,
+        "url_ok":     price > 0,
         "options": {
-            "shape": "원형",
-            "ea_per_sheet": 1,
+            "shape":          dom.get("shape") or "",
+            "ea_per_sheet":   1,
+            "size_dom_label": dom.get("size_text") or "",  # DOM sizeno 라벨 (추적용)
         },
     }
 
@@ -338,22 +424,43 @@ def crawl_all(headless: bool = True) -> list[dict]:
             if ti == 0:
                 dump_dom(page)
 
-            for paper in t.get("papers", [{}]):
+            for pi, paper in enumerate(t.get("papers", [{}])):
                 paper_name = paper.get("name", product_name)
                 print(f"\n  용지: {paper_name}")
 
-                # 용지 선택 (paperno3에서 텍스트 매칭)
-                page.evaluate(r"""([paperText]) => {
-                    const sel = document.getElementById('spdata_00_paperno3');
-                    if (!sel) return;
-                    const opt = [...sel.options].find(o => o.textContent.includes(paperText));
-                    if (opt) {
-                        sel.value = opt.value;
-                        const oc = sel.getAttribute('onchange');
-                        if (oc) { try { (new Function('event', oc)).call(sel, null); } catch(e) {} }
-                    }
-                }""", [paper_name])
-                time.sleep(1.5)
+                # 각 paper iteration마다 페이지 새로 로드 (초기 상태 = 페이지 기본 용지)
+                if pi > 0:
+                    page.goto(product_url, wait_until="domcontentloaded", timeout=30000)
+                    time.sleep(3)
+
+                # 페이지 현재 paperno3 값 확인
+                current_text = page.evaluate(r"""() => {
+                    const el = document.getElementById('spdata_00_paperno3');
+                    return el ? (el.options[el.selectedIndex]?.textContent?.trim() || '') : '';
+                }""") or ""
+
+                # paper_name이 현재 선택된 기본 용지면 paperno3 건드리지 않음
+                # (wowpress 내부 상태와 DOM value가 분리되어 있어서 변경해도 가격 반영 안 되는 문제 회피)
+                if paper_name == current_text or paper_name in current_text or current_text in paper_name:
+                    print(f"    paperno3 기본값 유지: {current_text}")
+                else:
+                    # 기본값 아닌 경우에만 paperno3 변경 시도
+                    page.evaluate(r"""([paperText]) => {
+                        const sel = document.getElementById('spdata_00_paperno3');
+                        if (!sel) return;
+                        const opt = [...sel.options].find(o => o.textContent.includes(paperText));
+                        if (opt) {
+                            sel.value = opt.value;
+                            const oc = sel.getAttribute('onchange');
+                            if (oc) { try { (new Function('event', oc)).call(sel, null); } catch(e) {} }
+                        }
+                    }""", [paper_name])
+                    time.sleep(2.5)
+                    actual = page.evaluate(r"""() => {
+                        const el = document.getElementById('spdata_00_paperno3');
+                        return el ? {val: el.value, text: el.options[el.selectedIndex]?.textContent?.trim()} : null;
+                    }""") or {}
+                    print(f"    paperno3 변경: {actual.get('text')} ({actual.get('val')})")
 
                 # paperno4 첫 번째 옵션 자동 선택
                 page.evaluate(r"""() => {
@@ -377,14 +484,14 @@ def crawl_all(headless: bool = True) -> list[dict]:
                 # 프리셋 사이즈
                 for size_info in t.get("preset_sizes", []):
                     size_name = size_info["name"]
-                    label = size_info["label"]
                     size_value = PRESET_SIZES.get(int(size_name.split("x")[0]))
 
                     if size_value:
-                        item = crawl_preset_size(page, int(size_name.split("x")[0]))
-                        item = build_item(product_name, paper_name, product_url, size_name, item["price"] if isinstance(item, dict) else 0)
+                        result = crawl_preset_size(page, int(size_name.split("x")[0]), paper_name)
+                        item = build_item(product_name, product_url, size_name,
+                                          result.get("price", 0), result.get("dom"))
                     else:
-                        item = build_item(product_name, paper_name, product_url, size_name, 0)
+                        item = build_item(product_name, product_url, size_name, 0, None)
 
                     if item["price"] > 0:
                         items.append(item)
@@ -393,8 +500,9 @@ def crawl_all(headless: bool = True) -> list[dict]:
                 for size_info in t.get("custom_sizes", []):
                     size_mm = size_info["mm"]
                     size_name = size_info["name"]
-                    item_raw = crawl_irregular_size(page, size_mm)
-                    item = build_item(product_name, paper_name, product_url, size_name, item_raw["price"] if isinstance(item_raw, dict) else 0)
+                    result = crawl_irregular_size(page, size_mm, paper_name)
+                    item = build_item(product_name, product_url, size_name,
+                                      result.get("price", 0), result.get("dom"))
                     if item["price"] > 0:
                         items.append(item)
 
@@ -423,8 +531,10 @@ def save(items: list[dict]) -> None:
     print(f"  총 {len(items)}개 아이템  |  crawled_at: {now}")
     print(f"{'─'*50}")
     for it in items:
-        mark = "✓" if it["url_ok"] else "✗"
-        print(f"  {mark}  {it['size']:8s}  {it['price']:>8,}원")
+        mark = "OK" if it["url_ok"] else "!!"
+        paper = it.get("paper_name", "")
+        pm = it.get("print_mode", "")
+        print(f"  {mark}  {it['size']:8s}  {paper[:30]:30s}  {pm[:10]:10s}  qty={it['qty']:>5}  {it['price']:>8,}원")
     print(f"{'='*50}")
 
 

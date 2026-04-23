@@ -3,16 +3,16 @@
 
 흐름:
   1. config/card_targets.json dtpia 섹션 로드
-  2. page_type(color/small_qty/special/uv)별로 옵션 셋팅 → DOM 가격 읽기
+  2. page_type(color/special/uv)별로 옵션 셋팅 → DOM 가격 읽기
   3. raw 값 그대로 저장 (정규화는 common.normalize가 담당)
 
 가격: #est_scroll_total_am (VAT 포함 합계)
 
-페이지 타입:
-  - color:     coating_type 단일 dropdown (paper × coating 합쳐진 옵션) — 일반명함
-  - small_qty: mtrl_cd_01(용지) + mtrl_cd_02(평량) + coating_type — 소량명함
-  - special:   mtrl_cd + mtrl_cdw — 고급지명함
-  - uv:        mtrl_cd + mtrl_cdw — UV옵셋명함
+페이지 타입 (오프셋 명함만):
+  - color:   coating_type 단일 dropdown (paper × coating 합쳐진 옵션) — 일반명함
+  - special: mtrl_cd + mtrl_cdw — 고급지명함
+  - uv:      mtrl_cd + mtrl_cdw — UV옵셋명함
+  ※ 디지털명함(SmallQuantity.aspx, page_type=small_qty)은 본 크롤러 범위 제외.
 
 출력: output/dtpia_card_raw_now.json — output_template 포맷
 """
@@ -81,6 +81,53 @@ JS_GET_PRICE = """() => {
 }"""
 
 
+JS_READ_DOM_STATE = """() => {
+    const selText = (id) => {
+        const el = document.getElementById(id);
+        if (!el || el.selectedIndex < 0) return '';
+        return (el.options[el.selectedIndex]?.textContent || '').trim();
+    };
+    const selVal = (id) => {
+        const el = document.getElementById(id);
+        return el ? (el.value || '') : '';
+    };
+    return {
+        // 일반명함(color): coating_type select 에 paper×coating 합쳐짐
+        coating_text:   selText('coating_type'),
+        // 특수지/UV: mtrl_cd (paper) + mtrl_cdw (평량)
+        mtrl_text:      selText('mtrl_cd'),
+        mtrl_cdw_text:  selText('mtrl_cdw'),
+        color_text:     selText('prn_clr_cn_gb'),
+        size_text:      selText('ppr_cut_tmp'),
+        qty_val:        selVal('prn_sht_cn'),
+    };
+}"""
+
+
+def read_dom_state(page) -> dict:
+    raw = page.evaluate(JS_READ_DOM_STATE) or {}
+    try:
+        qty = int(raw.get("qty_val") or "")
+    except (TypeError, ValueError):
+        qty = 0
+    # paper_name: mtrl_cd 있으면 우선, 아니면 coating_type (color page는 paper×coating 결합형)
+    mtrl = (raw.get("mtrl_text") or "").strip()
+    mtrl_cdw = (raw.get("mtrl_cdw_text") or "").strip()
+    coat = (raw.get("coating_text") or "").strip()
+    # 특수지/UV: mtrl + mtrl_cdw 결합 ("럭셔리 반누보 화이트 230g"형태면 mtrl_cdw 비어도 됨)
+    if mtrl:
+        paper = (f"{mtrl} {mtrl_cdw}".strip() if mtrl_cdw else mtrl)
+    else:
+        paper = coat   # color page: coating_type text 에 "스노우지 250g(무광코팅)" 식으로 올 수 있음
+    return {
+        "paper_name": paper,
+        "coating":    coat,      # color page에선 paper=coating text로 같음(덮어쓰는 모양새). normalize가 paper_name 괄호에서 coating 추출.
+        "print_mode": (raw.get("color_text") or "").strip(),
+        "size":       (raw.get("size_text") or "").strip(),
+        "qty":        qty,
+    }
+
+
 def parse_price(txt: str) -> int | None:
     if not txt:
         return None
@@ -120,29 +167,36 @@ class DtpiaCrawler:
         txt = page.evaluate(JS_GET_PRICE)
         return parse_price(txt or "")
 
-    def _emit(self, t, paper, color_name, qty, price):
-        out_paper = paper.get("match_as", paper.get("paper_name_out", ""))
-        coating_out = paper.get("coating_out_runtime", paper.get("coating_out", ""))
-        options = {}
+    def _emit(self, page, t, paper, color_name, qty, price):
+        # raw 원칙: DOM 실측. 없으면 null. config 는 options 에 추적용으로만.
+        dom = read_dom_state(page)
+        options = {
+            "config_paper_name_out": paper.get("paper_name_out"),
+            "config_coating_out":    paper.get("coating_out_runtime", paper.get("coating_out")),
+            "config_color_name":     color_name,
+        }
         if "actual_weight_g" in paper:
             options["actual_weight_g"] = paper["actual_weight_g"]
         if "note" in paper:
             options["note"] = paper["note"]
-        self.items.append({
-            "product": t["product_name"],
-            "category": t["category"],
-            "paper_name": out_paper,
-            "coating": coating_out,
-            "print_mode": color_name,
-            "size": SIZE_RAW,
-            "qty": qty,
-            "price": price,
+        item = {
+            "product":    t["product_name"],
+            "category":   t["category"],
+            "paper_name": dom["paper_name"] or None,
+            "coating":    dom["coating"]    or None,
+            "print_mode": dom["print_mode"] or None,
+            "size":       dom["size"]       or None,
+            "qty":        dom["qty"]        or None,
+            "price":      price,
             "price_vat_included": True,
-            "url": t["url"],
-            "url_ok": True,
-            "options": options,
-        })
-        log.info(f"    {out_paper} | {coating_out or '-'} | {color_name} | {qty}매 → {price:,}원")
+            "url":        t["url"],
+            "url_ok":     True,
+            "options":    options,
+        }
+        if paper.get("match_as"):
+            item["match_as"] = paper["match_as"]
+        self.items.append(item)
+        log.info(f"    DOM: {dom['paper_name']} | {dom['coating'] or '-'} | {dom['print_mode']} | {dom['qty']}매 → {price:,}원")
 
     def _crawl_target(self, page, t: dict):
         log.info(f"▶ {t['category']} / {t['product_name']} ({t['page_type']})")
@@ -174,20 +228,6 @@ class DtpiaCrawler:
                     log.warning(f"    coating_type={paper['coating_select_value']!r} 셋팅 실패")
                     continue
                 paper_loops = [paper]  # 단일 조합
-            elif page_type == "small_qty":
-                if not self._set(page, "mtrl_cd_01", paper["mtrl_01"]):
-                    log.warning(f"    mtrl_cd_01={paper['mtrl_01']} 실패"); continue
-                page.wait_for_timeout(500)
-                if not self._set(page, "mtrl_cd_02", paper["mtrl_02"]):
-                    log.warning(f"    mtrl_cd_02={paper['mtrl_02']} 실패"); continue
-                page.wait_for_timeout(500)
-                # coating_type iterate
-                paper_loops = []
-                for c in paper["coatings"]:
-                    pcopy = dict(paper)
-                    pcopy["coating_select_value"] = c["value"]
-                    pcopy["coating_out_runtime"] = c["name"]
-                    paper_loops.append(pcopy)
             elif page_type in ("special", "uv"):
                 if not self._set(page, "mtrl_cd", paper["mtrl_cd"]):
                     log.warning(f"    mtrl_cd={paper['mtrl_cd']} 실패"); continue
@@ -202,18 +242,27 @@ class DtpiaCrawler:
                 log.warning(f"    unknown page_type: {page_type}"); continue
 
             for p_inst in paper_loops:
-                # small_qty의 경우 coating_type 셋팅
-                if page_type == "small_qty":
-                    if not self._set(page, "coating_type", p_inst["coating_select_value"]):
-                        log.warning(f"    coating_type={p_inst['coating_select_value']} 실패"); continue
-                    page.wait_for_timeout(400)
                 # color iterate
                 for color in t["color_modes"]:
                     if not self._set(page, "prn_clr_cn_gb", color["value"]):
                         log.warning(f"    color={color['name']} 실패"); continue
                     page.wait_for_timeout(400)
-                    # 각 paper/color 변경 시 qty/size가 reset될 수 있어 재셋팅
+                    # 각 paper/color 변경 시 qty/size가 reset될 수 있어 재셋팅 + 검증
                     self._set(page, "ppr_cut_tmp", t["size_value"])
+                    page.wait_for_timeout(200)
+                    actual_size = page.evaluate(
+                        "() => (document.getElementById('ppr_cut_tmp') || {}).value || ''"
+                    )
+                    if actual_size != t["size_value"]:
+                        # 1회 재시도
+                        self._set(page, "ppr_cut_tmp", t["size_value"])
+                        page.wait_for_timeout(400)
+                        actual_size = page.evaluate(
+                            "() => (document.getElementById('ppr_cut_tmp') || {}).value || ''"
+                        )
+                        if actual_size != t["size_value"]:
+                            log.warning(f"    size 셋팅 실패 (expected={t['size_value']}, actual={actual_size!r}) → skip")
+                            continue
                     for qty in target_qtys:
                         if not self._set(page, "prn_sht_cn", str(qty)):
                             continue
@@ -222,7 +271,18 @@ class DtpiaCrawler:
                         if price is None:
                             log.warning(f"    가격 읽기 실패: {p_inst.get('paper_name_out')} | {color['name']} | {qty}매")
                             continue
-                        self._emit(t, p_inst, color["name"], qty, price)
+                        # 비정상 저가 방어: 1매 단가 수준(qty×최소단가 이하) 차단 + 재시도
+                        # dtpia 오프셋 명함의 이론적 최저는 1000매 기준 약 5,000원 이상 (공급가)
+                        min_reasonable = max(500, qty * 3)  # qty=1000이면 3000, qty=200이면 600, qty=100이면 500
+                        if price < min_reasonable:
+                            log.warning(f"    비정상 저가 {price}원 (qty={qty}, 기대 ≥{min_reasonable}) → callPrice 재시도")
+                            page.evaluate("() => { if (typeof callPrice === 'function') callPrice(); }")
+                            page.wait_for_timeout(1500)
+                            price = self._read_price(page)
+                            if price is None or price < min_reasonable:
+                                log.warning(f"    재시도 후에도 비정상({price}) → skip")
+                                continue
+                        self._emit(page, t, p_inst, color["name"], qty, price)
 
     def run(self):
         log.info(f"=== 디티피아 명함 크롤링 시작 ({len(TARGETS)}종 제품) ===")

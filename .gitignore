@@ -1,6 +1,6 @@
 __pycache__/
 *.pyc
-
+1
 # 크롤링 결과 (로컬 데이터)
 output/
 
@@ -10,5 +10,10 @@ output/
 # 임시/디버그 파일
 output/_*.txt
 
-# Claude Code 런타임 부산물
-.claude/
+# Claude Code 런타임 부산물 (skill.md는 추적)
+.claude/*
+!.claude/skill.md
+
+# 임시 리서치/조사 산출물
+research/
+

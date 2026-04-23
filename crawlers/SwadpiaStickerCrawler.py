@@ -41,6 +41,53 @@ JS_GET_PRICE = r"""() => {
 }"""
 
 
+JS_READ_DOM_STATE = r"""() => {
+    const selText = (name) => {
+        const el = document.querySelector(`select[name="${name}"]`);
+        if (!el || el.selectedIndex < 0) return '';
+        return (el.options[el.selectedIndex]?.textContent || '').trim();
+    };
+    const selVal = (name) => {
+        const el = document.querySelector(`select[name="${name}"]`);
+        return el ? (el.value || '') : '';
+    };
+    const inpVal = (name) => {
+        const el = document.querySelector(`input[name="${name}"]`);
+        return el ? (el.value || '') : '';
+    };
+    return {
+        paper_text:  selText('paper_code'),
+        coating_text:selText('coating_type'),
+        color_text:  selText('print_color_type'),
+        shape_text:  selText('domusong_type'),
+        section_text:selText('domusong_section'),
+        qty_val:     selVal('paper_qty'),
+        size_x:      inpVal('domusong_x_size'),
+        size_y:      inpVal('domusong_y_size'),
+    };
+}"""
+
+
+def read_dom_state(page) -> dict:
+    raw = page.evaluate(JS_READ_DOM_STATE) or {}
+    try:
+        qty = int(raw.get("qty_val") or "")
+    except (TypeError, ValueError):
+        qty = 0
+    x = (raw.get("size_x") or "").strip()
+    y = (raw.get("size_y") or "").strip()
+    size = f"{x}x{y}" if x and y else ""
+    return {
+        "paper_name": (raw.get("paper_text") or "").strip(),
+        "coating":    (raw.get("coating_text") or "").strip(),
+        "print_mode": (raw.get("color_text") or "").strip(),
+        "shape":      (raw.get("shape_text") or "").strip(),
+        "section":    (raw.get("section_text") or "").strip(),
+        "size":       size,
+        "qty":        qty,
+    }
+
+
 def _load_targets() -> list[dict]:
     if not _CONFIG_PATH.exists():
         return []
@@ -134,24 +181,32 @@ class SwadpiaStickerCrawler:
                                     log.warning(f"    price fail: {paper['name']} / {coating['name']} / {size_info['name']} / {qty}")
                                     continue
 
+                                dom = read_dom_state(page)
                                 self.items.append({
-                                    "product": t["product_name"],
-                                    "category": "스티커",
-                                    "paper_name": paper["name"],
-                                    "coating": coating["name"],
-                                    "print_mode": color["name"],
-                                    "size": size_info["name"],
-                                    "qty": qty,
-                                    "price": price,
+                                    "product":    t["product_name"],
+                                    "category":   "스티커",
+                                    "paper_name": dom["paper_name"] or None,
+                                    "coating":    dom["coating"]    or None,
+                                    "print_mode": dom["print_mode"] or None,
+                                    "size":       dom["size"]       or None,
+                                    "qty":        dom["qty"]        or None,
+                                    "price":      price,
                                     "price_vat_included": True,
-                                    "url": url,
-                                    "url_ok": True,
+                                    "url":        url,
+                                    "url_ok":     True,
                                     "options": {
-                                        "shape": shape["name"],
-                                        "ea_per_sheet": 1,
+                                        "shape":               dom["shape"] or None,
+                                        "domusong_section":    dom["section"] or None,
+                                        "ea_per_sheet":        1,
+                                        "config_paper_name":   paper["name"],
+                                        "config_coating":      coating["name"],
+                                        "config_color":        color["name"],
+                                        "config_shape":        shape["name"],
+                                        "config_size":         size_info["name"],
+                                        "config_qty":          qty,
                                     },
                                 })
-                                log.info(f"    {paper['name']} | {coating['name']} | {size_info['name']} | {qty} -> {price:,}")
+                                log.info(f"    DOM: {dom['paper_name']} | {dom['coating']} | {dom['size']} | {dom['qty']} -> {price:,}")
 
     def run(self):
         log.info(f"=== 성원애드피아 스티커 크롤링 시작 ({len(TARGETS)}종 제품) ===")

@@ -82,6 +82,54 @@ JS_AVAILABLE_QTYS = """() => {
 }"""
 
 
+JS_READ_DOM_STATE = """() => {
+    const sel = (name) => {
+        const el = document.querySelector(`select[name="${name}"]`);
+        if (!el || el.selectedIndex < 0) return '';
+        return (el.options[el.selectedIndex]?.textContent || '').trim();
+    };
+    const val = (name) => {
+        const el = document.querySelector(`select[name="${name}"]`);
+        return el ? (el.value || '') : '';
+    };
+    // checked radio의 라벨 텍스트 (paper_gloss / paper_gloss2 중 하나만 체크됨)
+    let coat = '';
+    for (const r of document.querySelectorAll('input[type=radio]:checked')) {
+        if (!/^paper_gloss/.test(r.name || '')) continue;
+        const byFor = r.id ? document.querySelector(`label[for="${r.id}"]`) : null;
+        if (byFor) { coat = byFor.innerText.trim(); break; }
+        const wrap = r.closest('label');
+        if (wrap) { coat = wrap.innerText.trim(); break; }
+        const nxt = r.nextSibling;
+        if (nxt && nxt.nodeType === 3) { coat = nxt.textContent.trim(); break; }
+        // 마지막 fallback: value (코드)
+        coat = r.value || '';
+    }
+    return {
+        paper_text:  sel('paper_code'),
+        color_text:  sel('print_color_type'),
+        size_text:   sel('paper_size'),
+        qty_val:     val('paper_qty'),
+        coating:     coat,
+    };
+}"""
+
+
+def read_dom_state(page) -> dict:
+    raw = page.evaluate(JS_READ_DOM_STATE) or {}
+    try:
+        qty = int(raw.get("qty_val") or "")
+    except (TypeError, ValueError):
+        qty = 0
+    return {
+        "paper_name": (raw.get("paper_text") or "").strip(),
+        "coating":    (raw.get("coating") or "").strip(),
+        "print_mode": (raw.get("color_text") or "").strip(),
+        "size":       (raw.get("size_text") or "").strip(),
+        "qty":        qty,
+    }
+
+
 def parse_total_price(txt: str) -> int | None:
     if not txt:
         return None
@@ -147,23 +195,30 @@ class SwadpiaCrawler:
                             if price is None:
                                 log.warning(f"    가격 파싱 실패: {paper['name']} | {coating['name']} | {color['name']} | {qty}매")
                                 continue
+                            dom = read_dom_state(page)
                             self.items.append({
-                                "product": t["product_name"],
-                                "category": t["product_name"],
-                                "paper_name": paper["name"],
-                                "coating": coating["name"],
-                                "print_mode": color["name"],
-                                "size": SIZE_RAW,
-                                "qty": qty,
-                                "price": price,
+                                "product":    t["product_name"],
+                                "category":   t["product_name"],
+                                "paper_name": dom["paper_name"] or None,
+                                "coating":    dom["coating"] or None,
+                                "print_mode": dom["print_mode"] or None,
+                                "size":       dom["size"] or None,
+                                "qty":        dom["qty"] or None,
+                                "price":      price,
                                 "price_vat_included": True,
-                                "url": url,
-                                "url_ok": True,
-                                "options": {},
+                                "url":        url,
+                                "url_ok":     True,
+                                "options": {
+                                    "config_paper_code": paper["code"],
+                                    "config_paper_name": paper["name"],
+                                    "config_coating":    coating["name"],
+                                    "config_color":      color["name"],
+                                    "config_qty":        qty,
+                                },
                             })
-                            log.info(f"    {paper['name']} | {coating['name']} | {color['name']} | {qty}매 → {price:,}원")
+                            log.info(f"    DOM: {dom['paper_name']} | {dom['coating']} | {dom['print_mode']} | {dom['qty']}매 → {price:,}원")
                         except Exception as e:
-                            log.error(f"    ✖ {paper['name']} / {coating['name']} / {color['name']} / {qty}: {e}")
+                            log.error(f"    X {paper['name']} / {coating['name']} / {color['name']} / {qty}: {e}")
 
     def run(self):
         log.info(f"=== 성원애드피아 명함 크롤링 시작 ({len(TARGETS)}종 제품) ===")

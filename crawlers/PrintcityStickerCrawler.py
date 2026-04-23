@@ -49,22 +49,17 @@ TARGETS = _load_targets()
 
 
 def _read_total_price(page) -> int | None:
-    """견적서의 총결제액 읽기."""
+    """견적서의 총결제액 읽기 — VAT 포함 최종가.
+    이전 구현은 '총 결제액' 헤더 + 상위 DIV의 첫 숫자(공급가)를 잡아 VAT 미포함 값이 저장됐음.
+    수정: '총결제액' 직후 숫자 패턴만 매칭하여 VAT 포함 최종가를 추출.
+    """
     text = page.evaluate(r"""() => {
         const allEls = [...document.querySelectorAll('*')];
         for (const el of allEls) {
             const t = el.textContent || '';
-            if (t.includes('총결제액') && t.length < 100) {
-                const m = t.match(/([\d,]+)\s*원/);
-                if (m) return m[1];
-            }
-        }
-        for (const el of allEls) {
-            const t = el.textContent || '';
-            if (t.includes('총 결제액') && t.length < 200) {
-                const matches = [...t.matchAll(/([\d,]+)\s*원/g)];
-                if (matches.length > 0) return matches[matches.length - 1][1];
-            }
+            if (t.length > 300) continue;
+            const m = t.match(/총\s*결\s*제\s*액\s*([\d,]+)\s*원/);
+            if (m) return m[1];
         }
         return null;
     }""")
@@ -82,6 +77,43 @@ def _set_select(page, selector_id: str, value: str):
         const s = document.querySelector('select#{selector_id}');
         if (s) {{ s.value = '{value}'; s.dispatchEvent(new Event('change', {{bubbles: true}})); }}
     }}""")
+
+
+JS_READ_DOM_STATE = """() => {
+    const selText = (id) => {
+        const el = document.querySelector('select#' + id);
+        if (!el || el.selectedIndex < 0) return '';
+        return (el.options[el.selectedIndex]?.textContent || '').trim();
+    };
+    const selVal = (id) => {
+        const el = document.querySelector('select#' + id);
+        return el ? (el.value || '') : '';
+    };
+    return {
+        paper_text:     selText('materialCode'),
+        coating_text:   selText('coatingCode'),
+        color_text:     selText('colorCode'),
+        shape_text:     selText('stickerTypeCode'),
+        size_text:      selText('sizeCode'),
+        qty_val:        selVal('quantities'),
+    };
+}"""
+
+
+def read_dom_state(page) -> dict:
+    raw = page.evaluate(JS_READ_DOM_STATE) or {}
+    try:
+        qty = int(raw.get("qty_val") or "")
+    except (TypeError, ValueError):
+        qty = 0
+    return {
+        "paper_name": (raw.get("paper_text") or "").strip(),
+        "coating":    (raw.get("coating_text") or "").strip(),
+        "print_mode": (raw.get("color_text") or "").strip(),
+        "shape":      (raw.get("shape_text") or "").strip(),
+        "size":       (raw.get("size_text") or "").strip(),
+        "qty":        qty,
+    }
 
 
 class PrintcityStickerCrawler:
@@ -139,24 +171,31 @@ class PrintcityStickerCrawler:
                                     continue
 
                                 ea = size_info.get("ea_per_sheet", 1)
+                                dom = read_dom_state(page)
                                 self.items.append({
-                                    "product": t["product_name"],
-                                    "category": "스티커",
-                                    "paper_name": paper["name"],
-                                    "coating": coating["name"],
-                                    "print_mode": color["name"],
-                                    "size": size_info["name"],
-                                    "qty": qty,
-                                    "price": price,
+                                    "product":    t["product_name"],
+                                    "category":   "스티커",
+                                    "paper_name": dom["paper_name"] or None,
+                                    "coating":    dom["coating"]    or None,
+                                    "print_mode": dom["print_mode"] or None,
+                                    "size":       dom["size"]       or None,
+                                    "qty":        dom["qty"]        or None,
+                                    "price":      price,
                                     "price_vat_included": True,
-                                    "url": url,
-                                    "url_ok": True,
+                                    "url":        url,
+                                    "url_ok":     True,
                                     "options": {
-                                        "shape": shape["name"],
-                                        "ea_per_sheet": ea,
+                                        "shape":              dom["shape"] or None,
+                                        "ea_per_sheet":       ea,
+                                        "config_paper_name":  paper["name"],
+                                        "config_coating":     coating["name"],
+                                        "config_color":       color["name"],
+                                        "config_shape":       shape["name"],
+                                        "config_size":        size_info["name"],
+                                        "config_qty":         qty,
                                     },
                                 })
-                                log.info(f"    {paper['name']} | {coating['name']} | {size_info['name']} | {qty} -> {price:,} (ea={ea})")
+                                log.info(f"    DOM: {dom['paper_name']} | {dom['coating']} | {dom['size']} | {dom['qty']} -> {price:,} (ea={ea})")
 
     def run(self):
         log.info(f"=== 프린트시티 스티커 크롤링 시작 ({len(TARGETS)}종 제품) ===")

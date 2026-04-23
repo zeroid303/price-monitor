@@ -63,20 +63,36 @@ def _normalize_print_mode(raw: str, rule: dict) -> tuple[str, dict]:
 
 
 def _normalize_size(raw: str, rule: dict) -> str:
-    """raw size → 'WxH' mm 정수."""
+    """raw size → canonical.
+
+    카드/스티커는 'WxH' mm 정수 포맷. 봉투는 '대봉투'/'9절봉투' 같은 카테고리 canonical.
+    처리 순서:
+      1) aliases 직접 매칭 ("대봉투-규격" → "대봉투")
+      2) WxH 숫자 파싱 ("510x387" → "510x387")
+      3) 파싱 결과 재-alias 매칭 ("330x245" → "대봉투")
+    """
     raw = (raw or "").strip()
     if not raw:
-        return rule.get("default", "90x50")
+        return rule.get("default", "")
+    lookup = _build_alias_lookup(rule) if "aliases" in rule else {}
+    # 1) raw 그대로 alias 매칭
+    if lookup and raw in lookup:
+        return lookup[raw]
+    # 2) WxH 숫자 파싱
     pattern = rule.get("regex", r"(\d+)\s*[x×*X]\s*(\d+)\s*(cm)?")
     m = re.search(pattern, raw)
     if not m:
-        return rule.get("default", "90x50")
+        return rule.get("default", "")
     w, h = int(m.group(1)), int(m.group(2))
     unit = m.group(3) if m.lastindex and m.lastindex >= 3 else None
     if unit == "cm":
         w *= 10
         h *= 10
-    return f"{w}x{h}"
+    result = f"{w}x{h}"
+    # 3) 파싱 결과 재-alias 매칭 (봉투용)
+    if lookup and result in lookup:
+        return lookup[result]
+    return result
 
 
 def _normalize_qty(raw, rule: dict) -> int:
@@ -144,6 +160,8 @@ def _normalize_paper_name(raw: str, rule: dict) -> tuple[str, str | None]:
         base = working[:wm.start()].strip()
 
     base = re.sub(r"\s+", " ", base).strip()
+    # base 끝에 남은 구분자 제거 (raw가 "레자크-110g" 형태일 때 "레자크-" → "레자크")
+    base = base.rstrip("-_ ").strip()
 
     # ── 5. base alias 매칭 (longest match) ──
     canonical_name = None
@@ -156,7 +174,11 @@ def _normalize_paper_name(raw: str, rule: dict) -> tuple[str, str | None]:
         canonical_name = base
 
     # ── 6. 재조립 ──
-    result = f"{canonical_name} {weight}g" if weight else canonical_name
+    # canonical에 이미 평량이 박혀있는 경우(예: 스티커 "초강접아트지 90g") 실제 raw weight와
+    # 섞여 "초강접아트지 90g 100g"이 되는 것을 방지 — canonical의 trailing " Xg" 제거 후 재조립.
+    # 카드 규칙처럼 canonical이 base-only ("스노우화이트")이면 sub 는 no-op.
+    canonical_base = re.sub(r"\s*\d+\s*[gG]$", "", canonical_name).strip() or canonical_name
+    result = f"{canonical_base} {weight}g" if weight else canonical_name
     return result, paper_coating
 
 
@@ -209,12 +231,17 @@ def apply(item: dict, norm_rule: dict) -> dict:
     # qty
     out["qty"] = _normalize_qty(out.get("qty"), norm_rule.get("qty", {}))
 
-    # price: VAT 포함 가격으로 통일 (raw가 별도면 ×1.1 보정)
+    # price: 공급가(VAT 제외) 기준으로 통일
+    # raw가 VAT 포함이면 ÷1.1 하여 공급가로 변환. raw가 이미 공급가면 그대로.
     raw_price = out.get("price")
-    if isinstance(raw_price, (int, float)) and out.get("price_vat_included") is False:
-        out["price"] = round(raw_price * 1.1)
-        out["price_vat_included"] = True
-        options["price_vat_adjusted"] = True  # 보정 흔적 (참고용)
+    if isinstance(raw_price, (int, float)):
+        if out.get("price_vat_included") is True:
+            out["price"] = round(raw_price / 1.1)
+            out["price_vat_included"] = False
+            options["price_vat_stripped"] = True  # 변환 흔적
+        else:
+            # 공급가 raw → 그대로 유지
+            out["price_vat_included"] = False
 
     out["options"] = options
     return out

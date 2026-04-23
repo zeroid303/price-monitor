@@ -89,6 +89,43 @@ JS_AVAIL_OPTIONS = """(sel_id) => {
     return [...el.options].map(o => o.value).filter(v => v);
 }"""
 
+
+JS_READ_DOM_STATE = """() => {
+    const sel = id => document.getElementById(id);
+    const optText = el => el && el.selectedIndex >= 0
+        ? (el.options[el.selectedIndex]?.textContent?.trim() || '')
+        : '';
+    const val = el => el ? (el.value || '') : '';
+    return {
+        paper3:     optText(sel('spdata_00_paperno3')),
+        paper4:     optText(sel('spdata_00_paperno4')),
+        paper5:     optText(sel('spdata_00_paperno5')),
+        color_text: optText(sel('pdata_00_colorno')),
+        qty_val:    val(sel('spdata_00_ordqty')),
+        size_text:  optText(sel('pdata_00_sizeno')),
+    };
+}"""
+
+
+def read_dom_state(page) -> dict:
+    state = page.evaluate(JS_READ_DOM_STATE) or {}
+    parts = [
+        (state.get("paper3") or "").strip(),
+        (state.get("paper4") or "").strip(),
+        (state.get("paper5") or "").strip(),
+    ]
+    paper_name = " ".join(p for p in parts if p)
+    try:
+        qty = int(state.get("qty_val") or "")
+    except (TypeError, ValueError):
+        qty = 0
+    return {
+        "paper_name": paper_name,
+        "color_text": (state.get("color_text") or "").strip(),
+        "qty":        qty,
+        "size_text":  (state.get("size_text") or "").strip(),
+    }
+
 # 와우프레스의 paper select는 paperno3(종류) → paperno4(평량/색상) 2단계.
 # 트리 구조가 paper마다 달라(어떤 건 leaf→parent, 어떤 건 leaf→middle→grand)
 # paperList JSON에서 leaf로부터 부모 체인을 모두 모아서 paperno3 dropdown에 매칭되는 조상을 찾음.
@@ -217,29 +254,35 @@ class WowpressCrawler:
                         log.warning(f"    가격 읽기 실패: {paper['name']} | {color['name']} | {qty_str}매")
                         continue
 
-                    # match_as 오버라이드 (평량 차이 매칭용)
-                    out_paper_name = paper.get("match_as", paper["name"])
-                    options = {}
+                    dom = read_dom_state(page)
+                    options = {
+                        "config_paper_name": paper["name"],
+                        "config_color":      color["name"],
+                    }
                     if "actual_weight_g" in paper:
                         options["actual_weight_g"] = paper["actual_weight_g"]
                     if "note" in paper:
                         options["note"] = paper["note"]
 
-                    self.items.append({
-                        "product": t["product_name"],
-                        "category": t["category"],
-                        "paper_name": out_paper_name,
-                        "coating": "",  # paper_name에 (코팅)이 박혀 있어 정규화가 분리
-                        "print_mode": color["name"],
-                        "size": SIZE_RAW,
-                        "qty": int(qty_str),
-                        "price": price,
+                    item = {
+                        "product":    t["product_name"],
+                        "category":   t["category"],
+                        "paper_name": dom["paper_name"] or None,
+                        # wowpress 명함은 별도 coating select 없음 → null (paper_name 괄호 속 coating 은 normalize 추출)
+                        "coating":    None,
+                        "print_mode": dom["color_text"] or None,
+                        "size":       dom["size_text"]  or None,
+                        "qty":        dom["qty"]        or None,
+                        "price":      price,
                         "price_vat_included": True,
-                        "url": url,
-                        "url_ok": True,
-                        "options": options,
-                    })
-                    log.info(f"    {out_paper_name} | {color['name']} | {qty_str}매 → {price:,}원")
+                        "url":        url,
+                        "url_ok":     True,
+                        "options":    options,
+                    }
+                    if paper.get("match_as"):
+                        item["match_as"] = paper["match_as"]
+                    self.items.append(item)
+                    log.info(f"    DOM: {dom['paper_name']} | {dom['color_text']} | {dom['size_text']} | {dom['qty']}매 → {price:,}원")
 
     def run(self):
         log.info(f"=== 와우프레스 명함 크롤링 시작 ({len(TARGETS)}종 제품) ===")

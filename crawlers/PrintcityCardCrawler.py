@@ -112,10 +112,11 @@ def crawl_product(spec: dict) -> list[dict]:
             skipped["paper"] += 1
             continue
 
-        # 코팅: COT 우선, 없으면 PCS(부분코팅) fallback
+        # 코팅: COT 우선, 없으면 PCS(부분코팅) fallback. API 가 안 주면 None (raw=DOM 원칙)
         cot = sel.get("COT") or sel.get("PCS")
-        cot_title = cot["title"] if cot else "코팅없음"
-        if cot_title not in coating_set:
+        cot_title = cot["title"] if cot else None
+        # 크롤 필터는 config coating_set 기준 — cot_title 이 None 일 땐 매칭 스킵
+        if cot_title is None or cot_title not in coating_set:
             skipped["coating"] += 1
             continue
 
@@ -132,18 +133,18 @@ def crawl_product(spec: dict) -> list[dict]:
             if value is None:
                 continue
             items.append({
-                "product": pname,
-                "category": pname,
-                "paper_name": mat["title"],       # raw: "스노우화이트-250g"
-                "coating": cot_title,              # raw: "양면무광코팅", "부분UV코팅-앞면"
-                "print_mode": col["title"],        # raw: "양면8도", "단면4도"
-                "size": siz["title"],              # raw: "명함 90×50"
-                "qty": qty,
-                "price": int(value * 1.1),         # 총결제액 (VAT 포함)
+                "product":    pname,
+                "category":   pname,
+                "paper_name": (mat.get("title") or None),
+                "coating":    cot_title,
+                "print_mode": (col.get("title") or None),
+                "size":       (siz.get("title") or None),
+                "qty":        qty or None,
+                "price":      int(value * 1.1),
                 "price_vat_included": True,
-                "url": product_url,
-                "url_ok": url_ok,
-                "options": options,
+                "url":        product_url,
+                "url_ok":     url_ok,
+                "options":    options,
             })
 
     print(f"    → {len(items)}건 (필터 제외: size={skipped['size']}, color={skipped['color']}, paper={skipped['paper']}, coating={skipped['coating']})")

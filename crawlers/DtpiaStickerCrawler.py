@@ -94,6 +94,55 @@ JS_DUMP_INPUTS = """() => {
 }"""
 
 
+JS_READ_DOM_STATE = """() => {
+    const selText = (id) => {
+        const el = document.getElementById(id);
+        if (!el || el.selectedIndex < 0) return '';
+        return (el.options[el.selectedIndex]?.textContent || '').trim();
+    };
+    const selVal = (id) => {
+        const el = document.getElementById(id);
+        return el ? (el.value || '') : '';
+    };
+    const inpVal = (id) => {
+        const el = document.getElementById(id);
+        return el ? (el.value || '') : '';
+    };
+    return {
+        paper_text:        selText('mtrl_cd'),
+        coating_text:      selText('coating_type'),
+        sticker_type_text: selText('sticker_type'),
+        kal_type_text:     selText('kal_type_tmp'),
+        qty_val:           selVal('prn_sht_cn'),
+        cut_hz:            inpVal('ppr_cut_hz'),
+        cut_vt:            inpVal('ppr_cut_vt'),
+        work_hz:           inpVal('wk_hz'),
+        work_vt:           inpVal('wk_vt'),
+    };
+}"""
+
+
+def read_dom_state(page) -> dict:
+    raw = page.evaluate(JS_READ_DOM_STATE) or {}
+    try:
+        qty = int(raw.get("qty_val") or "")
+    except (TypeError, ValueError):
+        qty = 0
+    hz = (raw.get("cut_hz") or "").strip()
+    vt = (raw.get("cut_vt") or "").strip()
+    size = f"{hz}x{vt}" if hz and vt else ""
+    return {
+        "paper_name":   (raw.get("paper_text") or "").strip(),
+        "coating":      (raw.get("coating_text") or "").strip(),
+        # dtpia 스티커 페이지는 인쇄 도수 UI 가 없음 (단면칼라 고정) → raw.print_mode 비움
+        "print_mode":   "",
+        "size":         size,
+        "qty":          qty,
+        "sticker_type": (raw.get("sticker_type_text") or "").strip(),
+        "kal_type":     (raw.get("kal_type_text") or "").strip(),
+    }
+
+
 def parse_price(txt: str) -> int | None:
     if not txt:
         return None
@@ -238,21 +287,32 @@ class DtpiaStickerCrawler:
                 price = parse_price(txt or "")
 
                 if price and price > 0:
+                    dom = read_dom_state(page)
                     self.items.append({
-                        "product": t["product_name"],
-                        "category": "스티커",
-                        "paper_name": paper["name"],
-                        "coating": coating["name"],
-                        "print_mode": "자유형 도무송",
-                        "size": size_label,
-                        "qty": t["qtys"][0],
-                        "price": price,
+                        "product":    t["product_name"],
+                        "category":   "스티커",
+                        "paper_name": dom["paper_name"] or None,
+                        "coating":    dom["coating"]    or None,
+                        # 사이트가 인쇄 도수 UI 를 노출하지 않음 → null
+                        "print_mode": dom["print_mode"] or None,
+                        "size":       dom["size"]       or None,
+                        "qty":        dom["qty"]        or None,
+                        "price":      price,
                         "price_vat_included": True,
-                        "url": url,
-                        "url_ok": True,
-                        "options": {"shape": "원형", "ea_per_sheet": 1},
+                        "url":        url,
+                        "url_ok":     True,
+                        "options": {
+                            # 도무송은 커팅 형태 — print_mode 가 아니므로 options 로 이동
+                            "sticker_type":      dom["sticker_type"] or None,
+                            "kal_type":          dom["kal_type"]     or None,
+                            "ea_per_sheet":      1,
+                            "config_paper_name": paper["name"],
+                            "config_coating":    coating["name"],
+                            "config_size":       size_label,
+                            "config_qty":        t["qtys"][0],
+                        },
                     })
-                    log.info(f"      {paper['name']} | {size_label} -> {price:,}")
+                    log.info(f"      DOM: {dom['paper_name']} | {dom['coating']} | {dom['size']} | {dom['sticker_type']} | {dom['kal_type']} -> {price:,}")
                 else:
                     log.warning(f"      {paper['name']} | {size_label}: price fail")
 
