@@ -1,6 +1,5 @@
 {
   "_description": "사이트별 매칭 규칙·VAT 정책 + 전역 정규화 규칙. 새 사이트 추가, VAT 변경, 매칭 방식 변경 시 이 파일만 수정.",
-
   "_schema": {
     "name": "사람용 표시명 (한글)",
     "ownership": "self(자사) | competitor",
@@ -12,58 +11,155 @@
     "paper_name_extract": "paper_name에 다른 필드 정보가 인코딩돼 있는 사이트용 정규식 추출 규칙. 매칭 전에 사이트별 전처리로 적용.",
     "tech": "selenium | playwright | http (참고용, 매칭에는 영향 없음)"
   },
-
   "_defaults": {
     "_description": "전역 매칭 기본값. 사이트별 설정에 없으면 이 값 적용.",
     "match_method": "substring",
     "qty_default": 200
   },
-
   "_match_axes": {
     "_description": "모든 사이트·모든 제품 공통 매칭 축. ref/output 양쪽에서 정규화 후 (paper_name, coating, print_mode, size, qty) 5개 키로 매칭.",
-    "axes": ["paper_name", "coating", "print_mode", "size", "qty"]
+    "axes": [
+      "paper_name",
+      "coating",
+      "print_mode",
+      "size",
+      "qty"
+    ]
   },
-
   "_normalization": {
     "coating": {
       "_description": "코팅 = 약품 도포 처리 여부/종류. 면(side) 정보가 섞여 들어와도 종류만 추출.",
       "default": "비코팅",
-      "allowed": ["비코팅", "무광코팅", "유광코팅", "벨벳코팅"],
+      "allowed": [
+        "비코팅",
+        "무광코팅",
+        "유광코팅",
+        "벨벳코팅"
+      ],
       "aliases": {
-        "비코팅":   ["", "없음", "안함", "코팅없음", "무코팅"],
-        "무광코팅": ["무광", "양면무광코팅", "양면무광", "단면무광"],
-        "유광코팅": ["유광", "코팅", "양면유광코팅", "양면유광", "단면유광"],
-        "벨벳코팅": ["벨벳", "양면벨벳코팅"]
+        "비코팅": [
+          "",
+          "없음",
+          "안함",
+          "코팅없음",
+          "무코팅"
+        ],
+        "무광코팅": [
+          "무광",
+          "양면무광코팅",
+          "양면무광",
+          "단면무광"
+        ],
+        "유광코팅": [
+          "유광",
+          "코팅",
+          "양면유광코팅",
+          "양면유광",
+          "단면유광"
+        ],
+        "벨벳코팅": [
+          "벨벳",
+          "양면벨벳코팅"
+        ]
       },
       "_alias_notes": {
         "유광코팅 ← 코팅": "ecard21 '일반코팅명함' 카테고리의 default가 유광. raw 값 '코팅' 단독 = 유광코팅. (스노우화이트 216g 케이스 확인됨)"
       },
       "to_options": {
         "_description": "특수 코팅은 매칭 축에서 빼고 options로 보존. coating 매칭값은 base 값(보통 비코팅)으로 정규화.",
-        "홀로그램코팅 도트-양면":      { "coating_base": "비코팅", "options": { "hologram": "도트" } },
-        "홀로그램코팅 심플-양면":      { "coating_base": "비코팅", "options": { "hologram": "심플" } },
-        "부분코팅-앞면":               { "coating_base": "비코팅", "options": { "partial_coating": true } },
-        "부분코팅-뒷면":               { "coating_base": "비코팅", "options": { "partial_coating": true } },
-        "부분코팅-양면":               { "coating_base": "비코팅", "options": { "partial_coating": true } },
-        "부분UV코팅-앞면":             { "coating_base": "비코팅", "options": { "partial_coating": true } },
-        "부분UV코팅-뒷면":             { "coating_base": "비코팅", "options": { "partial_coating": true } },
-        "부분UV코팅-양면":             { "coating_base": "비코팅", "options": { "partial_coating": true } }
+        "홀로그램코팅 도트-양면": {
+          "coating_base": "비코팅",
+          "options": {
+            "hologram": "도트"
+          }
+        },
+        "홀로그램코팅 심플-양면": {
+          "coating_base": "비코팅",
+          "options": {
+            "hologram": "심플"
+          }
+        },
+        "부분코팅-앞면": {
+          "coating_base": "비코팅",
+          "options": {
+            "partial_coating": true
+          }
+        },
+        "부분코팅-뒷면": {
+          "coating_base": "비코팅",
+          "options": {
+            "partial_coating": true
+          }
+        },
+        "부분코팅-양면": {
+          "coating_base": "비코팅",
+          "options": {
+            "partial_coating": true
+          }
+        },
+        "부분UV코팅-앞면": {
+          "coating_base": "비코팅",
+          "options": {
+            "partial_coating": true
+          }
+        },
+        "부분UV코팅-뒷면": {
+          "coating_base": "비코팅",
+          "options": {
+            "partial_coating": true
+          }
+        },
+        "부분UV코팅-양면": {
+          "coating_base": "비코팅",
+          "options": {
+            "partial_coating": true
+          }
+        }
       }
     },
-
     "print_mode": {
       "_description": "인쇄 면(side) + 색도(color)를 합친 정규화 값. 양면칼라 == 8도. 단면칼라 == 4도. 백색1도는 백색 1색.",
       "default": "양면칼라",
-      "allowed": ["양면칼라", "단면칼라", "양면백색1도", "단면백색1도"],
+      "allowed": [
+        "양면칼라",
+        "단면칼라",
+        "양면백색1도",
+        "단면백색1도"
+      ],
       "aliases": {
-        "양면칼라":    ["", "양면", "양면8도", "양면8도(형광CMYK)", "양면8도(형광CMY+K)", "양면인쇄", "양면4도", "양면 칼라8도", "양면 칼라4도", "양면칼라"],
-        "단면칼라":    ["단면", "단면8도", "단면4도", "단면 칼라4도", "단면 칼라8도", "단면칼라"],
-        "양면백색1도": ["양면백색"],
-        "단면백색1도": ["단면백색"]
+        "양면칼라": [
+          "",
+          "양면",
+          "양면8도",
+          "양면8도(형광CMYK)",
+          "양면8도(형광CMY+K)",
+          "양면인쇄",
+          "양면4도",
+          "양면 칼라8도",
+          "양면 칼라4도",
+          "양면칼라"
+        ],
+        "단면칼라": [
+          "단면",
+          "단면8도",
+          "단면4도",
+          "단면 칼라4도",
+          "단면 칼라8도",
+          "단면칼라"
+        ],
+        "양면백색1도": [
+          "양면백색"
+        ],
+        "단면백색1도": [
+          "단면백색"
+        ]
       },
       "to_options": {
         "_description": "박/특수 후가공이 color_mode에 섞여 들어온 경우 분리. 박은 현재 매칭 대상 아님 → options.note로 보존.",
-        "양면8도_단면금박": { "_base": "양면칼라", "note": "단면금박" }
+        "양면8도_단면금박": {
+          "_base": "양면칼라",
+          "note": "단면금박"
+        }
       },
       "_도수_참고": {
         "양면칼라": "8도 (=CMYK × 2면)",
@@ -72,12 +168,16 @@
         "단면백색1도": "1도"
       }
     },
-
     "size": {
       "_description": "용지 크기. 가로x세로 mm 정수 형식으로 통일.",
       "default": "90x50",
       "format": "{W}x{H}",
-      "allowed_examples": ["90x50", "86x54", "86x52", "90x100"],
+      "allowed_examples": [
+        "90x50",
+        "86x54",
+        "86x52",
+        "90x100"
+      ],
       "_normalize_rules": [
         "공백·㎜·mm·cm 단위 제거 후 숫자만 추출",
         "구분자 *, ×, X 모두 x로 통일",
@@ -88,23 +188,66 @@
       "regex": "(\\d+)\\s*[x×*X]\\s*(\\d+)\\s*(cm)?",
       "_note_regex": "위 정규식으로 (W, H, unit) 추출 후 unit==cm이면 ×10."
     },
-
     "qty": {
       "_description": "수량. 정수 매수. 100/200/500/1000매 등 단위 다양화 예정 → 매칭 축으로 사용.",
       "default": 200,
-      "common_units": [100, 200, 500, 1000, 2000],
+      "common_units": [
+        100,
+        200,
+        500,
+        1000,
+        2000
+      ],
       "_note": "ref와 output 양쪽 모두 같은 qty여야 매칭. ref에 qty가 명시 안 된 paper는 default 200으로 처리."
     },
-
     "paper_name": {
       "_description": "용지명 정규화. noise strip → coating 추출 → canonical alias 적용 → '{canonical} {weight}g' 형태로.",
-      "canonical": ["스노우화이트", "반누보화이트", "아르떼 울트라화이트", "누브", "휘라레"],
+      "canonical": [
+        "스노우화이트",
+        "반누보화이트",
+        "아르떼 울트라화이트",
+        "누브",
+        "휘라레"
+      ],
       "aliases": {
-        "스노우화이트": ["스노우", "스노우지", "스노우지 백색", "무코팅스노우", "코팅스노우"],
-        "반누보화이트": ["반누보", "프리미엄반누보", "반누보 화이트", "반누보 스노우화이트", "반누보 스노우 화이트", "반누보 내츄럴", "럭셔리 반누보 화이트"],
-        "아르떼 울트라화이트": ["아르떼", "아르떼울트라화이트", "아르미 울트라화이트"],
-        "누브": ["누브지", "엑스트라 누보", "엑스트라누보", "Extra 누브", "엑스트라 누브", "Extra 누브지"],
-        "휘라레": ["휘라레", "휘라레 화이트", "엑스트라 휘라레", "Extra 휘라레", "Extra 휘라레(린넨)", "린넨커버(휘라레) 솔라화이트", "휘라레 (린넨)"]
+        "스노우화이트": [
+          "스노우",
+          "스노우지",
+          "스노우지 백색",
+          "무코팅스노우",
+          "코팅스노우"
+        ],
+        "반누보화이트": [
+          "반누보",
+          "프리미엄반누보",
+          "반누보 화이트",
+          "반누보 스노우화이트",
+          "반누보 스노우 화이트",
+          "반누보 내츄럴",
+          "럭셔리 반누보 화이트"
+        ],
+        "아르떼 울트라화이트": [
+          "아르떼",
+          "아르떼울트라화이트",
+          "아르미 울트라화이트"
+        ],
+        "누브": [
+          "누브지",
+          "엑스트라 누보",
+          "엑스트라누보",
+          "Extra 누브",
+          "엑스트라 누브",
+          "Extra 누브지"
+        ],
+        "휘라레": [
+          "휘라레",
+          "휘라레 화이트",
+          "엑스트라 휘라레",
+          "Extra 휘라레",
+          "Extra 휘라레(린넨)",
+          "린넨커버(휘라레) 솔라화이트",
+          "휘라레 (린넨)"
+        ]
       },
       "noise_suffix_regex": "(\\d+)\\s*g.*$",
       "_noise_note": "paper_name 뒤에 부가 설명 텍스트(예: '메모를 하거나 스탬프 사용 시 번질 수 있어요.')가 붙어 있을 수 있음. 첫 '숫자g' 이후는 잘라냄.",
@@ -119,37 +262,63 @@
         "린넨커버(휘라레) 솔라화이트 216g": "휘라레 216g"
       }
     },
-
     "paper_name_extract": {
       "_description": "paper_name에 코팅 정보가 인코딩된 사이트용. coating 추출 룰. (alias 이전 단계)",
-      "applies_to": ["swadpia", "wowpress", "bizhows"],
+      "applies_to": [
+        "swadpia",
+        "wowpress",
+        "bizhows"
+      ],
       "rules": [
         {
           "pattern": "\\((무광코팅|유광코팅|벨벳코팅|무코팅)\\)",
           "extract_to": "coating",
           "remove_from_paper_name": true,
           "examples": {
-            "스노우지(무광코팅) 250g":   { "paper_name": "스노우지 250g",      "coating": "무광코팅" },
-            "스노우지(유광코팅) 300g":   { "paper_name": "스노우지 300g",      "coating": "유광코팅" },
-            "스노우지(무코팅) 250g":     { "paper_name": "스노우지 250g",      "coating": "비코팅" },
-            "스노우지 백색 300g(무광코팅)": { "paper_name": "스노우지 백색 300g", "coating": "무광코팅" }
+            "스노우지(무광코팅) 250g": {
+              "paper_name": "스노우지 250g",
+              "coating": "무광코팅"
+            },
+            "스노우지(유광코팅) 300g": {
+              "paper_name": "스노우지 300g",
+              "coating": "유광코팅"
+            },
+            "스노우지(무코팅) 250g": {
+              "paper_name": "스노우지 250g",
+              "coating": "비코팅"
+            },
+            "스노우지 백색 300g(무광코팅)": {
+              "paper_name": "스노우지 백색 300g",
+              "coating": "무광코팅"
+            }
           }
         },
         {
           "pattern": "^(무코팅|코팅)스노우",
           "extract_to": "coating",
-          "prefix_map": { "무코팅": "비코팅", "코팅": "유광코팅" },
+          "prefix_map": {
+            "무코팅": "비코팅",
+            "코팅": "유광코팅"
+          },
           "_note": "bizhows 표기: '무코팅스노우 400g' → 스노우 400g + 비코팅, '코팅스노우 300g' → 스노우 300g + 유광코팅(사용자 추정)",
           "examples": {
-            "무코팅스노우 400g": { "paper_name": "스노우 400g", "coating": "비코팅" },
-            "코팅스노우 300g":   { "paper_name": "스노우 300g", "coating": "유광코팅" },
-            "코팅스노우 219g":   { "paper_name": "스노우 219g", "coating": "유광코팅" }
+            "무코팅스노우 400g": {
+              "paper_name": "스노우 400g",
+              "coating": "비코팅"
+            },
+            "코팅스노우 300g": {
+              "paper_name": "스노우 300g",
+              "coating": "유광코팅"
+            },
+            "코팅스노우 219g": {
+              "paper_name": "스노우 219g",
+              "coating": "유광코팅"
+            }
           }
         }
       ]
     }
   },
-
   "sites": {
     "ecard21": {
       "name": "명함천국",
@@ -174,7 +343,7 @@
       "ownership": "competitor",
       "base_url": "https://www.bizhows.com",
       "match_by": "crawl_key",
-      "vat_included": false,
+      "vat_included": true,
       "tech": "playwright"
     },
     "swadpia": {

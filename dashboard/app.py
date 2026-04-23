@@ -22,11 +22,13 @@ OUTPUT_DIR = os.path.join(BASE_DIR, "output")
 RULE_PATHS = {
     "card": os.path.join(CONFIG_DIR, "card_mapping_rule.json"),
     "sticker": os.path.join(CONFIG_DIR, "sticker_mapping_rule.json"),
+    "envelope": os.path.join(CONFIG_DIR, "envelope_mapping_rule.json"),
 }
 
 CATEGORIES = [
     {"id": "card", "name": "명함"},
     {"id": "sticker", "name": "스티커"},
+    {"id": "envelope", "name": "봉투"},
 ]
 
 app = Flask(__name__)
@@ -63,7 +65,7 @@ def get_active_sites(category: str = "card") -> list[dict]:
             "name": conf.get("name", sid),
             "base_url": conf.get("base_url", ""),
             "ownership": conf.get("ownership", "competitor"),
-            "vat_adjusted": conf.get("vat_included", True) is False,
+            "vat_adjusted": False,  # 모든 사이트 공급가 기준 통일이라 별도 보정 표시 없음
         })
     return out
 
@@ -129,12 +131,16 @@ def _find_raw_paper_name(matching, items_by_site_sid, raw_items_by_site_sid):
 
 # ── 명함 grid ──
 def _build_card_grid(sites, site_ids, items_by_site, raw_items_by_site, latest_crawled):
+    # 그룹핑 키 = match_as(canonical, ±25g) 우선, 없으면 paper_name
+    def _gkey(it):
+        return it.get("match_as") or it.get("paper_name", "")
+
     seen_keys = []
     for key in CARD_GRID_ORDER:
         paper_name, coating, partial = key
         for sid in site_ids:
             for it in items_by_site[sid]:
-                if (it.get("paper_name") == paper_name
+                if (_gkey(it) == paper_name
                     and it.get("coating") == coating
                     and bool(it.get("options", {}).get("partial_coating")) == partial):
                     seen_keys.append(key)
@@ -155,7 +161,7 @@ def _build_card_grid(sites, site_ids, items_by_site, raw_items_by_site, latest_c
             sid = site["id"]
             matching = [
                 it for it in items_by_site[sid]
-                if it.get("paper_name") == paper_name
+                if _gkey(it) == paper_name
                 and it.get("coating") == coating
                 and bool(it.get("options", {}).get("partial_coating")) == partial
             ]
@@ -240,6 +246,80 @@ def _build_sticker_grid(sites, site_ids, items_by_site, raw_items_by_site, lates
     return {"type": "sticker", "sites": sites, "sizes": STICKER_SIZES, "papers": papers, "updated_at": latest_crawled}
 
 
+# ── 봉투 grid ──
+# 사이즈는 canonical 3종 고정(매출 TOP 순). print_mode는 단면칼라/단면흑백 2종.
+ENVELOPE_SIZES = ["대봉투", "9절봉투", "소봉투"]
+ENVELOPE_PRINT_MODES = ["단면칼라", "단면흑백"]
+
+# 용지 표시 순서 — 매출 매출 TOP 우선
+ENVELOPE_PAPER_ORDER = [
+    "모조 120g", "모조 100g", "모조 150g", "모조 180g",
+    "크라프트 98g",
+    "레자크체크백 110g", "레자크줄백 110g",
+    "랑데뷰 130g", "랑데뷰 160g",
+]
+
+
+def _build_envelope_grid(sites, site_ids, items_by_site, raw_items_by_site, latest_crawled):
+    # 키 = (paper_name, print_mode) — print_mode가 coating 자리를 대신. 비코팅 고정.
+    seen_keys = []
+    seen_set = set()
+    # 발견된 모든 (paper_name, print_mode) 조합 수집
+    for sid in site_ids:
+        for it in items_by_site[sid]:
+            key = (it.get("paper_name", ""), it.get("print_mode", ""))
+            if key not in seen_set:
+                seen_set.add(key)
+                seen_keys.append(key)
+
+    # ENVELOPE_PAPER_ORDER의 용지만 우선 필터, 그 순서로 정렬. print_mode는 칼라 먼저.
+    def sort_key(k):
+        paper, pm = k
+        paper_idx = ENVELOPE_PAPER_ORDER.index(paper) if paper in ENVELOPE_PAPER_ORDER else 999
+        pm_idx = ENVELOPE_PRINT_MODES.index(pm) if pm in ENVELOPE_PRINT_MODES else 999
+        return (paper_idx, pm_idx, paper, pm)
+
+    seen_keys.sort(key=sort_key)
+    # ENVELOPE_PAPER_ORDER 외 용지는 하단
+    canonical_keys = [k for k in seen_keys if k[0] in ENVELOPE_PAPER_ORDER]
+    other_keys = [k for k in seen_keys if k[0] not in ENVELOPE_PAPER_ORDER]
+    seen_keys = canonical_keys + other_keys
+
+    papers = []
+    for paper_name, print_mode in seen_keys:
+        label = f"{paper_name} · {print_mode}" if print_mode else paper_name
+        entry = {"label": label, "paper_name": paper_name, "print_mode": print_mode, "sites": {}}
+        for site in sites:
+            sid = site["id"]
+            matching = [
+                it for it in items_by_site[sid]
+                if it.get("paper_name") == paper_name and it.get("print_mode") == print_mode
+            ]
+            if not matching:
+                entry["sites"][sid] = None
+                continue
+            url = matching[0].get("url") or site["base_url"]
+            url_ok = matching[0].get("url_ok", True)
+            products_seen = []
+            # 사이즈별 가격
+            prices = {}
+            for it in matching:
+                p = it.get("product", "")
+                if p and p not in products_seen:
+                    products_seen.append(p)
+                size = it.get("size", "")
+                prices[size] = {"price": it.get("price")}
+            raw_paper_name = _find_raw_paper_name(matching, items_by_site[sid], raw_items_by_site.get(sid, []))
+            entry["sites"][sid] = {
+                "product": " + ".join(products_seen),
+                "raw_paper_name": raw_paper_name,
+                "url": url, "url_ok": url_ok, "prices": prices,
+            }
+        papers.append(entry)
+
+    return {"type": "envelope", "sites": sites, "sizes": ENVELOPE_SIZES, "papers": papers, "updated_at": latest_crawled}
+
+
 # ── grid API ──
 @app.route("/api/data/grid")
 def api_grid():
@@ -250,6 +330,8 @@ def api_grid():
 
     if category == "sticker":
         return jsonify(_build_sticker_grid(sites, site_ids, items_by_site, raw_items_by_site, latest_crawled))
+    if category == "envelope":
+        return jsonify(_build_envelope_grid(sites, site_ids, items_by_site, raw_items_by_site, latest_crawled))
     return jsonify(_build_card_grid(sites, site_ids, items_by_site, raw_items_by_site, latest_crawled))
 
 

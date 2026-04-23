@@ -51,7 +51,17 @@ CATEGORIES = {
             ("wowpress",  "crawlers.WowpressStickerCrawler",  "crawl_all", "save"),
         ],
     },
-    # TODO: envelope, flyer, postcard — 각 크롤러 신규 스키마로 마이그레이션 후 추가
+    "envelope": {
+        "rule_path": os.path.join(CONFIG_DIR, "envelope_mapping_rule.json"),
+        "crawlers": [
+            ("printcity", "crawlers.PrintcityEnvelopeCrawler", "crawl_all", "save"),
+            ("bizhows",   "crawlers.BizhowsEnvelopeCrawler",   "crawl_all", "save"),
+            ("swadpia",   "crawlers.SwadpiaEnvelopeCrawler",   "crawl_all", "save"),
+            ("dtpia",     "crawlers.DtpiaEnvelopeCrawler",     "crawl_all", "save"),
+            ("wowpress",  "crawlers.WowpressEnvelopeCrawler",  "crawl_all", "save"),
+        ],
+    },
+    # TODO: flyer, postcard — 각 크롤러 신규 스키마로 마이그레이션 후 추가
 }
 
 
@@ -127,6 +137,14 @@ def run_category(category: str) -> list[dict]:
         except Exception as e:
             logger.error(f"  정규화 실패 ({company}): {e}")
             continue
+
+    # 4. URL 생존 체크 (HEAD) — 타입 A(URL 자체 404) 감지
+    try:
+        from scripts.check_urls import run as check_urls_run
+        logger.info(f"\n▶ [{category}] URL 생존 체크")
+        check_urls_run([category])
+    except Exception as e:
+        logger.warning(f"  URL 체크 실패 (무시): {e}")
 
     logger.info(f"\n[{category}] 완료. 변동 감지는 대시보드가 past/now 비교로 수행.")
 

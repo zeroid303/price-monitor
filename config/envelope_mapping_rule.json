@@ -1,321 +1,299 @@
 {
-  "description": "3사 봉투 용지 매칭 참조 데이터. 명함천국(ecard21) vs 비즈하우스(bizhows) vs .",
-  "updated_at": "2026-03-23",
-  "crawled_dates": {
-    "ecard21": "2026-03-20",
-    "bizhows": "2026-03-20"
+  "_description": "봉투 카테고리 사이트별 매칭 규칙 + 정규화 규칙. card_mapping_rule.json / sticker_mapping_rule.json과 동일 구조.",
+  "_defaults": {
+    "match_method": "substring",
+    "qty_default": 1000
   },
-  "price_basis": {
-    "ecard21": "500매 단면칼라 기준 (코팅없음, 양면테잎없음)",
-    "bizhows": "500매 대량 기준 (후가공 없음)"
-  },
-  "envelope_sizes": {
-    "대봉투": {
-      "description": "A4 서류봉투",
-      "ecard21": "칼라대봉투 [A4 서류봉투] / 몸통 : 330 x 245mm / 뚜껑 : 34mm",
-      "bizhows": "대량 컬러 대봉투 (code: 7000/200/6003)",
-      "note": "330x243mm = 명함천국 330x245mm (2mm 차이)"
-    },
-    "중봉투_9절": {
-      "description": "9절 중봉투",
-      "ecard21": "칼라중봉투 [9절] / 몸통 : 190 x 259mm / 뚜껑 : 30mm",
-      "bizhows": null,
-      "note": "비즈하우스에 중봉투 없음.260x190mm = 명함천국 190x259mm (1mm 차이)"
-    },
-    "소봉투_일반": {
-      "description": "일반 소봉투 (뚜껑 하단)",
-      "ecard21": "칼라소봉투 [일반] / 몸통 : 220 x 105mm / 뚜껑 : 20mm",
-      "bizhows": "대량 컬러 소봉투 (code: 7000/200/6001)",
-      "note": "3사 동일 사이즈"
-    }
-  },
-  "papers": [
-    {
-      "paper_id": "moji_120g",
-      "paper_name_ko": "모조지 120g",
-      "material_group": "moji",
-      "weight_gsm": 120,
-      "ecard21": {
-        "paper_code": "ppk22",
-        "paper_name": "모조지 120g [봉투 기본용지]",
-        "prices": {
-          "컬러_대봉투_500": 88000,
-          "컬러_중봉투_9절_500": 148700,
-          "컬러_소봉투_일반_500": 43500
-        }
-      },
-      "bizhows": {
-        "paper_name": "모조지,백색,120g",
-        "prices": {
-          "컬러_대봉투_500": 104800,
-          "컬러_소봉투_500": 43200
-        },
-        "note": "중봉투 없음"
-      }
-    },
-    {
-      "paper_id": "lezak_stripe_110g",
-      "paper_name_ko": "레자크흰색줄무늬 110g",
-      "material_group": "lezak_stripe",
-      "weight_gsm": 110,
-      "ecard21": {
-        "paper_code": "ppk65",
-        "paper_name": "레자크흰색줄무늬 110g",
-        "prices": {
-          "컬러_대봉투_500": 93000,
-          "컬러_중봉투_9절_500": 165200,
-          "컬러_소봉투_일반_500": 50000
-        }
-      },
-      "bizhows": {
-        "paper_name": "줄무늬 레자크지,백색,110g (품절)",
-        "prices": {
-          "컬러_대봉투_500": 113500,
-          "컬러_소봉투_500": 47700
-        },
-        "status": "품절",
-        "note": "중봉투 없음"
-      }
-    },
-    {
-      "paper_id": "lezak_check_110g",
-      "paper_name_ko": "레자크체크백색 110g",
-      "material_group": "lezak_check",
-      "weight_gsm": 110,
-      "ecard21": {
-        "paper_code": "ppk76",
-        "paper_name": "레자크체크백색 110g",
-        "prices": {
-          "컬러_대봉투_500": 93000,
-          "컬러_중봉투_9절_500": 165200,
-          "컬러_소봉투_일반_500": 50000
-        }
-      },
-      "bizhows": {
-        "paper_name": "체크무늬 레자크지,백색,110g (품절)",
-        "prices": {
-          "컬러_대봉투_500": 113500,
-          "컬러_소봉투_500": 47700
-        },
-        "status": "품절",
-        "note": "중봉투 없음"
-      },
-      "note": "레자크(줄)만 있음"
-    },
-    {
-      "paper_id": "lezak_120g",
-      "paper_name_ko": "레자크 120g",
-      "material_group": "lezak",
-      "weight_gsm": 120,
-      "ecard21": {
-        "paper_code": "ppk29",
-        "paper_name": "레자크 120g",
-        "prices": {
-          "컬러_대봉투_500": 184300,
-          "컬러_중봉투_9절_500": 214700,
-          "컬러_소봉투_일반_500": 161300
-        }
-      },
-      "bizhows": null,
-      "note": "명함천국 고유. 일반 레자크 120g"
-    },
-    {
-      "paper_id": "kraft_98g",
-      "paper_name_ko": "크라프트 98g",
-      "material_group": "kraft",
-      "weight_gsm": 98,
-      "ecard21": {
-        "paper_code": "ppk69",
-        "paper_name": "크라프트 98g",
-        "prices": {
-          "컬러_대봉투_500": 149500,
-          "컬러_중봉투_9절_500": 149500
-        },
-        "note": "소봉투에는 크라프트 없음"
-      },
-      "bizhows": null,
-      "note": "명함천국 고유"
-    },
-    {
-      "paper_id": "hwailji_120g",
-      "paper_name_ko": "화일지 120g",
-      "material_group": "hwailji",
-      "weight_gsm": 120,
-      "ecard21": {
-        "paper_code": "ppk67",
-        "paper_name": "화일지 120g",
-        "prices": {
-          "컬러_대봉투_500": 163900,
-          "컬러_중봉투_9절_500": 163900,
-          "컬러_소봉투_일반_500": 148100
-        }
-      },
-      "bizhows": null,
-      "note": "명함천국 고유"
-    },
-    {
-      "paper_id": "starperl_120g",
-      "paper_name_ko": "스타펄 120g",
-      "material_group": "starperl",
-      "weight_gsm": 120,
-      "ecard21": {
-        "paper_code": "ppk96",
-        "paper_name": "스타펄 120g",
-        "prices": {
-          "컬러_대봉투_500": 414700,
-          "컬러_중봉투_9절_500": 396300,
-          "컬러_소봉투_일반_500": 334100
-        }
-      },
-      "bizhows": null,
-      "note": "명함천국 고유 프리미엄 펄지"
-    },
-    {
-      "paper_id": "tant_120g",
-      "paper_name_ko": "탄트 120g",
-      "material_group": "tant",
-      "weight_gsm": 120,
-      "ecard21": {
-        "paper_code": "ppk36",
-        "paper_name": "탄트 120g",
-        "prices": {
-          "컬러_대봉투_500": 209500,
-          "컬러_중봉투_9절_500": 247700,
-          "컬러_소봉투_일반_500": 178100
-        }
-      },
-      "bizhows": null,
-      "note": "명함천국 고유"
-    },
-    {
-      "paper_id": "mink_120g",
-      "paper_name_ko": "밍크 120g",
-      "material_group": "mink",
-      "weight_gsm": 120,
-      "ecard21": {
-        "paper_code": "ppk84",
-        "paper_name": "밍크 120g",
-        "prices": {
-          "컬러_대봉투_500": 181900,
-          "컬러_중봉투_9절_500": 211900,
-          "컬러_소봉투_일반_500": 160100
-        }
-      },
-      "bizhows": null,
-      "note": "명함천국 고유"
-    },
-    {
-      "paper_id": "laid_120g",
-      "paper_name_ko": "레이드 120g",
-      "material_group": "laid",
-      "weight_gsm": 120,
-      "ecard21": {
-        "paper_code": "ppk83",
-        "paper_name": "레이드 120g",
-        "prices": {
-          "컬러_대봉투_500": 191500,
-          "컬러_중봉투_9절_500": 224300,
-          "컬러_소봉투_일반_500": 166100
-        }
-      },
-      "bizhows": null,
-      "note": "명함천국 고유"
-    },
-    {
-      "paper_id": "moji_180g",
-      "paper_name_ko": "모조지 180g",
-      "material_group": "moji",
-      "weight_gsm": 180,
-      "ecard21": {
-        "paper_code": "ppk24",
-        "paper_name": "모조지 180g",
-        "prices": {
-          "컬러_대봉투_500": 201100,
-          "컬러_중봉투_9절_500": 253200,
-          "컬러_소봉투_일반_500": 185600
-        }
-      },
-      "bizhows": null,
-      "note": "명함천국 고유 (비즈하우스 150g까지만)"
-    },
-    {
-      "paper_id": "rendezvous_105g",
-      "paper_name_ko": "랑데뷰 105g",
-      "material_group": "rendezvous",
-      "weight_gsm": 105,
-      "ecard21": {
-        "paper_code": "ppkx2",
-        "paper_name": "랑데뷰 105g",
-        "prices": {
-          "컬러_대봉투_500": 239300,
-          "컬러_중봉투_9절_500": 250400,
-          "컬러_소봉투_일반_500": 218600
-        }
-      },
-      "bizhows": null,
-      "note": "명함천국 고유"
-    },
-    {
-      "paper_id": "rendezvous_130g",
-      "paper_name_ko": "랑데뷰 130g",
-      "material_group": "rendezvous",
-      "weight_gsm": 130,
-      "ecard21": {
-        "paper_code": "ppkx3",
-        "paper_name": "랑데뷰 130g",
-        "prices": {
-          "컬러_대봉투_500": 270300,
-          "컬러_중봉투_9절_500": 277900,
-          "컬러_소봉투_일반_500": 228800
-        }
-      },
-      "bizhows": null,
-      "note": "명함천국 고유"
-    },
-    {
-      "paper_id": "rendezvous_160g",
-      "paper_name_ko": "랑데뷰 160g",
-      "material_group": "rendezvous",
-      "weight_gsm": 160,
-      "ecard21": {
-        "paper_code": "ppkx4",
-        "paper_name": "랑데뷰 160g",
-        "prices": {
-          "컬러_대봉투_500": 288700,
-          "컬러_중봉투_9절_500": 299900,
-          "컬러_소봉투_일반_500": 252700
-        }
-      },
-      "bizhows": null,
-      "note": "명함천국 고유"
-    }
-  ],
-  "comparison_summary": {
-    "3사_비교_가능": {
-      "모조지_120g": {
-        "대봉투": "명함천국 88,000 vs 비즈하우스 104,800",
-        "중봉투_9절": "명함천국 148,700 vs 비즈하우스 없음",
-        "소봉투_일반": "명함천국 43,500 vs 비즈하우스 43,200"
-      },
-      "레자크줄무늬_110g": {
-        "대봉투": "명함천국 93,000 vs 비즈하우스 113,500(품절)",
-        "중봉투_9절": "명함천국 165,200 vs 비즈하우스 없음",
-        "소봉투_일반": "명함천국 50,000 vs 비즈하우스 47,700(품절)"
-      }
-    },
-    "명함천국_고유_용지": [
-      "레자크 120g",
-      "크라프트 98g",
-      "화일지 120g",
-      "스타펄 120g",
-      "탄트 120g",
-      "밍크 120g",
-      "레이드 120g",
-      "모조지 180g",
-      "랑데뷰 105g/130g/160g"
-    ],
-    "비즈하우스_없는_사이즈": [
-      "중봉투 (9절)"
+  "_match_axes": {
+    "_description": "봉투 매칭 축. qty·coating은 고정(1000매·비코팅)이지만 5축 구조는 카드/스티커와 동일 유지.",
+    "axes": [
+      "paper_name",
+      "coating",
+      "print_mode",
+      "size",
+      "qty"
     ]
+  },
+  "_normalization": {
+    "coating": {
+      "_description": "봉투는 매출 TOP 전량이 비코팅. 비교는 비코팅 고정.",
+      "default": "비코팅",
+      "allowed": [
+        "비코팅"
+      ],
+      "aliases": {
+        "비코팅": [
+          "",
+          "없음",
+          "안함",
+          "코팅없음",
+          "코팅안함",
+          "무코팅"
+        ]
+      }
+    },
+    "print_mode": {
+      "_description": "봉투 인쇄 도수. 단면칼라(옵셋 4도) / 단면흑백(마스타·기성봉투 1도). 양면봉투 인쇄는 매출 타겟 아님.",
+      "default": "단면칼라",
+      "allowed": [
+        "단면칼라",
+        "단면흑백"
+      ],
+      "aliases": {
+        "단면칼라": [
+          "단면",
+          "단면 칼라",
+          "단면 칼라4도",
+          "단면4도",
+          "칼라4도",
+          "4도",
+          "컬러",
+          "칼라",
+          "옵셋",
+          "옵셋 칼라4도",
+          "옵셋칼라",
+          "신규칼선"
+        ],
+        "단면흑백": [
+          "단면 흑백",
+          "단면 먹1도",
+          "단면 먹1도 ",
+          "단면 1도",
+          "전면 먹1도",
+          "단면1도",
+          "흑백",
+          "1도",
+          "먹1도",
+          "마스타",
+          "마스타 인쇄",
+          "기성봉투"
+        ]
+      }
+    },
+    "size": {
+      "_description": "봉투 사이즈 = 봉투 규격(카테고리). 3종 고정(대봉투=330x245 / 9절봉투=255~260x190 / 소봉투=220x105). 작업·완성·절수·사이트별 표기 모두 aliases로 흡수.",
+      "default": "대봉투",
+      "allowed": [
+        "대봉투",
+        "9절봉투",
+        "소봉투"
+      ],
+      "aliases": {
+        "대봉투": [
+          "대봉투",
+          "대봉투-규격",
+          "대봉투 (A4 서류)",
+          "4절",
+          "4절봉투",
+          "4절 (330x245)",
+          "A4",
+          "A4서류",
+          "A4 서류",
+          "A4 서류봉투",
+          "서류봉투",
+          "330x245",
+          "330*245",
+          "245x330",
+          "245*330",
+          "510x387",
+          "510*387",
+          "387x510",
+          "387*510"
+        ],
+        "9절봉투": [
+          "9절",
+          "9절봉투",
+          "9절봉투-규격",
+          "9절 (260x190)",
+          "중봉투",
+          "중봉투 9절",
+          "중봉투(9절)",
+          "중봉투_9절",
+          "260x190",
+          "260*190",
+          "190x260",
+          "190*260",
+          "255x190",
+          "255*190",
+          "190x255",
+          "190*255",
+          "250x190",
+          "250*190",
+          "190x250",
+          "190*250",
+          "238x262",
+          "238*262",
+          "262x238",
+          "262*238"
+        ],
+        "소봉투": [
+          "소봉투",
+          "소봉투-규격",
+          "소봉투 (220x105)",
+          "규격형 220*105(소봉투)",
+          "220*105(소봉투)",
+          "A4 소봉투",
+          "월렛",
+          "220x105",
+          "220*105",
+          "105x220",
+          "105*220"
+        ]
+      },
+      "_note": "bizhows 9절봉투 결측, swadpia 기성형(CEV5000) 단면흑백 전담."
+    },
+    "qty": {
+      "_description": "매수. 매출 기준 1000매 고정. 사이트별 옵션은 1000 하나만 선택.",
+      "default": 1000,
+      "common_units": [
+        1000
+      ]
+    },
+    "paper_name": {
+      "_description": "봉투 용지명 정규화. 매출 TOP에 등장하는 용지만 canonical로 정의. 평량은 '{canonical} {weight}g' 형식으로 붙임. 신규 사이트 연결 시 raw 용지명을 aliases에 추가하면 자동 매칭.",
+      "canonical": [
+        "모조 100g",
+        "모조 120g",
+        "모조 150g",
+        "모조 180g",
+        "크라프트 98g",
+        "레자크체크백 110g",
+        "레자크줄백 110g",
+        "랑데뷰 130g",
+        "랑데뷰 160g"
+      ],
+      "aliases": {
+        "모조 100g": [
+          "모조 100g",
+          "모조지 100g",
+          "모조-100g",
+          "RMO100",
+          "모조지,백색,100g",
+          "모조지 백색 100g"
+        ],
+        "모조 120g": [
+          "모조 120g",
+          "모조지 120g",
+          "모조-120g",
+          "RMO120",
+          "모조지,백색,120g",
+          "모조지 120g [봉투 기본용지]",
+          "모조지 백색 120g"
+        ],
+        "모조 150g": [
+          "모조 150g",
+          "모조지 150g",
+          "모조-150g",
+          "RMO150",
+          "모조지,백색,150g",
+          "모조지 백색 150g"
+        ],
+        "모조 180g": [
+          "모조 180g",
+          "모조지 180g",
+          "모조-180g",
+          "모조지,백색,180g",
+          "모조지 백색 180g"
+        ],
+        "크라프트 98g": [
+          "크라프트 98g",
+          "크라프트-98g",
+          "크라프트지 98g",
+          "크라프트 크라프트 98g",
+          "크라프트 크라프트 100g",
+          "크라프트 100g"
+        ],
+        "레자크체크백 110g": [
+          "레자크체크백 110g",
+          "레자크체크백색 110g",
+          "레자크체크백색G 110g",
+          "레자크체크백-110g",
+          "체크레자크 백색 110g",
+          "체크레자크백 110g",
+          "체크무늬 레자크지,백색,110g",
+          "체크무늬 레자크지 백색 110g",
+          "페스티발체크 110g",
+          "페스티발 #101 체크 고백색 110g",
+          "페스티발 체크 고백색 110g",
+          "페스티발 (레쟈크) #101 체크 고백색 110g"
+        ],
+        "레자크줄백 110g": [
+          "레자크줄백 110g",
+          "레자크줄백A 110g",
+          "레자크흰색줄무늬 110g",
+          "레자크줄무늬 110g",
+          "레자크줄무늬백-110g",
+          "레자크줄무늬백 110g",
+          "레자크바밀이바-110g",
+          "줄레자크 백색 110g",
+          "줄레자크백 110g",
+          "줄무늬 레자크지,백색,110g",
+          "페스티발 #010 줄무늬 고백색 110g",
+          "페스티발 줄 고백색 110g",
+          "페스티발 (레쟈크) #010 줄무늬 고백색 110g"
+        ],
+        "랑데뷰 130g": [
+          "랑데뷰 130g",
+          "랑데뷰-130g",
+          "랑데뷰 내츄럴 130g",
+          "랑데뷰 울트라화이트 130g"
+        ],
+        "랑데뷰 160g": [
+          "랑데뷰 160g",
+          "랑데뷰-160g",
+          "랑데뷰 내츄럴 160g",
+          "랑데뷰 울트라화이트 160g"
+        ]
+      },
+      "noise_suffix_regex": "(\\d+)\\s*g.*$",
+      "_noise_note": "paper_name 뒤 부가 설명 텍스트는 첫 '숫자g' 이후 잘라냄."
+    },
+    "paper_name_extract": {
+      "_description": "봉투는 용지명에 코팅 정보가 인코딩되는 경우가 드물어 현재 룰 비어있음. 필요 시 card/sticker 패턴 참고하여 추가.",
+      "applies_to": [],
+      "rules": []
+    }
+  },
+  "sites": {
+    "printcity": {
+      "name": "프린트시티",
+      "ownership": "self",
+      "base_url": "https://www.printcity.co.kr",
+      "vat_included": true,
+      "tech": "playwright",
+      "_envelope_note": "칼라: /product/EnvelopeOffset_ver2, 흑백: /product/EnvelopeMaster. 하위 버튼으로 '대봉투-규격' / '9절봉투-규격' 선택."
+    },
+    "bizhows": {
+      "name": "비즈하우스",
+      "ownership": "competitor",
+      "base_url": "https://www.bizhows.com",
+      "vat_included": true,
+      "tech": "playwright",
+      "_envelope_note": "대량시리즈 4종: 6001(소컬러), 6002(소흑백), 6003(대컬러), 6004(대흑백). 9절봉투 취급 없음 → 9절 행은 결측. VAT 별도(×1.1 보정)."
+    },
+    "swadpia": {
+      "name": "성원애드피아",
+      "ownership": "competitor",
+      "base_url": "https://www.swadpia.co.kr",
+      "vat_included": true,
+      "tech": "playwright",
+      "_envelope_note": "CEV1000/GEV1001 대중소봉투 단일 페이지. bongto_type으로 대/중/소 선택 (CE101=대봉투 330x245, CE103=중봉투 260x190=9절)."
+    },
+    "dtpia": {
+      "name": "디티피아",
+      "ownership": "competitor",
+      "base_url": "https://www.dtpia.co.kr",
+      "vat_included": true,
+      "tech": "playwright",
+      "_envelope_note": "칼라: /Order/Envelope/Standard.aspx (sdiv_cd A501=대봉투 4절 / A302=9절). 흑백: /Order/Envelope/Master.aspx (sdiv_cd AMA2=대봉투 330x245만, 9절 없음)."
+    },
+    "wowpress": {
+      "name": "와우프레스",
+      "ownership": "competitor",
+      "base_url": "https://www.wowpress.co.kr",
+      "vat_included": true,
+      "tech": "playwright",
+      "_envelope_note": "ProdNo=40034(칼라봉투), 40035(마스타봉투=흑백). 소량봉투(40036)는 1000매 타겟 무관이라 제외."
+    }
   }
 }

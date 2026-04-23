@@ -332,89 +332,6 @@
       ]
     },
     {
-      "category": "일반지명함",
-      "product_name": "소량명함",
-      "url": "https://dtpia.co.kr/Order/Businesscard/SmallQuantity.aspx",
-      "page_type": "small_qty",
-      "size_value": "TD03",
-      "qtys": [
-        100,
-        200
-      ],
-      "color_modes": [
-        {
-          "value": "8",
-          "name": "양면칼라"
-        },
-        {
-          "value": "4",
-          "name": "단면칼라"
-        }
-      ],
-      "papers": [
-        {
-          "mtrl_01": "RSW",
-          "mtrl_02": "200",
-          "paper_name_out": "스노우지 200g",
-          "match_as": "스노우지 216g",
-          "actual_weight_g": 200,
-          "note": "디티피아 실제 200g, printcity 216g 매칭 (16g 차이)",
-          "coatings": [
-            {
-              "value": "N",
-              "name": "코팅없음"
-            },
-            {
-              "value": "2",
-              "name": "유광코팅"
-            },
-            {
-              "value": "4",
-              "name": "무광코팅"
-            }
-          ]
-        },
-        {
-          "mtrl_01": "RSW",
-          "mtrl_02": "250",
-          "paper_name_out": "스노우지 250g",
-          "coatings": [
-            {
-              "value": "N",
-              "name": "코팅없음"
-            },
-            {
-              "value": "2",
-              "name": "유광코팅"
-            },
-            {
-              "value": "4",
-              "name": "무광코팅"
-            }
-          ]
-        },
-        {
-          "mtrl_01": "RSW",
-          "mtrl_02": "300",
-          "paper_name_out": "스노우지 300g",
-          "coatings": [
-            {
-              "value": "N",
-              "name": "코팅없음"
-            },
-            {
-              "value": "2",
-              "name": "유광코팅"
-            },
-            {
-              "value": "4",
-              "name": "무광코팅"
-            }
-          ]
-        }
-      ]
-    },
-    {
       "category": "고급지명함",
       "product_name": "고급지명함",
       "url": "https://dtpia.co.kr/Order/Businesscard/Special.aspx?code=2",
@@ -441,7 +358,7 @@
           "mtrl_cd": "RLW230",
           "mtrl_cdw": "230",
           "paper_name_out": "럭셔리 반누보 화이트 230g",
-          "match_as": "럭셔리 반누보 화이트 250g",
+          "match_as": "반누보화이트 250g",
           "actual_weight_g": 230,
           "note": "디티피아 실제 230g, printcity 250g 매칭 (20g 차이)"
         }
@@ -472,7 +389,7 @@
           "mtrl_cd": "RRW230",
           "mtrl_cdw": "230",
           "paper_name_out": "휘라레 (린넨) 230g",
-          "match_as": "휘라레 (린넨) 216g",
+          "match_as": "휘라레 216g",
           "actual_weight_g": 230,
           "note": "디티피아 실제 230g, printcity 216g 매칭 (14g 차이)"
         }

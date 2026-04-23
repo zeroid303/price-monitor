@@ -38,13 +38,16 @@
         .paper-title { padding: 12px 18px; border-bottom: 1px solid #eee; background: #fafbfc; font-weight: 600; font-size: 14px; }
         .paper-title .partial-tag { display: inline-block; background: #fff3cd; color: #856404; padding: 1px 7px; border-radius: 3px; font-size: 11px; margin-right: 8px; vertical-align: middle; }
 
-        table.grid { width: 100%; border-collapse: collapse; }
+        table.grid { width: 100%; border-collapse: collapse; table-layout: fixed; }
         table.grid th, table.grid td { border: 1px solid #eaeaea; padding: 8px 10px; font-size: 12.5px; }
         table.grid thead th { background: #fafafa; color: #666; font-weight: 600; text-align: center; }
         table.grid thead .site-name { font-size: 13px; color: #2d3436; }
         table.grid thead .site-source { font-size: 10.5px; color: #999; font-weight: 400; line-height: 1.4; word-break: break-all; }
         table.grid thead .site-source a { color: #0984e3; text-decoration: none; }
         table.grid thead .site-source a:hover { text-decoration: underline; }
+        table.grid thead .site-source a.dead { color: #b2bec3; text-decoration: line-through; }
+        table.grid thead .site-source a.dead:hover { text-decoration: line-through underline; }
+        table.grid thead .site-source .dead-tag { color: #d63031; font-size: 10px; margin-left: 4px; }
         table.grid .row-side { background: #fafafa; font-weight: 600; text-align: center; color: #555; vertical-align: middle; width: 60px; }
         table.grid .row-qty { background: #fcfcfc; text-align: center; color: #777; width: 70px; }
         table.grid .row-size { background: #fcfcfc; text-align: center; color: #555; font-weight: 500; width: 80px; }
@@ -77,6 +80,7 @@
         <ul class="sidebar-nav" id="sidebarNav">
             <li><a href="#" data-category="card" class="active">명함</a></li>
             <li><a href="#" data-category="sticker">스티커</a></li>
+            <li><a href="#" data-category="envelope">봉투</a></li>
         </ul>
     </div>
 
@@ -134,20 +138,38 @@
                <span>인쇄: 양면칼라(8도) / 단면칼라(4도)</span>
                <span>매수: 100 / 200 / 500 / 1000</span>
                <span>평량 오차: ±25g 허용</span>
-               <span>비즈하우스는 VAT 미포함이라서 가격 1.1배 보정</span>
+               <span>가격: 공급가 기준 (부가세 제외, ÷1.1 변환)</span>
                <span class="updated-at" id="updatedAt"></span>`,
         sticker: `<span>형태: 원형 도무송</span>
                   <span>매수: 1000매 고정</span>
                   <span>사이즈: 45x45mm ~ 95x95mm</span>
                   <span>평량 오차: ±25g 허용</span>
+                  <span>가격: 공급가 기준 (부가세 제외, ÷1.1 변환)</span>
                   <span class="updated-at" id="updatedAt"></span>`,
+        envelope: `<span>규격: 대봉투(330x245) / 9절봉투(255x190) / 소봉투(220x105)</span>
+                   <span>인쇄: 단면칼라(4도) / 단면흑백(1도)</span>
+                   <span>매수: 1000매 고정</span>
+                   <span>코팅: 비코팅 고정</span>
+                   <span>가격: 공급가 기준 (부가세 제외, ÷1.1 변환)</span>
+                   <span class="updated-at" id="updatedAt"></span>`,
     };
 
-    const TITLES = { card: '명함', sticker: '스티커' };
+    const TITLES = { card: '명함', sticker: '스티커', envelope: '봉투' };
 
     function fmt(n) {
         if (n == null) return '';
         return Number(n).toLocaleString();
+    }
+
+    // 사이트 링크 렌더러 — url_ok=false면 회색/취소선/⚠ 표시
+    function renderSiteLink(url, url_ok) {
+        if (!url) return '';
+        let host;
+        try { const u = new URL(url); host = u.host + u.pathname; } catch(e) { host = url.substring(0, 60); }
+        if (url_ok === false) {
+            return `<a href="${url}" target="_blank" rel="noopener" class="dead" title="링크 응답 없음/404 — 크롤 이후 페이지 삭제·변경 가능성">${host}</a><span class="dead-tag">⚠</span>`;
+        }
+        return `<a href="${url}" target="_blank" rel="noopener">${host}</a>`;
     }
 
     // ── 사이드바 클릭 ──
@@ -179,7 +201,7 @@
             html += `<div class="paper-card">
                 <div class="paper-title">${tag}${paper.paper_name} <span style="color:#888;font-weight:400;">${paper.coating}</span></div>
                 <table class="grid"><thead><tr>
-                    <th rowspan="2" colspan="2">면 / 매수</th>`;
+                    <th rowspan="2" colspan="2" style="width: 130px;">면 / 매수</th>`;
             for (const site of sites) {
                 const sd = paper.sites[site.id];
                 const product = sd ? sd.product : '';
@@ -191,7 +213,7 @@
                     <div class="site-source">
                         ${product ? product + '<br>' : ''}
                         ${rawPaper ? `<span style="color:#b45309;font-size:11px;">${rawPaper}</span><br>` : ''}
-                        ${url ? `<a href="${url}" target="_blank" rel="noopener">${(() => { const u = new URL(url); return u.host + u.pathname; })()}</a>` : ''}
+                        ${renderSiteLink(url, sd ? sd.url_ok : undefined)}
                     </div>
                 </th>`;
             }
@@ -228,7 +250,7 @@
             html += `<div class="paper-card">
                 <div class="paper-title">${paper.paper_name} <span style="color:#888;font-weight:400;">${paper.coating}</span></div>
                 <table class="grid"><thead><tr>
-                    <th>사이즈</th>`;
+                    <th style="width: 90px;">사이즈</th>`;
             for (const site of sites) {
                 const sd = paper.sites[site.id];
                 const product = sd ? sd.product : '';
@@ -240,7 +262,7 @@
                     <div class="site-source">
                         ${product ? product + '<br>' : ''}
                         ${rawPaper ? `<span style="color:#b45309;font-size:11px;">${rawPaper}</span><br>` : ''}
-                        ${url ? `<a href="${url}" target="_blank" rel="noopener">${(() => { const u = new URL(url); return u.host + u.pathname; })()}</a>` : ''}
+                        ${renderSiteLink(url, sd ? sd.url_ok : undefined)}
                     </div>
                 </th>`;
             }
@@ -267,6 +289,52 @@
         document.getElementById('grids').innerHTML = html;
     }
 
+    // ── 봉투 그리드 렌더링 (사이즈별 행, 사이트별 열) ──
+    function renderEnvelopeGrids(data) {
+        const { sites, sizes, papers } = data;
+        if (!papers.length) {
+            document.getElementById('grids').innerHTML = '<div class="empty">데이터 없음. "가격 업데이트"로 크롤링하세요.</div>';
+            return;
+        }
+        let html = '';
+        for (const paper of papers) {
+            html += `<div class="paper-card">
+                <div class="paper-title">${paper.paper_name} <span style="color:#888;font-weight:400;">${paper.print_mode || ''}</span></div>
+                <table class="grid"><thead><tr>
+                    <th style="width: 90px;">사이즈</th>`;
+            for (const site of sites) {
+                const sd = paper.sites[site.id];
+                const product = sd ? sd.product : '';
+                const url = sd ? sd.url : site.base_url;
+                const vatTag = site.vat_adjusted ? ' <span style="color:#888;font-size:11px;">(VAT ×1.1 보정)</span>' : '';
+                const rawPaper = sd ? (sd.raw_paper_name || '') : '';
+                html += `<th>
+                    <div class="site-name">${site.name}${vatTag}</div>
+                    <div class="site-source">
+                        ${product ? product + '<br>' : ''}
+                        ${rawPaper ? `<span style="color:#b45309;font-size:11px;">${rawPaper}</span><br>` : ''}
+                        ${renderSiteLink(url, sd ? sd.url_ok : undefined)}
+                    </div>
+                </th>`;
+            }
+            html += `</tr></thead><tbody>`;
+            for (const size of sizes) {
+                html += `<tr><td class="row-size">${size}</td>`;
+                for (const site of sites) {
+                    const sd = paper.sites[site.id];
+                    const priceData = sd ? sd.prices[size] : null;
+                    const price = priceData ? priceData.price : null;
+                    const isBase = site.ownership === 'self';
+                    const cls = price == null ? 'price empty' : (isBase ? 'price base' : 'price');
+                    html += `<td class="${cls}">${price == null ? '-' : fmt(price)}</td>`;
+                }
+                html += '</tr>';
+            }
+            html += `</tbody></table></div>`;
+        }
+        document.getElementById('grids').innerHTML = html;
+    }
+
     // ── 데이터 로드 ──
     async function loadData() {
         try {
@@ -274,6 +342,8 @@
             const data = await resp.json();
             if (data.type === 'sticker') {
                 renderStickerGrids(data);
+            } else if (data.type === 'envelope') {
+                renderEnvelopeGrids(data);
             } else {
                 renderCardGrids(data);
             }

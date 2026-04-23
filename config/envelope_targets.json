@@ -1,0 +1,215 @@
+{
+  "_description": "봉투 카테고리 크롤 타겟. 사이즈 canonical 2종(대봉투/9절봉투) × 인쇄 2종(단면칼라/단면흑백) × 1000매 × 비코팅 고정.",
+  "_schema": {
+    "printcity": "{ slug, url, print_mode, sub_products[{canonical_size, button_text}], papers[raw name list], _product_id_todo }",
+    "bizhows":   "{ product_name, canonical_size, print_mode, mock, code1/2/3, url, qty_target_label, finish_target }",
+    "swadpia":   "{ category_code, product_code, url, sizes[{canonical, bongto_kind, bongto_type}], print_modes[{canonical, cal_line}], papers[{paper_kind, paper_type?, paper_code?, canonical}] }",
+    "dtpia":     "{ product_name, url, print_mode, sizes[{canonical, sdiv_cd, label}], jijil_gb[{value, family}], mtrl_cd[{value, paper}], color_field, qty }",
+    "wowpress":  "{ product_name, prod_no, url, print_mode, sizes[{canonical, size_value?}], papers[{paper_no?, name, canonical?}] }"
+  },
+  "_filters_common": {
+    "qty": [1000],
+    "coating": "비코팅",
+    "sizes": ["대봉투", "9절봉투"],
+    "print_modes": ["단면칼라", "단면흑백"]
+  },
+
+  "printcity": [
+    {
+      "product_name": "칼라봉투(옵셋)",
+      "slug": "EnvelopeOffset_ver2",
+      "product_id": "679c5fff8db6e00652374798",
+      "url": "https://www.printcity.co.kr/product/EnvelopeOffset_ver2",
+      "print_mode": "단면칼라",
+      "color_code": "COL:40",
+      "sub_products": [
+        {"canonical_size": "대봉투",  "button_text": "대봉투-규격",  "size_title": "330x245"},
+        {"canonical_size": "9절봉투", "button_text": "9절봉투-규격", "size_title": "255x190"},
+        {"canonical_size": "소봉투",  "button_text": "소봉투-규격",  "size_title": "220x105"}
+      ],
+      "_note": "dtp21 API 응답 내 productTypes 순회. ENT:ST(규격형) + ENP:ST/DM 둘 다, COL:40(단면칼라) 기준 필터링."
+    },
+    {
+      "product_name": "기성봉투(마스타·단면흑백)",
+      "slug": "EnvelopeMaster",
+      "product_id": "679c5fff8db6e00652374795",
+      "url": "https://www.printcity.co.kr/product/EnvelopeMaster",
+      "print_mode": "단면흑백",
+      "color_code": "COL:10",
+      "sub_products": [
+        {"canonical_size": "대봉투", "button_text": "대봉투", "size_title": "330x245"},
+        {"canonical_size": "9절봉투", "button_text": "9절봉투", "size_title": "255x190"},
+        {"canonical_size": "소봉투", "button_text": "소봉투", "size_title": "220x105"}
+      ],
+      "_note": "Master는 단면흑백(COL:10). 3종 사이즈 모두 API productTypes에 존재 확인."
+    }
+  ],
+
+  "bizhows": [
+    {
+      "product_name": "대량 컬러 대봉투",
+      "canonical_size": "대봉투",
+      "print_mode": "단면칼라",
+      "mock": "7000_200_6003",
+      "code1": "7000", "code2": "200", "code3": "6003",
+      "url": "https://www.bizhows.com/ko/v/option?code1=7000&code2=200&code3=6003&mock=7000_200_6003",
+      "qty_target_label": "1,000매",
+      "finish_target": "후가공 없음"
+    },
+    {
+      "product_name": "대량 컬러 소봉투",
+      "canonical_size": "소봉투",
+      "print_mode": "단면칼라",
+      "mock": "7000_200_6001",
+      "code1": "7000", "code2": "200", "code3": "6001",
+      "url": "https://www.bizhows.com/ko/v/option?code1=7000&code2=200&code3=6001&mock=7000_200_6001",
+      "qty_target_label": "1,000매",
+      "finish_target": "후가공 없음"
+    },
+    {
+      "_notes": [
+        "9절봉투는 비즈하우스 취급 없음 → 결측",
+        "단면흑백도 비즈하우스 취급 없음 → 결측",
+        "  - 기존 7000_200_6004는 티켓봉투 175x85 (매출 타겟 외)",
+        "  - 7000_200_6002(대량 흑백 소봉투)는 이름만 흑백이고 실제는 컬러 (6001과 가격 동일, 페이지상 컬러 제품). 단면흑백 전용 제품 없음."
+      ]
+    }
+  ],
+
+  "swadpia": [
+    {
+      "product_name": "대중소봉투(단면칼라)",
+      "category_code": "CEV1000",
+      "product_code": "GEV1001",
+      "url": "https://www.swadpia.co.kr/goods/goods_view/CEV1000/GEV1001",
+      "print_mode": "단면칼라",
+      "print_mode_field": "cal_line",
+      "print_mode_value": "BDC40",
+      "sizes": [
+        {"canonical": "대봉투",  "bongto_kind": "CE1", "bongto_type": "CE101", "label": "330*245(서류형규격)"},
+        {"canonical": "9절봉투", "bongto_kind": "CE1", "bongto_type": "CE103", "label": "260*190(중봉투규격)"},
+        {"canonical": "소봉투",  "bongto_kind": "CE1", "bongto_type": "CE102", "label": "220*105(소봉투규격)"}
+      ],
+      "qty_field": "paper_qty",
+      "_note": "단면칼라 전담. paper_kind × paper_type × paper_code 3단 드롭다운 전수조사. 용지 raw text는 paper_code 옵션 라벨로 저장 → normalize가 alias 매칭."
+    },
+    {
+      "product_name": "기성형봉투(단면흑백)",
+      "category_code": "CEV5000",
+      "product_code": "GEV5001",
+      "url": "https://www.swadpia.co.kr/goods/goods_view/CEV5000/GEV5001",
+      "print_mode": "단면흑백",
+      "print_mode_field": "bside_color_amount",
+      "print_mode_value": "BDD21",
+      "skip_paper_kind_loop": true,
+      "sizes": [
+        {"canonical": "대봉투",  "bongto_kind": "CE4", "bongto_type": "CE401", "label": "기성형 330*245(대봉투)"},
+        {"canonical": "9절봉투", "bongto_kind": "CE4", "bongto_type": "CE406", "label": "기성형 260*190(중봉투)"},
+        {"canonical": "소봉투",  "bongto_kind": "CE4", "bongto_type": "CE402", "label": "기성형 220*105(소봉투)"}
+      ],
+      "qty_field": "paper_qty",
+      "_note": "기성형은 paper_kind/paper_type가 UI 장식(실필터 아님) → paper_code만 직접 순회. BDD21=전면 먹1도 단면흑백. 사이즈별 실제 공급: 대봉투 4종, 9절 1종(크라프트만), 소봉투 4종."
+    }
+  ],
+
+  "dtpia": [
+    {
+      "product_name": "규격봉투(단면칼라)",
+      "url": "https://dtpia.co.kr/Order/Envelope/Standard.aspx",
+      "print_mode": "단면칼라",
+      "sizes": [
+        {"canonical": "대봉투",  "sdiv_cd": "A501", "label": "4절 (330x245)"},
+        {"canonical": "9절봉투", "sdiv_cd": "A302", "label": "9절 (260x190)"},
+        {"canonical": "소봉투",  "sdiv_cd": "A101", "label": "바닥 (220x105)"}
+      ],
+      "jijil_gb": [
+        {"value": "A", "canonical_family": "모조",   "papers": ["모조 100g", "모조 120g", "모조 150g"]},
+        {"value": "B", "canonical_family": "레자크(페스티발)", "papers": ["레자크체크백 110g", "레자크줄백 110g"]},
+        {"value": "F", "canonical_family": "레자크(일반)",      "papers": ["레자크 120g"]},
+        {"value": "J", "canonical_family": "크라프트", "papers": ["크라프트 98g"]},
+        {"value": "K", "canonical_family": "랑데뷰",   "papers": ["랑데뷰 130g", "랑데뷰 160g"]}
+      ],
+      "_mtrl_cd_example_모조": [
+        {"value": "RMO100", "paper": "모조 100g"},
+        {"value": "RMO120", "paper": "모조 120g"},
+        {"value": "RMO150", "paper": "모조 150g"}
+      ],
+      "color_field": {"prn_clr_cn_gb": "4"},
+      "qty_field": "prn_sht_cn",
+      "qty_target_value": "1000",
+      "cover_tomson_default": "",
+      "_note": "jijil_gb 매핑은 2차 탐색 결과로 A/B/F/J/K만 확인. 나머지(C=밍크 D=레이드 E=미색모조 등)는 매출 타겟 외라 제외. 각 jijil_gb의 mtrl_cd 리스트는 크롤러 작성 때 onchange 후 dump."
+    },
+    {
+      "product_name": "기성봉투(단면흑백)",
+      "url": "https://dtpia.co.kr/Order/Envelope/Master.aspx",
+      "print_mode": "단면흑백",
+      "sizes": [
+        {"canonical": "대봉투", "sdiv_cd": "AMA2", "label": "330x245"}
+      ],
+      "en_category": [
+        {"value": "A", "label": "서류봉투(대봉투)"}
+      ],
+      "en_type": [
+        {"value": "A1|RKH060", "paper": "크라프트 98g",  "_label": "4절 초특대형 (크라프트 98g)"},
+        {"value": "A4|RKH061", "paper": "레자크 120g", "_label": "4절 레자크 120g"}
+      ],
+      "color_field": {"prn_clr_cn_gb": "1"},
+      "qty_field": "prn_sht_cn",
+      "qty_target_value": "1000",
+      "_note": "Master는 기성봉투라 용지가 봉투 종류와 묶여 있음(en_type 각 항목이 크라프트/레자크 평량 고정). 9절봉투는 Master에 없음 → 9절 흑백 결측."
+    }
+  ],
+
+  "wowpress": [
+    {
+      "product_name": "칼라봉투",
+      "prod_no": "40034",
+      "url": "https://wowpress.co.kr/ordr/prod/dets?ProdNo=40034",
+      "print_mode": "단면칼라",
+      "color_no": "255",
+      "size_select_name": "SizeNo",
+      "sizes": [
+        {"canonical": "대봉투",  "size_value": "5629", "label": "1호(5절)봉투(330x245)"},
+        {"canonical": "9절봉투", "size_value": "5631", "label": "3호(9절)봉투(250x190)"},
+        {"canonical": "소봉투",  "size_value": "5616", "label": "A4규격봉투(220x105)"}
+      ],
+      "papers": [
+        {"paper_no": 20239, "name": "모조 100g"},
+        {"paper_no": 20240, "name": "모조 120g"},
+        {"paper_no": 20124, "name": "레자크체크백 110g"},
+        {"paper_no": 21013, "name": "레자크줄백 110g"}
+      ],
+      "qty_target": "1000"
+    },
+    {
+      "product_name": "마스타봉투(단면흑백)",
+      "prod_no": "40035",
+      "url": "https://wowpress.co.kr/ordr/prod/dets?ProdNo=40035",
+      "print_mode": "단면흑백",
+      "color_no": "",
+      "size_select_name": "SizeNo",
+      "sizes": [
+        {"canonical": "대봉투",  "size_value": "5629", "label": "1호(5절)봉투(330x245)"},
+        {"canonical": "9절봉투", "size_value": "7141", "label": "3호(9절)봉투(260x190)"},
+        {"canonical": "소봉투",  "size_value": "5616", "label": "A4규격봉투(220x105)"}
+      ],
+      "papers": [
+        {"paper_no": 20239, "name": "모조 100g"},
+        {"paper_no": 20240, "name": "모조 120g"},
+        {"paper_no": 21013, "name": "레자크줄백 110g"}
+      ],
+      "qty_target": "1000",
+      "_color_note": "ColorNo 기본값(도수선택 빈value) 상태가 실제 단면 먹1도 가격 반환. color_no를 빈문자열로 두면 기본 선택 유지"
+    },
+    {
+      "_notes": [
+        "40034 칼라봉투: paperno3(용지 종류) > paperno4(색상) > paperno5(sPaper0, 평량) 3단 cascade. card 크롤러의 JS_PAPER_PARENT_CHAIN 재활용.",
+        "40034는 크라프트/랑데뷰/탄트지 옵션 존재하지만 1000매 가격 0원 → 공급 안함. canonical 매칭되는 4종(모조/레자크체크/레자크줄)만 targets 등록.",
+        "40035 마스타봉투: '도수선택' 기본값(빈 ColorNo)에서 단면 먹1도 가격 반환. 군청/금적은 추가 옵션이라 제외. 크라프트는 역시 0원 → 제외.",
+        "40036 소량봉투: 최대 500매라 매출 1000매 타겟 매칭 불가 → 제외.",
+        "9절봉투 size_value가 칼라봉투(5631)와 마스타봉투(7141)가 다름 — 페이지별 확인 확정."
+      ]
+    }
+  ]
+}
