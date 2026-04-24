@@ -1,0 +1,2294 @@
+printcity:
+  _description: 프린트시티 디지털명함 가격 테이블. data/printcity/ 엑셀에서 일회성 생성 (scripts/build_printcity_card_targets.py). 엑셀 갱신 시 스크립트 재실행.
+  sources:
+  - data/printcity/digital_card.xlsx
+  filters_applied:
+    size: SIZ:NC-90X50
+    qty:
+    - 100
+    - 200
+    - 500
+    - 1000
+  price_vat_included: false
+  generated_at: 2026-04-24 15:16
+  items:
+  - product: 디지털명함
+    paper: 화이트모조 220g
+    paper_code: MAT:WMJ-220
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 100
+    price: 3000
+  - product: 디지털명함
+    paper: 화이트모조 220g
+    paper_code: MAT:WMJ-220
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 200
+    price: 4500
+  - product: 디지털명함
+    paper: 화이트모조 220g
+    paper_code: MAT:WMJ-220
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 500
+    price: 10000
+  - product: 디지털명함
+    paper: 화이트모조 220g
+    paper_code: MAT:WMJ-220
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 1000
+    price: 19000
+  - product: 디지털명함
+    paper: 화이트모조 220g
+    paper_code: MAT:WMJ-220
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 100
+    price: 4000
+  - product: 디지털명함
+    paper: 화이트모조 220g
+    paper_code: MAT:WMJ-220
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 200
+    price: 6000
+  - product: 디지털명함
+    paper: 화이트모조 220g
+    paper_code: MAT:WMJ-220
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 500
+    price: 12000
+  - product: 디지털명함
+    paper: 화이트모조 220g
+    paper_code: MAT:WMJ-220
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 1000
+    price: 23000
+  - product: 디지털명함
+    paper: 스노우화이트-250g
+    paper_code: MAT:SNW-250
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 100
+    price: 3000
+  - product: 디지털명함
+    paper: 스노우화이트-250g
+    paper_code: MAT:SNW-250
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 200
+    price: 4500
+  - product: 디지털명함
+    paper: 스노우화이트-250g
+    paper_code: MAT:SNW-250
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 500
+    price: 10000
+  - product: 디지털명함
+    paper: 스노우화이트-250g
+    paper_code: MAT:SNW-250
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 1000
+    price: 19000
+  - product: 디지털명함
+    paper: 스노우화이트-250g
+    paper_code: MAT:SNW-250
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 100
+    price: 4000
+  - product: 디지털명함
+    paper: 스노우화이트-250g
+    paper_code: MAT:SNW-250
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 200
+    price: 6000
+  - product: 디지털명함
+    paper: 스노우화이트-250g
+    paper_code: MAT:SNW-250
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 500
+    price: 12000
+  - product: 디지털명함
+    paper: 스노우화이트-250g
+    paper_code: MAT:SNW-250
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 1000
+    price: 23000
+  - product: 디지털명함
+    paper: 스타드림 다이아 240g
+    paper_code: MAT:SDD-240
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 100
+    price: 3700
+  - product: 디지털명함
+    paper: 스타드림 다이아 240g
+    paper_code: MAT:SDD-240
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 200
+    price: 6500
+  - product: 디지털명함
+    paper: 스타드림 다이아 240g
+    paper_code: MAT:SDD-240
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 500
+    price: 13500
+  - product: 디지털명함
+    paper: 스타드림 다이아 240g
+    paper_code: MAT:SDD-240
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 1000
+    price: 27000
+  - product: 디지털명함
+    paper: 스타드림 다이아 240g
+    paper_code: MAT:SDD-240
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 100
+    price: 4500
+  - product: 디지털명함
+    paper: 스타드림 다이아 240g
+    paper_code: MAT:SDD-240
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 200
+    price: 7500
+  - product: 디지털명함
+    paper: 스타드림 다이아 240g
+    paper_code: MAT:SDD-240
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 500
+    price: 16000
+  - product: 디지털명함
+    paper: 스타드림 다이아 240g
+    paper_code: MAT:SDD-240
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 1000
+    price: 32000
+  - product: 디지털명함
+    paper: 몽블랑-240g
+    paper_code: MAT:MOB-240
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 100
+    price: 3700
+  - product: 디지털명함
+    paper: 몽블랑-240g
+    paper_code: MAT:MOB-240
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 200
+    price: 6500
+  - product: 디지털명함
+    paper: 몽블랑-240g
+    paper_code: MAT:MOB-240
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 500
+    price: 13500
+  - product: 디지털명함
+    paper: 몽블랑-240g
+    paper_code: MAT:MOB-240
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 1000
+    price: 27000
+  - product: 디지털명함
+    paper: 몽블랑-240g
+    paper_code: MAT:MOB-240
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 100
+    price: 4500
+  - product: 디지털명함
+    paper: 몽블랑-240g
+    paper_code: MAT:MOB-240
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 200
+    price: 7500
+  - product: 디지털명함
+    paper: 몽블랑-240g
+    paper_code: MAT:MOB-240
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 500
+    price: 16000
+  - product: 디지털명함
+    paper: 몽블랑-240g
+    paper_code: MAT:MOB-240
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 1000
+    price: 32000
+  - product: 디지털명함
+    paper: 스타드림-240g
+    paper_code: MAT:STD-240
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 100
+    price: 3700
+  - product: 디지털명함
+    paper: 스타드림-240g
+    paper_code: MAT:STD-240
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 200
+    price: 6500
+  - product: 디지털명함
+    paper: 스타드림-240g
+    paper_code: MAT:STD-240
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 500
+    price: 13500
+  - product: 디지털명함
+    paper: 스타드림-240g
+    paper_code: MAT:STD-240
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 1000
+    price: 27000
+  - product: 디지털명함
+    paper: 스타드림-240g
+    paper_code: MAT:STD-240
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 100
+    price: 4500
+  - product: 디지털명함
+    paper: 스타드림-240g
+    paper_code: MAT:STD-240
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 200
+    price: 7500
+  - product: 디지털명함
+    paper: 스타드림-240g
+    paper_code: MAT:STD-240
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 500
+    price: 16000
+  - product: 디지털명함
+    paper: 스타드림-240g
+    paper_code: MAT:STD-240
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 1000
+    price: 32000
+  - product: 디지털명함
+    paper: 키칼라메탈릭-200g
+    paper_code: MAT:KEM-200
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 100
+    price: 4000
+  - product: 디지털명함
+    paper: 키칼라메탈릭-200g
+    paper_code: MAT:KEM-200
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 200
+    price: 7000
+  - product: 디지털명함
+    paper: 키칼라메탈릭-200g
+    paper_code: MAT:KEM-200
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 500
+    price: 13500
+  - product: 디지털명함
+    paper: 키칼라메탈릭-200g
+    paper_code: MAT:KEM-200
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 1000
+    price: 27000
+  - product: 디지털명함
+    paper: 키칼라메탈릭-200g
+    paper_code: MAT:KEM-200
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 100
+    price: 5200
+  - product: 디지털명함
+    paper: 키칼라메탈릭-200g
+    paper_code: MAT:KEM-200
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 200
+    price: 8000
+  - product: 디지털명함
+    paper: 키칼라메탈릭-200g
+    paper_code: MAT:KEM-200
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 500
+    price: 16000
+  - product: 디지털명함
+    paper: 키칼라메탈릭-200g
+    paper_code: MAT:KEM-200
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 1000
+    price: 32000
+  - product: 디지털명함
+    paper: 팝셋-240g
+    paper_code: MAT:POS-240
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 100
+    price: 3100
+  - product: 디지털명함
+    paper: 팝셋-240g
+    paper_code: MAT:POS-240
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 200
+    price: 6000
+  - product: 디지털명함
+    paper: 팝셋-240g
+    paper_code: MAT:POS-240
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 500
+    price: 13500
+  - product: 디지털명함
+    paper: 팝셋-240g
+    paper_code: MAT:POS-240
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 1000
+    price: 27000
+  - product: 디지털명함
+    paper: 팝셋-240g
+    paper_code: MAT:POS-240
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 100
+    price: 3800
+  - product: 디지털명함
+    paper: 팝셋-240g
+    paper_code: MAT:POS-240
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 200
+    price: 7000
+  - product: 디지털명함
+    paper: 팝셋-240g
+    paper_code: MAT:POS-240
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 500
+    price: 16000
+  - product: 디지털명함
+    paper: 팝셋-240g
+    paper_code: MAT:POS-240
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 1000
+    price: 32000
+  - product: 디지털명함
+    paper: 키칼라골드-200g
+    paper_code: MAT:KEG-200
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 100
+    price: 3700
+  - product: 디지털명함
+    paper: 키칼라골드-200g
+    paper_code: MAT:KEG-200
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 200
+    price: 6500
+  - product: 디지털명함
+    paper: 키칼라골드-200g
+    paper_code: MAT:KEG-200
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 500
+    price: 13500
+  - product: 디지털명함
+    paper: 키칼라골드-200g
+    paper_code: MAT:KEG-200
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 1000
+    price: 27000
+  - product: 디지털명함
+    paper: 키칼라골드-200g
+    paper_code: MAT:KEG-200
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 100
+    price: 4500
+  - product: 디지털명함
+    paper: 키칼라골드-200g
+    paper_code: MAT:KEG-200
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 200
+    price: 7500
+  - product: 디지털명함
+    paper: 키칼라골드-200g
+    paper_code: MAT:KEG-200
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 500
+    price: 16000
+  - product: 디지털명함
+    paper: 키칼라골드-200g
+    paper_code: MAT:KEG-200
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 1000
+    price: 32000
+  - product: 디지털명함
+    paper: 스타골드-250g
+    paper_code: MAT:STG-220
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 100
+    price: 4000
+  - product: 디지털명함
+    paper: 스타골드-250g
+    paper_code: MAT:STG-220
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 200
+    price: 7000
+  - product: 디지털명함
+    paper: 스타골드-250g
+    paper_code: MAT:STG-220
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 500
+    price: 13500
+  - product: 디지털명함
+    paper: 스타골드-250g
+    paper_code: MAT:STG-220
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 1000
+    price: 27000
+  - product: 디지털명함
+    paper: 스타골드-250g
+    paper_code: MAT:STG-220
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 100
+    price: 5200
+  - product: 디지털명함
+    paper: 스타골드-250g
+    paper_code: MAT:STG-220
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 200
+    price: 8000
+  - product: 디지털명함
+    paper: 스타골드-250g
+    paper_code: MAT:STG-220
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 500
+    price: 16000
+  - product: 디지털명함
+    paper: 스타골드-250g
+    paper_code: MAT:STG-220
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 1000
+    price: 32000
+  - product: 디지털명함
+    paper: 컨셉(블루펄)-250g
+    paper_code: MAT:COB-250
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 100
+    price: 4000
+  - product: 디지털명함
+    paper: 컨셉(블루펄)-250g
+    paper_code: MAT:COB-250
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 200
+    price: 7000
+  - product: 디지털명함
+    paper: 컨셉(블루펄)-250g
+    paper_code: MAT:COB-250
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 500
+    price: 13500
+  - product: 디지털명함
+    paper: 컨셉(블루펄)-250g
+    paper_code: MAT:COB-250
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 1000
+    price: 27000
+  - product: 디지털명함
+    paper: 컨셉(블루펄)-250g
+    paper_code: MAT:COB-250
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 100
+    price: 5200
+  - product: 디지털명함
+    paper: 컨셉(블루펄)-250g
+    paper_code: MAT:COB-250
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 200
+    price: 8000
+  - product: 디지털명함
+    paper: 컨셉(블루펄)-250g
+    paper_code: MAT:COB-250
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 500
+    price: 16000
+  - product: 디지털명함
+    paper: 컨셉(블루펄)-250g
+    paper_code: MAT:COB-250
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 1000
+    price: 32000
+  - product: 디지털명함
+    paper: 반누보화이트-250g
+    paper_code: MAT:VNV-250
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 100
+    price: 3700
+  - product: 디지털명함
+    paper: 반누보화이트-250g
+    paper_code: MAT:VNV-250
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 200
+    price: 6500
+  - product: 디지털명함
+    paper: 반누보화이트-250g
+    paper_code: MAT:VNV-250
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 500
+    price: 13500
+  - product: 디지털명함
+    paper: 반누보화이트-250g
+    paper_code: MAT:VNV-250
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 1000
+    price: 27000
+  - product: 디지털명함
+    paper: 반누보화이트-250g
+    paper_code: MAT:VNV-250
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 100
+    price: 4500
+  - product: 디지털명함
+    paper: 반누보화이트-250g
+    paper_code: MAT:VNV-250
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 200
+    price: 7500
+  - product: 디지털명함
+    paper: 반누보화이트-250g
+    paper_code: MAT:VNV-250
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 500
+    price: 16000
+  - product: 디지털명함
+    paper: 반누보화이트-250g
+    paper_code: MAT:VNV-250
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 1000
+    price: 32000
+  - product: 디지털명함
+    paper: 휘라레-216g
+    paper_code: MAT:FIR-216
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 100
+    price: 3000
+  - product: 디지털명함
+    paper: 휘라레-216g
+    paper_code: MAT:FIR-216
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 200
+    price: 5200
+  - product: 디지털명함
+    paper: 휘라레-216g
+    paper_code: MAT:FIR-216
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 500
+    price: 10500
+  - product: 디지털명함
+    paper: 휘라레-216g
+    paper_code: MAT:FIR-216
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 1000
+    price: 19000
+  - product: 디지털명함
+    paper: 휘라레-216g
+    paper_code: MAT:FIR-216
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 100
+    price: 4000
+  - product: 디지털명함
+    paper: 휘라레-216g
+    paper_code: MAT:FIR-216
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 200
+    price: 6500
+  - product: 디지털명함
+    paper: 휘라레-216g
+    paper_code: MAT:FIR-216
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 500
+    price: 12000
+  - product: 디지털명함
+    paper: 휘라레-216g
+    paper_code: MAT:FIR-216
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 1000
+    price: 23000
+  - product: 디지털명함
+    paper: 누브지-210g
+    paper_code: MAT:NUV-209
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 100
+    price: 3000
+  - product: 디지털명함
+    paper: 누브지-210g
+    paper_code: MAT:NUV-209
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 200
+    price: 5200
+  - product: 디지털명함
+    paper: 누브지-210g
+    paper_code: MAT:NUV-209
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 500
+    price: 10500
+  - product: 디지털명함
+    paper: 누브지-210g
+    paper_code: MAT:NUV-209
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 1000
+    price: 19000
+  - product: 디지털명함
+    paper: 누브지-210g
+    paper_code: MAT:NUV-209
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 100
+    price: 4000
+  - product: 디지털명함
+    paper: 누브지-210g
+    paper_code: MAT:NUV-209
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 200
+    price: 6500
+  - product: 디지털명함
+    paper: 누브지-210g
+    paper_code: MAT:NUV-209
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 500
+    price: 12000
+  - product: 디지털명함
+    paper: 누브지-210g
+    paper_code: MAT:NUV-209
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 1000
+    price: 23000
+  - product: 디지털명함
+    paper: 머쉬멜로우-209g
+    paper_code: MAT:MAS-209
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 100
+    price: 3000
+  - product: 디지털명함
+    paper: 머쉬멜로우-209g
+    paper_code: MAT:MAS-209
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 200
+    price: 5200
+  - product: 디지털명함
+    paper: 머쉬멜로우-209g
+    paper_code: MAT:MAS-209
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 500
+    price: 10500
+  - product: 디지털명함
+    paper: 머쉬멜로우-209g
+    paper_code: MAT:MAS-209
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 1000
+    price: 19000
+  - product: 디지털명함
+    paper: 머쉬멜로우-209g
+    paper_code: MAT:MAS-209
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 100
+    price: 4000
+  - product: 디지털명함
+    paper: 머쉬멜로우-209g
+    paper_code: MAT:MAS-209
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 200
+    price: 6500
+  - product: 디지털명함
+    paper: 머쉬멜로우-209g
+    paper_code: MAT:MAS-209
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 500
+    price: 12000
+  - product: 디지털명함
+    paper: 머쉬멜로우-209g
+    paper_code: MAT:MAS-209
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 1000
+    price: 23000
+  - product: 디지털명함
+    paper: 그레이스-256g
+    paper_code: MAT:GRA-256
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 100
+    price: 3000
+  - product: 디지털명함
+    paper: 그레이스-256g
+    paper_code: MAT:GRA-256
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 200
+    price: 5200
+  - product: 디지털명함
+    paper: 그레이스-256g
+    paper_code: MAT:GRA-256
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 500
+    price: 10500
+  - product: 디지털명함
+    paper: 그레이스-256g
+    paper_code: MAT:GRA-256
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 1000
+    price: 19000
+  - product: 디지털명함
+    paper: 그레이스-256g
+    paper_code: MAT:GRA-256
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 100
+    price: 4000
+  - product: 디지털명함
+    paper: 그레이스-256g
+    paper_code: MAT:GRA-256
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 200
+    price: 6500
+  - product: 디지털명함
+    paper: 그레이스-256g
+    paper_code: MAT:GRA-256
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 500
+    price: 12000
+  - product: 디지털명함
+    paper: 그레이스-256g
+    paper_code: MAT:GRA-256
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 1000
+    price: 23000
+  - product: 디지털명함
+    paper: 친환경용지-209g
+    paper_code: MAT:REN-209
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 100
+    price: 3000
+  - product: 디지털명함
+    paper: 친환경용지-209g
+    paper_code: MAT:REN-209
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 200
+    price: 5200
+  - product: 디지털명함
+    paper: 친환경용지-209g
+    paper_code: MAT:REN-209
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 500
+    price: 10500
+  - product: 디지털명함
+    paper: 친환경용지-209g
+    paper_code: MAT:REN-209
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 1000
+    price: 19000
+  - product: 디지털명함
+    paper: 친환경용지-209g
+    paper_code: MAT:REN-209
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 100
+    price: 4000
+  - product: 디지털명함
+    paper: 친환경용지-209g
+    paper_code: MAT:REN-209
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 200
+    price: 6500
+  - product: 디지털명함
+    paper: 친환경용지-209g
+    paper_code: MAT:REN-209
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 500
+    price: 12000
+  - product: 디지털명함
+    paper: 친환경용지-209g
+    paper_code: MAT:REN-209
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 1000
+    price: 23000
+  - product: 디지털명함
+    paper: 랑데뷰 내츄럴 210g
+    paper_code: MAT:RADN-210
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 100
+    price: 2600
+  - product: 디지털명함
+    paper: 랑데뷰 내츄럴 210g
+    paper_code: MAT:RADN-210
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 200
+    price: 4000
+  - product: 디지털명함
+    paper: 랑데뷰 내츄럴 210g
+    paper_code: MAT:RADN-210
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 500
+    price: 10500
+  - product: 디지털명함
+    paper: 랑데뷰 내츄럴 210g
+    paper_code: MAT:RADN-210
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 1000
+    price: 19000
+  - product: 디지털명함
+    paper: 랑데뷰 내츄럴 210g
+    paper_code: MAT:RADN-210
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 100
+    price: 3500
+  - product: 디지털명함
+    paper: 랑데뷰 내츄럴 210g
+    paper_code: MAT:RADN-210
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 200
+    price: 5500
+  - product: 디지털명함
+    paper: 랑데뷰 내츄럴 210g
+    paper_code: MAT:RADN-210
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 500
+    price: 12000
+  - product: 디지털명함
+    paper: 랑데뷰 내츄럴 210g
+    paper_code: MAT:RADN-210
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 1000
+    price: 23000
+  - product: 디지털명함
+    paper: Extra 머쉬-250g
+    paper_code: MAT:EMS-250
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 100
+    price: 5500
+  - product: 디지털명함
+    paper: Extra 머쉬-250g
+    paper_code: MAT:EMS-250
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 200
+    price: 7000
+  - product: 디지털명함
+    paper: Extra 머쉬-250g
+    paper_code: MAT:EMS-250
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 500
+    price: 15500
+  - product: 디지털명함
+    paper: Extra 머쉬-250g
+    paper_code: MAT:EMS-250
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 1000
+    price: 32000
+  - product: 디지털명함
+    paper: Extra 머쉬-250g
+    paper_code: MAT:EMS-250
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 100
+    price: 6500
+  - product: 디지털명함
+    paper: Extra 머쉬-250g
+    paper_code: MAT:EMS-250
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 200
+    price: 9000
+  - product: 디지털명함
+    paper: Extra 머쉬-250g
+    paper_code: MAT:EMS-250
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 500
+    price: 20500
+  - product: 디지털명함
+    paper: Extra 머쉬-250g
+    paper_code: MAT:EMS-250
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 1000
+    price: 38000
+  - product: 디지털명함
+    paper: Extra 누브-250g
+    paper_code: MAT:ENV-250
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 100
+    price: 5500
+  - product: 디지털명함
+    paper: Extra 누브-250g
+    paper_code: MAT:ENV-250
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 200
+    price: 7000
+  - product: 디지털명함
+    paper: Extra 누브-250g
+    paper_code: MAT:ENV-250
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 500
+    price: 15500
+  - product: 디지털명함
+    paper: Extra 누브-250g
+    paper_code: MAT:ENV-250
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 1000
+    price: 32000
+  - product: 디지털명함
+    paper: Extra 누브-250g
+    paper_code: MAT:ENV-250
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 100
+    price: 6500
+  - product: 디지털명함
+    paper: Extra 누브-250g
+    paper_code: MAT:ENV-250
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 200
+    price: 9000
+  - product: 디지털명함
+    paper: Extra 누브-250g
+    paper_code: MAT:ENV-250
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 500
+    price: 20500
+  - product: 디지털명함
+    paper: Extra 누브-250g
+    paper_code: MAT:ENV-250
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 1000
+    price: 38000
+  - product: 디지털명함
+    paper: Extra 린넨-250g
+    paper_code: MAT:ERN-250
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 100
+    price: 5500
+  - product: 디지털명함
+    paper: Extra 린넨-250g
+    paper_code: MAT:ERN-250
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 200
+    price: 7000
+  - product: 디지털명함
+    paper: Extra 린넨-250g
+    paper_code: MAT:ERN-250
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 500
+    price: 15500
+  - product: 디지털명함
+    paper: Extra 린넨-250g
+    paper_code: MAT:ERN-250
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 1000
+    price: 32000
+  - product: 디지털명함
+    paper: Extra 린넨-250g
+    paper_code: MAT:ERN-250
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 100
+    price: 6500
+  - product: 디지털명함
+    paper: Extra 린넨-250g
+    paper_code: MAT:ERN-250
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 200
+    price: 9000
+  - product: 디지털명함
+    paper: Extra 린넨-250g
+    paper_code: MAT:ERN-250
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 500
+    price: 20500
+  - product: 디지털명함
+    paper: Extra 린넨-250g
+    paper_code: MAT:ERN-250
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 1000
+    price: 38000
+  - product: 디지털명함
+    paper: Extra 엠보-270g
+    paper_code: MAT:EEB-270
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 100
+    price: 5500
+  - product: 디지털명함
+    paper: Extra 엠보-270g
+    paper_code: MAT:EEB-270
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 200
+    price: 7000
+  - product: 디지털명함
+    paper: Extra 엠보-270g
+    paper_code: MAT:EEB-270
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 500
+    price: 15500
+  - product: 디지털명함
+    paper: Extra 엠보-270g
+    paper_code: MAT:EEB-270
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 1000
+    price: 32000
+  - product: 디지털명함
+    paper: Extra 엠보-270g
+    paper_code: MAT:EEB-270
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 100
+    price: 6500
+  - product: 디지털명함
+    paper: Extra 엠보-270g
+    paper_code: MAT:EEB-270
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 200
+    price: 9000
+  - product: 디지털명함
+    paper: Extra 엠보-270g
+    paper_code: MAT:EEB-270
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 500
+    price: 20500
+  - product: 디지털명함
+    paper: Extra 엠보-270g
+    paper_code: MAT:EEB-270
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 1000
+    price: 38000
+  - product: 디지털명함
+    paper: 화이트린넨펄-227g
+    paper_code: MAT:WRP-227
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 100
+    price: 6000
+  - product: 디지털명함
+    paper: 화이트린넨펄-227g
+    paper_code: MAT:WRP-227
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 200
+    price: 8500
+  - product: 디지털명함
+    paper: 화이트린넨펄-227g
+    paper_code: MAT:WRP-227
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 500
+    price: 16000
+  - product: 디지털명함
+    paper: 화이트린넨펄-227g
+    paper_code: MAT:WRP-227
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 1000
+    price: 32000
+  - product: 디지털명함
+    paper: 화이트린넨펄-227g
+    paper_code: MAT:WRP-227
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 100
+    price: 7500
+  - product: 디지털명함
+    paper: 화이트린넨펄-227g
+    paper_code: MAT:WRP-227
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 200
+    price: 11000
+  - product: 디지털명함
+    paper: 화이트린넨펄-227g
+    paper_code: MAT:WRP-227
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 500
+    price: 21500
+  - product: 디지털명함
+    paper: 화이트린넨펄-227g
+    paper_code: MAT:WRP-227
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 1000
+    price: 43000
+  - product: 디지털명함
+    paper: 네추럴린넨펄-227g
+    paper_code: MAT:NRP-227
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 100
+    price: 6000
+  - product: 디지털명함
+    paper: 네추럴린넨펄-227g
+    paper_code: MAT:NRP-227
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 200
+    price: 8500
+  - product: 디지털명함
+    paper: 네추럴린넨펄-227g
+    paper_code: MAT:NRP-227
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 500
+    price: 16000
+  - product: 디지털명함
+    paper: 네추럴린넨펄-227g
+    paper_code: MAT:NRP-227
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 1000
+    price: 32000
+  - product: 디지털명함
+    paper: 네추럴린넨펄-227g
+    paper_code: MAT:NRP-227
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 100
+    price: 7500
+  - product: 디지털명함
+    paper: 네추럴린넨펄-227g
+    paper_code: MAT:NRP-227
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 200
+    price: 11000
+  - product: 디지털명함
+    paper: 네추럴린넨펄-227g
+    paper_code: MAT:NRP-227
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 500
+    price: 21500
+  - product: 디지털명함
+    paper: 네추럴린넨펄-227g
+    paper_code: MAT:NRP-227
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 1000
+    price: 43000
+  - product: 디지털명함
+    paper: 골드린넨펄-227g
+    paper_code: MAT:GRP-227
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 100
+    price: 6000
+  - product: 디지털명함
+    paper: 골드린넨펄-227g
+    paper_code: MAT:GRP-227
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 200
+    price: 8500
+  - product: 디지털명함
+    paper: 골드린넨펄-227g
+    paper_code: MAT:GRP-227
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 500
+    price: 16000
+  - product: 디지털명함
+    paper: 골드린넨펄-227g
+    paper_code: MAT:GRP-227
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 1000
+    price: 32000
+  - product: 디지털명함
+    paper: 골드린넨펄-227g
+    paper_code: MAT:GRP-227
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 100
+    price: 7500
+  - product: 디지털명함
+    paper: 골드린넨펄-227g
+    paper_code: MAT:GRP-227
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 200
+    price: 11000
+  - product: 디지털명함
+    paper: 골드린넨펄-227g
+    paper_code: MAT:GRP-227
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 500
+    price: 21500
+  - product: 디지털명함
+    paper: 골드린넨펄-227g
+    paper_code: MAT:GRP-227
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 1000
+    price: 43000
+  - product: 디지털명함
+    paper: 크라프트-250g
+    paper_code: MAT:CRA-250
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 100
+    price: null
+  - product: 디지털명함
+    paper: 크라프트-250g
+    paper_code: MAT:CRA-250
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 200
+    price: null
+  - product: 디지털명함
+    paper: 크라프트-250g
+    paper_code: MAT:CRA-250
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 500
+    price: null
+  - product: 디지털명함
+    paper: 크라프트-250g
+    paper_code: MAT:CRA-250
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 1000
+    price: null
+  - product: 디지털명함
+    paper: 크라프트-250g
+    paper_code: MAT:CRA-250
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 100
+    price: null
+  - product: 디지털명함
+    paper: 크라프트-250g
+    paper_code: MAT:CRA-250
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 200
+    price: null
+  - product: 디지털명함
+    paper: 크라프트-250g
+    paper_code: MAT:CRA-250
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 500
+    price: null
+  - product: 디지털명함
+    paper: 크라프트-250g
+    paper_code: MAT:CRA-250
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 1000
+    price: null
+  - product: 디지털명함
+    paper: 크리스탈 펄(팝셋)-235g
+    paper_code: MAT:CTP-235
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 100
+    price: null
+  - product: 디지털명함
+    paper: 크리스탈 펄(팝셋)-235g
+    paper_code: MAT:CTP-235
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 200
+    price: null
+  - product: 디지털명함
+    paper: 크리스탈 펄(팝셋)-235g
+    paper_code: MAT:CTP-235
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 500
+    price: null
+  - product: 디지털명함
+    paper: 크리스탈 펄(팝셋)-235g
+    paper_code: MAT:CTP-235
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 1000
+    price: null
+  - product: 디지털명함
+    paper: 크리스탈 펄(팝셋)-235g
+    paper_code: MAT:CTP-235
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 100
+    price: null
+  - product: 디지털명함
+    paper: 크리스탈 펄(팝셋)-235g
+    paper_code: MAT:CTP-235
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 200
+    price: null
+  - product: 디지털명함
+    paper: 크리스탈 펄(팝셋)-235g
+    paper_code: MAT:CTP-235
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 500
+    price: null
+  - product: 디지털명함
+    paper: 크리스탈 펄(팝셋)-235g
+    paper_code: MAT:CTP-235
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 1000
+    price: null
+  - product: 디지털명함
+    paper: 띤또레또-250g
+    paper_code: MAT:TIN-250
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 100
+    price: null
+  - product: 디지털명함
+    paper: 띤또레또-250g
+    paper_code: MAT:TIN-250
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 200
+    price: null
+  - product: 디지털명함
+    paper: 띤또레또-250g
+    paper_code: MAT:TIN-250
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 500
+    price: null
+  - product: 디지털명함
+    paper: 띤또레또-250g
+    paper_code: MAT:TIN-250
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 1000
+    price: null
+  - product: 디지털명함
+    paper: 띤또레또-250g
+    paper_code: MAT:TIN-250
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 100
+    price: null
+  - product: 디지털명함
+    paper: 띤또레또-250g
+    paper_code: MAT:TIN-250
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 200
+    price: null
+  - product: 디지털명함
+    paper: 띤또레또-250g
+    paper_code: MAT:TIN-250
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 500
+    price: null
+  - product: 디지털명함
+    paper: 띤또레또-250g
+    paper_code: MAT:TIN-250
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 1000
+    price: null
+  - product: 디지털명함
+    paper: 탄트지-200g
+    paper_code: MAT:TT-200
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 100
+    price: null
+  - product: 디지털명함
+    paper: 탄트지-200g
+    paper_code: MAT:TT-200
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 200
+    price: null
+  - product: 디지털명함
+    paper: 탄트지-200g
+    paper_code: MAT:TT-200
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 500
+    price: null
+  - product: 디지털명함
+    paper: 탄트지-200g
+    paper_code: MAT:TT-200
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 1000
+    price: null
+  - product: 디지털명함
+    paper: 탄트지-200g
+    paper_code: MAT:TT-200
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 100
+    price: null
+  - product: 디지털명함
+    paper: 탄트지-200g
+    paper_code: MAT:TT-200
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 200
+    price: null
+  - product: 디지털명함
+    paper: 탄트지-200g
+    paper_code: MAT:TT-200
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 500
+    price: null
+  - product: 디지털명함
+    paper: 탄트지-200g
+    paper_code: MAT:TT-200
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 1000
+    price: null
+  - product: 디지털명함
+    paper: 스노우화이트-300g
+    paper_code: MAT:SNW-300
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 100
+    price: 1700
+  - product: 디지털명함
+    paper: 스노우화이트-300g
+    paper_code: MAT:SNW-300
+    coating: null
+    coating_code: null
+    color_mode: 단면4도
+    color_code: COL:40
+    size: 90x50
+    qty: 200
+    price: 3300
+  - product: 디지털명함
+    paper: 스노우화이트-300g
+    paper_code: MAT:SNW-300
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 100
+    price: 1700
+  - product: 디지털명함
+    paper: 스노우화이트-300g
+    paper_code: MAT:SNW-300
+    coating: null
+    coating_code: null
+    color_mode: 양면8도
+    color_code: COL:44
+    size: 90x50
+    qty: 200
+    price: 3300

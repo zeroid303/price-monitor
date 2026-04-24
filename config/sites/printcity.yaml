@@ -1,0 +1,8 @@
+# 프린트시티 사이트 메타. 웹 크롤링 없이 data/printcity/*.xlsx 를 직접 소스로 사용.
+# 엑셀 갱신 시 scripts/build_printcity_card_targets.py 재실행 → config/targets/card_{offset,digital}.yaml 의 printcity 섹션 교체.
+
+name: "프린트시티"
+base_url: "https://www.printcity.co.kr"
+tech: "xlsx"             # 엑셀 직접 파싱. Playwright/browser 사용 안 함.
+ownership: "self"        # 자사 — 가격 기준(reference)
+vat_included: false      # 엑셀 value 컬럼은 공급가(VAT 제외)
