@@ -6,6 +6,7 @@ output/
 
 # 로그
 *.log
+logs/
 
 # 임시/디버그 파일
 output/_*.txt
