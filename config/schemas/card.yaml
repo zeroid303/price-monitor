@@ -1,0 +1,1753 @@
+_description: 명함 카테고리 정규화 규칙 (canonical 사전 + alias). 사이트 메타데이터(name/base_url/vat_included 등)는 config/sites/{site}.yaml 참조.
+_match_axes:
+  _description: 매칭 축 6개. paper_name(canonical 이름)과 paper_weight_g(평량 수치)를 분리해 ±N g 허용 같은 산술 매칭을 용이하게 함.
+  axes:
+  - paper_name
+  - paper_weight_g
+  - coating
+  - print_mode
+  - size
+  - qty
+  weight_tolerance_g: 25
+_defaults:
+  _description: 전역 매칭 기본값. 사이트별 설정에 없으면 이 값 적용.
+  match_method: substring
+  qty_default: 200
+_normalization:
+  paper_name:
+    _description: 용지명 정규화. noise strip → coating 추출 → canonical alias 적용 → '{canonical} {weight}g' 형태. canonical 구조는 피드백 엑셀(경쟁사
+      가격 모니터링 피드백.xlsx) 기반으로 자동 생성. aliases(flat)은 기존 normalize.py 호환용 역 인덱스.
+    canonical:
+      CCP:
+        weights:
+        - 350
+        weight_ranges: []
+        weightless: false
+        aliases:
+          dtpia:
+          - CCP 350g
+      Extra 매트화이트:
+        weights:
+        - 200
+        - 300
+        - 350
+        weight_ranges: []
+        weightless: false
+        aliases:
+          printcity:
+          - Extra 매트화이트 350g
+          swadpia:
+          - 엑스트라매트 백색 350g
+          wowpress:
+          - 매직콤마 화이트 300g
+          - 메탈화이트 200g
+      Extra 에그화이트:
+        weights:
+        - 400
+        weight_ranges: []
+        weightless: false
+        aliases:
+          printcity:
+          - Extra 에그화이트 400g
+          swadpia:
+          - 에그쉘 엑스트라화이트 400g
+      Extra 엠보:
+        weights:
+        - 270
+        weight_ranges: []
+        weightless: false
+        aliases:
+          printcity:
+          - Extra 엠보 270g
+      PET카드지:
+        weights:
+        - 200
+        - 300
+        weight_ranges: []
+        weightless: true
+        aliases:
+          printcity:
+          - PET카드 200g
+          - PET카드 300g
+          swadpia:
+          - PET(투명) 300μ
+          wowpress:
+          - PET(투명)
+        notes:
+        - 투명/화이트 PET 플라스틱 카드
+      PVC 카드:
+        weights: []
+        weight_ranges: []
+        weightless: true
+        aliases:
+          adsland:
+          - 골드
+          - 골드펄
+          - 골드펄+은테
+          - 누드카드(투명)
+          - 실버
+          - 실버펄
+          - 실버펄+은테
+          - 프리미엄 골드
+          - 프리미엄 실버
+          - 화이트카드
+          dtpia:
+          - 화이트
+          printcity:
+          - 골드
+          - 반투명
+          - 실버
+          - 투명
+          - 플래티늄 골드
+          - 플레티늄 실버
+          - 화이트
+          wowpress:
+          - 샤인카드 골드
+          - 샤인카드 화이트
+          - 카드 골드
+          - 카드 반투명
+          - 카드 실버
+          - 카드 투명
+          - 카드 플래티넘골드
+          - 카드 플래티넘실버
+          - 카드 화이트
+          - 펄카드 골드
+          - 펄카드 골드+골드엣지
+          - 펄카드 골드+실버엣지
+          - 펄카드 반투명골드
+          - 펄카드 반투명실버
+          - 펄카드 실버
+          - 펄카드 실버+실버엣지
+        notes:
+        - PVC/플라스틱 카드 — 평량(gsm) 없음, 두께(μm) 기준
+      골드라운드:
+        weights: []
+        weight_ranges: []
+        weightless: true
+        aliases:
+          dtpia:
+          - 골드라운드
+          - 실버라운드
+      그라시 아이스골드:
+        weights:
+        - 250
+        weight_ranges: []
+        weightless: false
+        aliases:
+          adsland:
+          - 그라시 아이스골드(메탈릭) 250g
+      그레이스:
+        weights:
+        - 209
+        - 256
+        weight_ranges: []
+        weightless: false
+        aliases:
+          adsland:
+          - 그레이스 (베스트매트) 209g
+          dtpia:
+          - 그레이스 209g
+          printcity:
+          - 그레이스 256g
+      금지:
+        weights: []
+        weight_ranges: []
+        weightless: true
+        aliases:
+          dtpia:
+          - 금지
+          - 은지
+      금펄:
+        weights: []
+        weight_ranges: []
+        weightless: true
+        aliases:
+          dtpia:
+          - 금펄
+          - 금펄반투명
+          printcity:
+          - 금펄
+          - 금펄 금테
+          - 금펄 은테
+          - 반투명 금펄
+      기본 화이트카드:
+        weights:
+        - 200
+        weight_ranges:
+        - - 240
+          - 250
+        weightless: true
+        aliases:
+          dtpia:
+          - 메탈릭 화이트 250g
+          - 스타드림 화이트 240g
+          swadpia:
+          - Luxury 화이트 250μ
+          wowpress:
+          - 메탈아이스 250g
+          - 스타라이트 화이트 200g
+      누브지:
+        weights:
+        - 210
+        - 250
+        - 350
+        weight_ranges: []
+        weightless: false
+        aliases:
+          adsland:
+          - 누브지 (랑데뷰) -당일판가능 210g
+          - 누브지 (랑데뷰) 210g
+          printcity:
+          - Extra 누브 250g
+          - Extra 누브 350g
+          - 누브지 210g
+          wowpress:
+          - 엑스트라 누보 350g
+      대례지:
+        weights:
+        - 209
+        weight_ranges: []
+        weightless: false
+        aliases:
+          dtpia:
+          - 대례지(한지) 209g
+          wowpress:
+          - 대례지 209g
+      듀오 화이트:
+        weights:
+        - 400
+        weight_ranges: []
+        weightless: false
+        aliases:
+          swadpia:
+          - 듀오 화이트 400g
+      라텍스:
+        weights:
+        - 301
+        weight_ranges: []
+        weightless: false
+        aliases:
+          printcity:
+          - 라텍스 라피스 301g
+          - 라텍스 블랙 301g
+          - 라텍스 스칼렛 301g
+        notes:
+        - 디지털 화이트명함 - 라텍스 특수지
+      랑데뷰:
+        weights: []
+        weight_ranges:
+        - - 204
+          - 240
+        weightless: false
+        aliases:
+          dtpia:
+          - 랑데뷰 204g
+          - 랑데뷰 210g
+          - 랑데뷰 224g
+          printcity:
+          - 랑데뷰 240g
+          wowpress:
+          - 랑데뷰 210g
+      랑데뷰네츄럴:
+        weights:
+        - 210
+        - 310
+        weight_ranges: []
+        weightless: false
+        aliases:
+          printcity:
+          - 랑데뷰 내츄럴 210g
+          swadpia:
+          - 랑데뷰 내츄럴 310g
+      레이나:
+        weights:
+        - 209
+        weight_ranges: []
+        weightless: false
+        aliases:
+          dtpia:
+          - 레이나 209g
+      레자크:
+        weights:
+        - 200
+        weight_ranges: []
+        weightless: false
+        aliases:
+          dtpia:
+          - 레자크 200g
+      리액션알파인:
+        weights:
+        - 310
+        weight_ranges: []
+        weightless: false
+        aliases:
+          wowpress:
+          - 리액션알파인 310g
+      린넨펄:
+        weights:
+        - 227
+        weight_ranges: []
+        weightless: false
+        aliases:
+          printcity:
+          - 골드린넨펄 227g
+          - 네추럴린넨펄 227g
+          - 화이트린넨펄 227g
+        notes:
+        - 프린트시티 디지털명함 린넨펄 계열
+      마메이드 백색:
+        weights:
+        - 400
+        weight_ranges: []
+        weightless: false
+        aliases:
+          dtpia:
+          - 마메이드 백색 400g
+          - 마메이드 아이보리 400g
+      마분지:
+        weights:
+        - 209
+        weight_ranges: []
+        weightless: false
+        aliases:
+          wowpress:
+          - 마분지 209g
+      머쉬멜로우:
+        weights:
+        - 250
+        - 310
+        - 350
+        weight_ranges:
+        - - 204
+          - 224
+        weightless: false
+        aliases:
+          adsland:
+          - 매쉬멜로우 (FSC) 209g
+          dtpia:
+          - 마쉬멜로우 204g
+          - 마쉬멜로우 209g
+          - 마쉬멜로우 224g
+          - 마쉬멜로우 미색 209g
+          - 마쉬멜로우 화이트 209g
+          printcity:
+          - Extra 머쉬 250g
+          - Extra 머쉬 350g
+          - 머쉬멜로우 209g
+          swadpia:
+          - 매쉬맬로우 화이트 209g
+          wowpress:
+          - 매쉬멜로우 209g
+          - 엑스트라 매쉬멜로우 310g
+      메탈릭 골드:
+        weights:
+        - 200
+        weight_ranges: []
+        weightless: false
+        aliases:
+          dtpia:
+          - 메탈릭 골드 200g
+      메탈아이스 골드:
+        weights:
+        - 300
+        weight_ranges: []
+        weightless: false
+        aliases:
+          wowpress:
+          - 메탈아이스 골드 300g
+          - 메탈아이스 실버 300g
+      메탈펄골드:
+        weights: []
+        weight_ranges: []
+        weightless: true
+        aliases:
+          dtpia:
+          - 메탈펄골드 테
+      모조지:
+        weights:
+        - 300
+        weight_ranges:
+        - - 200
+          - 250
+        weightless: false
+        aliases:
+          dtpia:
+          - 모조지 200g
+          - 모조지 250g
+          - 모조지 300g
+          printcity:
+          - 모조 220g
+          - 화이트모조 220g
+          swadpia:
+          - 베이직 백색 233g
+          wowpress:
+          - 모조지 백색 220g
+          - 베이직 233g
+      몽블랑:
+        weights: []
+        weight_ranges:
+        - - 204
+          - 240
+        weightless: false
+        aliases:
+          dtpia:
+          - 몽블랑 204g
+          - 몽블랑 210g
+          - 몽블랑 224g
+          printcity:
+          - 몽블랑 240g
+      반누보화이트:
+        weights:
+        - 320
+        - 400
+        weight_ranges:
+        - - 186
+          - 250
+        weightless: false
+        aliases:
+          adsland:
+          - 반누보화이트 -당일판가능 227g
+          - 반누보화이트 227g
+          dtpia:
+          - 럭셔리 반누보 화이트 230g
+          - 반누보 186g
+          - 반누보 204g
+          - 반누보 224g
+          - 반누보 스노우 화이트 400g
+          printcity:
+          - 반누보화이트 250g
+          swadpia:
+          - 반누보 스노우화이트 227g
+          - 반누보 화이트 204g
+          - 반누보 화이트 250g
+          - 반누보 화이트 320g
+          wowpress:
+          - 반누보 내츄럴 227g
+          - 반누보 화이트 227g
+          - 프리미엄반누보 250g
+      밤부 내츄럴:
+        weights:
+        - 300
+        weight_ranges: []
+        weightless: false
+        aliases:
+          wowpress:
+          - 밤부 내츄럴 300g
+      뱅가드:
+        weights:
+        - 216
+        - 250
+        - 300
+        weight_ranges: []
+        weightless: false
+        aliases:
+          printcity:
+          - 바우하우스 블랙 250g
+          - 뱅가드 레드 300g
+          - 뱅가드 블루 300g
+          wowpress:
+          - 스튜디오컬렉션 뉴블랙 216g
+          - 스튜디오컬렉션 딥블루 216g
+          - 스튜디오컬렉션 레드 216g
+        notes:
+        - 디지털 화이트명함 - 강한 색지
+      뱅가드레드:
+        weights:
+        - 240
+        - 380
+        weight_ranges: []
+        weightless: false
+        aliases:
+          dtpia:
+          - 피아노블랙 240g
+          swadpia:
+          - 매트블랙 380g
+        notes:
+        - 디지털 화이트명함
+      벨벳 화이트:
+        weights:
+        - 359
+        weight_ranges: []
+        weightless: false
+        aliases:
+          swadpia:
+          - 벨벳 화이트 359g
+      블랑 순백색:
+        weights:
+        - 300
+        weight_ranges: []
+        weightless: false
+        aliases:
+          dtpia:
+          - 블랑 순백색 300g
+          - 블랑 크림 300g
+      비안코 플래시:
+        weights:
+        - 400
+        weight_ranges: []
+        weightless: false
+        aliases:
+          dtpia:
+          - 비안코 플래시 400g
+      비화이트:
+        weights:
+        - 250
+        weight_ranges: []
+        weightless: false
+        aliases:
+          dtpia:
+          - 비화이트 250g
+      빌리지 미색:
+        weights:
+        - 200
+        weight_ranges: []
+        weightless: false
+        aliases:
+          dtpia:
+          - 빌리지 미색 200g
+          printcity:
+          - 빌리지 200g
+      사파이어펄:
+        weights:
+        - 200
+        weight_ranges:
+        - - 240
+          - 250
+        weightless: false
+        aliases:
+          dtpia:
+          - 샤이니 200g
+          - 샤이니 골드펄 250g
+          printcity:
+          - 사파이어펄 240g
+          swadpia:
+          - 다이니티 골드펄 250g
+        notes:
+        - 비즈하우스(스타라이트화이트)=와우프레스(스타라이트), 나머지는 모두 다른 용지
+      션샤인:
+        weights: []
+        weight_ranges:
+        - - 204
+          - 240
+        weightless: false
+        aliases:
+          dtpia:
+          - 션샤인 204g
+          - 션샤인 224g
+          - 썬샤인 240g
+      수퍼파인:
+        weights:
+        - 216
+        weight_ranges: []
+        weightless: false
+        aliases:
+          dtpia:
+          - 수퍼파인 216g
+      수페이퍼 연미색:
+        weights:
+        - 200
+        weight_ranges: []
+        weightless: false
+        aliases:
+          wowpress:
+          - 수페이퍼 연미색 200g
+      스노우화이트:
+        weights:
+        - 250
+        - 300
+        - 400
+        weight_ranges:
+        - - 200
+          - 219
+        weightless: false
+        aliases:
+          adsland:
+          - 스노우지 (비코팅) 250g
+          dtpia:
+          - 스노우지 200g
+          - 스노우지 250g
+          - 스노우지 300g
+          printcity:
+          - 스노우화이트 216g
+          - 스노우화이트 250g
+          - 스노우화이트 300g
+          - 스노우화이트 400g
+          swadpia:
+          - 스노우지 백색 (무광코팅) 300g
+          - 스노우지 백색 250g
+          - 스노우지 백색 300g
+          wowpress:
+          - 스노우지 250g
+          - 스노우지 300g
+          - 스노우지(무광코팅) 219g
+          - 스노우지(무광코팅) 250g
+          - 스노우지(무광코팅) 300g
+          - 스노우지(무코팅) 250g
+          - 스노우지(무코팅) 300g
+          - 스노우지(무코팅) 400g
+          - 스노우지(유광코팅) 300g
+      스코틀랜드:
+        weights:
+        - 170
+        - 220
+        weight_ranges: []
+        weightless: false
+        aliases:
+          adsland:
+          - 스코틀랜드 170g
+          dtpia:
+          - 스코틀랜드 220g
+          printcity:
+          - 스코틀랜드 220g
+          wowpress:
+          - 스코틀랜드 220g
+      스퀘어:
+        weights:
+        - 310
+        weight_ranges: []
+        weightless: false
+        aliases:
+          dtpia:
+          - 스퀘어 310g
+      스타골드:
+        weights:
+        - 200
+        - 300
+        weight_ranges:
+        - - 240
+          - 250
+        weightless: true
+        aliases:
+          adsland:
+          - 스타드림 골드 (FSC) 240g
+          dtpia:
+          - 스타드림 골드 240g
+          - 시리오 골드 300g
+          printcity:
+          - 스타골드 250g
+          swadpia:
+          - Luxury 골드 200μ
+          wowpress:
+          - 스타드림 골드 240g
+          - 스타드림 골드 300g
+          - 스타라이트 골드 200g
+      스타드림:
+        weights:
+        - 340
+        weight_ranges:
+        - - 240
+          - 250
+        weightless: false
+        aliases:
+          adsland:
+          - 스타드림 (샤인스타) -당일판가능 250g
+          dtpia:
+          - 스타드림 다이아 250g
+          printcity:
+          - Extra 스타 340g
+          - 스타드림 240g
+          - 스타드림 다이아 240g
+          wowpress:
+          - 스타드림 다이아몬드 240g
+        notes:
+        - 명함천국, 프린트시티에서는 스타드림으로 명칭
+      스타드림 수정:
+        weights: []
+        weight_ranges:
+        - - 240
+          - 241
+        weightless: false
+        aliases:
+          adsland:
+          - 스타드림 쿼츠 (FSC) 240g
+          dtpia:
+          - 스타드림 쿼츠 241g
+          swadpia:
+          - 스타드림 쿼츠 240g
+          wowpress:
+          - 스타드림 쿼츠 240g
+      스타드림 실버:
+        weights:
+        - 200
+        - 240
+        - 300
+        weight_ranges: []
+        weightless: true
+        aliases:
+          adsland:
+          - 스타드림 실버 (FSC) 240g
+          dtpia:
+          - 메탈릭 실버 200g
+          - 메탈펄실버 테
+          - 스타드림 실버 240g
+          - 시리오 실버 300g
+          - 은펄
+          swadpia:
+          - Luxury 실버 200μ
+          wowpress:
+          - 스타드림 실버 240g
+          - 스타드림 실버 300g
+          - 스타라이트 실버 200g
+      스타드림 오팔:
+        weights:
+        - 240
+        weight_ranges: []
+        weightless: false
+        aliases:
+          wowpress:
+          - 스타드림 오팔 240g
+      스타드림(글라시아):
+        weights:
+        - 250
+        weight_ranges: []
+        weightless: false
+        aliases:
+          swadpia:
+          - 블루펄스타(글라시 실버블루) 250g
+      스타드림핀포인트:
+        weights:
+        - 240
+        weight_ranges: []
+        weightless: false
+        aliases:
+          wowpress:
+          - 스타드림핀포인트 240g
+      시리오 스노우:
+        weights:
+        - 300
+        weight_ranges:
+        - - 204
+          - 230
+        weightless: false
+        aliases:
+          dtpia:
+          - 시리오 스노우 300g
+          - 시리오 진주 230g
+          - 시리오펄(진주) 204g
+          - 시리오펄(진주) 224g
+      심볼퓨전:
+        weights:
+        - 200
+        - 300
+        weight_ranges: []
+        weightless: false
+        aliases:
+          wowpress:
+          - 심볼퓨전 200g
+          - 심볼퓨전 300g
+      썬샤인화이트:
+        weights:
+        - 230
+        - 300
+        weight_ranges: []
+        weightless: false
+        aliases:
+          wowpress:
+          - 썬샤인화이트 230g
+          - 썬샤인화이트 300g
+      아르떼:
+        weights:
+        - 230
+        - 310
+        weight_ranges: []
+        weightless: false
+        aliases:
+          dtpia:
+          - 아르떼 230g
+          printcity:
+          - 아르떼 울트라화이트 310g
+          swadpia:
+          - 아르미 울트라화이트 230g
+          - 아르미 울트라화이트 310g
+          wowpress:
+          - 아르떼울트라화이트 310g
+      아르떼 UW:
+        weights:
+        - 310
+        weight_ranges: []
+        weightless: false
+        aliases:
+          adsland:
+          - 아르떼 UW 310g
+        notes:
+        - adsland 에폭명함 고유 표기
+      아스트로 프리미엄 화이트:
+        weights:
+        - 400
+        weight_ranges: []
+        weightless: false
+        aliases:
+          dtpia:
+          - 아스트로 프리미엄 화이트 400g
+      아코팩:
+        weights:
+        - 300
+        weight_ranges: []
+        weightless: false
+        aliases:
+          adsland:
+          - 아코팩 (신상품) 300g
+      아쿠아사틴:
+        weights:
+        - 256
+        weight_ranges: []
+        weightless: false
+        aliases:
+          swadpia:
+          - 아쿠아사틴 256g
+      아트지:
+        weights:
+        - 200
+        - 250
+        - 300
+        weight_ranges: []
+        weightless: false
+        aliases:
+          adsland:
+          - 아트지 (무광코팅) 250g
+          - 아트지 (벨벳코팅) 300g
+          - 아트지 (유광코팅) 300g
+          dtpia:
+          - 아트지 200g
+          - 아트지 250g
+          - 아트지 300g
+          printcity:
+          - 아트 300g
+          swadpia:
+          - 아트지 백색 300g
+          wowpress:
+          - 아트지 250g
+          - 아트지 300g
+          - 아트지(UV무광코팅) 250g
+          - 아트지(UV유광코팅) 250g
+          - 아트지(벨벳코팅) 300g
+      엑스트라 띤또레또:
+        weights:
+        - 250
+        - 300
+        - 350
+        weight_ranges: []
+        weightless: false
+        aliases:
+          dtpia:
+          - 띤또레또 250g
+          printcity:
+          - Extra 띤또레또 350g
+          - 띤또레또 250g
+          swadpia:
+          - 띤또레또 백색 300g
+          wowpress:
+          - 띤또레또 250g
+          - 띤또레또순백 300g
+      엑스트라 메트:
+        weights:
+        - 350
+        weight_ranges: []
+        weightless: false
+        aliases:
+          adsland:
+          - 엑스트라 메트 350g
+      엑스트라폴라 백색:
+        weights:
+        - 370
+        weight_ranges: []
+        weightless: false
+        aliases:
+          swadpia:
+          - 엑스트라폴라 백색 370g
+      엔틱골드펄:
+        weights:
+        - 240
+        weight_ranges: []
+        weightless: false
+        aliases:
+          printcity:
+          - 엔틱골드펄 240g
+      오로황금:
+        weights:
+        - 220
+        weight_ranges: []
+        weightless: false
+        aliases:
+          dtpia:
+          - 오로황금 220g
+      올드밀 비앙크:
+        weights:
+        - 400
+        weight_ranges: []
+        weightless: false
+        aliases:
+          dtpia:
+          - 올드밀 비앙크 400g
+      올드밀 엑스트라:
+        weights:
+        - 300
+        weight_ranges: []
+        weightless: false
+        aliases:
+          wowpress:
+          - 올드밀 엑스트라 300g
+      유니트 백색:
+        weights:
+        - 233
+        weight_ranges: []
+        weightless: false
+        aliases:
+          dtpia:
+          - 유니트 백색 233g
+      유포지:
+        weights:
+        - 200
+        - 250
+        weight_ranges: []
+        weightless: false
+        aliases:
+          adsland:
+          - 유포지(유포블루) 250u
+          dtpia:
+          - 유포블루(방수명함) 250g
+          - 유포지 200g
+          printcity:
+          - 유포지 250g
+          swadpia:
+          - 유포지 FEB 250μ
+          wowpress:
+          - 유포블루 250g
+          - 유포지 250g
+        notes:
+        - 와우프레스>유포블루는 디지털 계열에 있음 (https://wowpress.co.kr/ordr/prod/dets?ProdNo=40061)
+      은펄:
+        weights: []
+        weight_ranges: []
+        weightless: true
+        aliases:
+          printcity:
+          - 은펄
+          - 은펄 은테
+      은펄반투명:
+        weights: []
+        weight_ranges: []
+        weightless: true
+        aliases:
+          dtpia:
+          - 은펄반투명
+          printcity:
+          - 반투명 은펄
+      인버코트:
+        weights:
+        - 350
+        - 400
+        weight_ranges: []
+        weightless: false
+        aliases:
+          adsland:
+          - 인버코트 (신상품-FSC) 350g
+          dtpia:
+          - 인버코트 크레아토 400g
+          swadpia:
+          - 인버코트 350g
+      잔팩 터치:
+        weights:
+        - 400
+        weight_ranges: []
+        weightless: false
+        aliases:
+          dtpia:
+          - 잔팩 터치 400g
+        notes:
+        - feedback에 따라 크라프트와 다른 계열
+      쟈데 비단:
+        weights:
+        - 215
+        weight_ranges: []
+        weightless: false
+        aliases:
+          wowpress:
+          - 쟈데 비단 215g
+      제주감귤지 화이트:
+        weights:
+        - 300
+        weight_ranges: []
+        weightless: false
+        aliases:
+          wowpress:
+          - 제주감귤지 화이트 300g
+      체크레자크 백색:
+        weights:
+        - 200
+        weight_ranges: []
+        weightless: false
+        aliases:
+          wowpress:
+          - 체크레자크 백색 200g
+      친환경용지:
+        weights: []
+        weight_ranges:
+        - - 209
+          - 216
+        weightless: false
+        aliases:
+          dtpia:
+          - 인바이런먼트 216g
+          printcity:
+          - 친환경용지 209g
+        notes:
+        - 와우프레스>얼스팩은 다른 계열
+      카멜레온:
+        weights:
+        - 200
+        weight_ranges: []
+        weightless: false
+        aliases:
+          printcity:
+          - 카멜레온 200g
+      컨셉:
+        weights:
+        - 285
+        weight_ranges:
+        - - 235
+          - 250
+        weightless: false
+        aliases:
+          adsland:
+          - 크리스탈 펄 (팝셋) 235g
+          dtpia:
+          - 컨셉 240g
+          - 크리스탈 펄 240g
+          printcity:
+          - 컨셉(블루펄) 250g
+          - 컨셉(블루펄) 285g
+          - 크리스탈 펄(팝셋) 235g
+          - 팝셋 240g
+          swadpia:
+          - 크리스탈 펄화이트(팝셋) 235g
+          wowpress:
+          - 컨셉블루펄 250g
+          - 팝셋 화이트 240g
+      켄도:
+        weights:
+        - 200
+        - 300
+        weight_ranges: []
+        weightless: false
+        aliases:
+          wowpress:
+          - 켄도 200g
+          - 켄도 300g
+      코코:
+        weights:
+        - 298
+        weight_ranges: []
+        weightless: false
+        aliases:
+          wowpress:
+          - 스튜디오컬렉션 코코 298g
+        notes:
+        - 우리는 디지털에 있음
+      콩코르 컨셉:
+        weights:
+        - 250
+        weight_ranges: []
+        weightless: false
+        aliases:
+          adsland:
+          - 콩코르 컨셉 (FSC) 250g
+      크라프트:
+        weights:
+        - 300
+        - 356
+        weight_ranges:
+        - - 226
+          - 265
+        weightless: false
+        aliases:
+          adsland:
+          - 뉴크라프트보드 250g
+          dtpia:
+          - 유니크라프트 265g
+          printcity:
+          - 크라프트 250g
+          swadpia:
+          - 뉴크라프트보드 300g
+          wowpress:
+          - 뉴크라프트 300g
+          - 뉴크라프트보드 250g
+          - 얼스팩 226g
+          - 크라프트팩 356g
+        notes:
+        - 디티피아>잔팩터치는 다른 계열 (https://dtpia.co.kr/Order/Businesscard/Extra.aspx?mtrl_cd=RXT002)
+      클래식 우드그레인:
+        weights:
+        - 400
+        weight_ranges: []
+        weightless: false
+        aliases:
+          dtpia:
+          - 클래식 우드그레인 400g
+      키칼라골드:
+        weights:
+        - 250
+        weight_ranges:
+        - - 200
+          - 224
+        weightless: false
+        aliases:
+          dtpia:
+          - 마제스틱 250g
+          - 마제스틱(마블화이트) 204g
+          - 마제스틱(마블화이트) 224g
+          printcity:
+          - 키칼라골드 200g
+          swadpia:
+          - 키칼라 아이스골드 250g
+          wowpress:
+          - 키칼라 아이스골드 250g
+        notes:
+        - 키칼라 아이스골드는 색감이 화이트계열
+      키칼라메탈릭:
+        weights:
+        - 200
+        weight_ranges: []
+        weightless: false
+        aliases:
+          printcity:
+          - 키칼라메탈릭 200g
+      탄트지:
+        weights:
+        - 200
+        weight_ranges: []
+        weightless: false
+        aliases:
+          dtpia:
+          - 탄트지 200g
+          printcity:
+          - 탄트지 200g
+          wowpress:
+          - 탄트지 200g
+        notes:
+        - 우리는 디지털에 있음
+      트래져리컴포지션:
+        weights:
+        - 310
+        weight_ranges: []
+        weightless: false
+        aliases:
+          wowpress:
+          - 트래져리컴포지션 310g
+      트레이싱지:
+        weights:
+        - 200
+        weight_ranges: []
+        weightless: false
+        aliases:
+          wowpress:
+          - 트레이싱지 200g
+      팬시카드:
+        weights:
+        - 400
+        weight_ranges: []
+        weightless: false
+        aliases:
+          dtpia:
+          - 팬시카드 400g
+      페르라:
+        weights:
+        - 209
+        weight_ranges: []
+        weightless: false
+        aliases:
+          wowpress:
+          - 페르라 209g
+      페르라스터:
+        weights:
+        - 209
+        weight_ranges: []
+        weightless: false
+        aliases:
+          wowpress:
+          - 페르라스터 209g
+      포레스트그린:
+        weights:
+        - 216
+        weight_ranges: []
+        weightless: false
+        aliases:
+          printcity:
+          - 포레스트그린 216g
+      프리즈마:
+        weights:
+        - 250
+        weight_ranges: []
+        weightless: false
+        aliases:
+          wowpress:
+          - 프리즈마 250g
+      플로우:
+        weights:
+        - 310
+        weight_ranges: []
+        weightless: false
+        aliases:
+          dtpia:
+          - 플로우 310g
+      휘라레:
+        weights:
+        - 350
+        weight_ranges:
+        - - 216
+          - 250
+        weightless: false
+        aliases:
+          adsland:
+          - 휘라레 (린넨커버) -당일판가능 216g
+          dtpia:
+          - 휘라레 (린넨) 230g
+          - 휘라레 216g
+          printcity:
+          - Extra 린넨 250g
+          - Extra 휘라레(린넨) 350g
+          - 휘라레 216g
+          swadpia:
+          - 린넨커버(휘라레) 솔라화이트 216g
+          wowpress:
+          - 휘라레 화이트 216g
+    aliases:
+      CCP:
+      - CCP
+      Extra 매트화이트:
+      - Extra 매트화이트
+      - 매직콤마 화이트
+      - 메탈화이트
+      - 엑스트라매트 백색
+      Extra 에그화이트:
+      - Extra 에그화이트
+      - 에그쉘 엑스트라화이트
+      Extra 엠보:
+      - Extra 엠보
+      PET카드지:
+      - PET(투명)
+      - PET(투명) 300μ
+      - PET카드
+      - PET카드지
+      PVC 카드:
+      - PVC 카드
+      - 골드
+      - 골드펄
+      - 골드펄+은테
+      - 누드카드(투명)
+      - 반투명
+      - 샤인카드 골드
+      - 샤인카드 화이트
+      - 실버
+      - 실버펄
+      - 실버펄+은테
+      - 카드 골드
+      - 카드 반투명
+      - 카드 실버
+      - 카드 투명
+      - 카드 플래티넘골드
+      - 카드 플래티넘실버
+      - 카드 화이트
+      - 투명
+      - 펄카드 골드
+      - 펄카드 골드+골드엣지
+      - 펄카드 골드+실버엣지
+      - 펄카드 반투명골드
+      - 펄카드 반투명실버
+      - 펄카드 실버
+      - 펄카드 실버+실버엣지
+      - 프리미엄 골드
+      - 프리미엄 실버
+      - 플래티늄 골드
+      - 플레티늄 실버
+      - 화이트
+      - 화이트카드
+      골드라운드:
+      - 골드라운드
+      - 실버라운드
+      그라시 아이스골드:
+      - 그라시 아이스골드
+      - 그라시 아이스골드(메탈릭)
+      그레이스:
+      - 그레이스
+      - 그레이스 (베스트매트)
+      금지:
+      - 금지
+      - 은지
+      금펄:
+      - 금펄
+      - 금펄 금테
+      - 금펄 은테
+      - 금펄반투명
+      - 반투명 금펄
+      기본 화이트카드:
+      - Luxury 화이트 250μ
+      - 기본 화이트카드
+      - 메탈릭 화이트
+      - 메탈아이스
+      - 스타드림 화이트
+      - 스타라이트 화이트
+      누브지:
+      - Extra 누브
+      - 누브지
+      - 누브지 (랑데뷰)
+      - 누브지 (랑데뷰) -당일판가능
+      - 엑스트라 누보
+      대례지:
+      - 대례지
+      - 대례지(한지)
+      듀오 화이트:
+      - 듀오 화이트
+      라텍스:
+      - 라텍스
+      - 라텍스 라피스
+      - 라텍스 블랙
+      - 라텍스 스칼렛
+      랑데뷰:
+      - 랑데뷰
+      랑데뷰네츄럴:
+      - 랑데뷰 내츄럴
+      - 랑데뷰네츄럴
+      레이나:
+      - 레이나
+      레자크:
+      - 레자크
+      리액션알파인:
+      - 리액션알파인
+      린넨펄:
+      - 골드린넨펄
+      - 네추럴린넨펄
+      - 린넨펄
+      - 화이트린넨펄
+      마메이드 백색:
+      - 마메이드 백색
+      - 마메이드 아이보리
+      마분지:
+      - 마분지
+      머쉬멜로우:
+      - Extra 머쉬
+      - 마쉬멜로우
+      - 마쉬멜로우 미색
+      - 마쉬멜로우 화이트
+      - 매쉬맬로우 화이트
+      - 매쉬멜로우
+      - 매쉬멜로우 (FSC)
+      - 머쉬멜로우
+      - 엑스트라 매쉬멜로우
+      메탈릭 골드:
+      - 메탈릭 골드
+      메탈아이스 골드:
+      - 메탈아이스 골드
+      - 메탈아이스 실버
+      메탈펄골드:
+      - 메탈펄골드
+      - 메탈펄골드 테
+      모조지:
+      - 모조
+      - 모조지
+      - 모조지 백색
+      - 베이직
+      - 베이직 백색
+      - 화이트모조
+      몽블랑:
+      - 몽블랑
+      반누보화이트:
+      - 럭셔리 반누보 화이트
+      - 반누보
+      - 반누보 내츄럴
+      - 반누보 스노우 화이트
+      - 반누보 스노우화이트
+      - 반누보 화이트
+      - 반누보화이트
+      - 반누보화이트 -당일판가능
+      - 프리미엄반누보
+      밤부 내츄럴:
+      - 밤부 내츄럴
+      뱅가드:
+      - 바우하우스 블랙
+      - 뱅가드
+      - 뱅가드 레드
+      - 뱅가드 블루
+      - 스튜디오컬렉션 뉴블랙
+      - 스튜디오컬렉션 딥블루
+      - 스튜디오컬렉션 레드
+      뱅가드레드:
+      - 매트블랙
+      - 뱅가드레드
+      - 피아노블랙
+      벨벳 화이트:
+      - 벨벳 화이트
+      블랑 순백색:
+      - 블랑 순백색
+      - 블랑 크림
+      비안코 플래시:
+      - 비안코 플래시
+      비화이트:
+      - 비화이트
+      빌리지 미색:
+      - 빌리지
+      - 빌리지 미색
+      사파이어펄:
+      - 다이니티 골드펄
+      - 사파이어펄
+      - 샤이니
+      - 샤이니 골드펄
+      션샤인:
+      - 션샤인
+      - 썬샤인
+      수퍼파인:
+      - 수퍼파인
+      수페이퍼 연미색:
+      - 수페이퍼 연미색
+      스노우화이트:
+      - 스노우지
+      - 스노우지 (비코팅)
+      - 스노우지 백색
+      - 스노우화이트
+      스코틀랜드:
+      - 스코틀랜드
+      스퀘어:
+      - 스퀘어
+      스타골드:
+      - Luxury 골드 200μ
+      - 스타골드
+      - 스타드림 골드
+      - 스타드림 골드 (FSC)
+      - 스타라이트 골드
+      - 시리오 골드
+      스타드림:
+      - Extra 스타
+      - 스타드림
+      - 스타드림 (샤인스타) -당일판가능
+      - 스타드림 다이아
+      - 스타드림 다이아몬드
+      스타드림 수정:
+      - 스타드림 수정
+      - 스타드림 쿼츠
+      - 스타드림 쿼츠 (FSC)
+      스타드림 실버:
+      - Luxury 실버 200μ
+      - 메탈릭 실버
+      - 메탈펄실버 테
+      - 스타드림 실버
+      - 스타드림 실버 (FSC)
+      - 스타라이트 실버
+      - 시리오 실버
+      - 은펄
+      스타드림 오팔:
+      - 스타드림 오팔
+      스타드림(글라시아):
+      - 블루펄스타(글라시 실버블루)
+      - 스타드림(글라시아)
+      스타드림핀포인트:
+      - 스타드림핀포인트
+      시리오 스노우:
+      - 시리오 스노우
+      - 시리오 진주
+      - 시리오펄(진주)
+      심볼퓨전:
+      - 심볼퓨전
+      썬샤인화이트:
+      - 썬샤인화이트
+      아르떼:
+      - 아르떼
+      - 아르떼 울트라화이트
+      - 아르떼울트라화이트
+      - 아르미 울트라화이트
+      아르떼 UW:
+      - 아르떼 UW
+      아스트로 프리미엄 화이트:
+      - 아스트로 프리미엄 화이트
+      아코팩:
+      - 아코팩
+      - 아코팩 (신상품)
+      아쿠아사틴:
+      - 아쿠아사틴
+      아트지:
+      - 아트
+      - 아트지
+      - 아트지 백색
+      - 아트지(UV무광코팅)
+      - 아트지(UV유광코팅)
+      엑스트라 띤또레또:
+      - Extra 띤또레또
+      - 띤또레또
+      - 띤또레또 백색
+      - 띤또레또순백
+      - 엑스트라 띤또레또
+      엑스트라 메트:
+      - 엑스트라 메트
+      엑스트라폴라 백색:
+      - 엑스트라폴라 백색
+      엔틱골드펄:
+      - 엔틱골드펄
+      오로황금:
+      - 오로황금
+      올드밀 비앙크:
+      - 올드밀 비앙크
+      올드밀 엑스트라:
+      - 올드밀 엑스트라
+      유니트 백색:
+      - 유니트 백색
+      유포지:
+      - 유포블루
+      - 유포블루(방수명함)
+      - 유포지
+      - 유포지 FEB 250μ
+      - 유포지(유포블루) 250u
+      은펄:
+      - 은펄
+      - 은펄 은테
+      은펄반투명:
+      - 반투명 은펄
+      - 은펄반투명
+      인버코트:
+      - 인버코트
+      - 인버코트 (신상품-FSC)
+      - 인버코트 크레아토
+      잔팩 터치:
+      - 잔팩 터치
+      쟈데 비단:
+      - 쟈데 비단
+      제주감귤지 화이트:
+      - 제주감귤지 화이트
+      체크레자크 백색:
+      - 체크레자크 백색
+      친환경용지:
+      - 인바이런먼트
+      - 친환경용지
+      카멜레온:
+      - 카멜레온
+      컨셉:
+      - 컨셉
+      - 컨셉(블루펄)
+      - 컨셉블루펄
+      - 크리스탈 펄
+      - 크리스탈 펄 (팝셋)
+      - 크리스탈 펄(팝셋)
+      - 크리스탈 펄화이트(팝셋)
+      - 팝셋
+      - 팝셋 화이트
+      켄도:
+      - 켄도
+      코코:
+      - 스튜디오컬렉션 코코
+      - 코코
+      콩코르 컨셉:
+      - 콩코르 컨셉
+      - 콩코르 컨셉 (FSC)
+      크라프트:
+      - 뉴크라프트
+      - 뉴크라프트보드
+      - 얼스팩
+      - 유니크라프트
+      - 크라프트
+      - 크라프트팩
+      클래식 우드그레인:
+      - 클래식 우드그레인
+      키칼라골드:
+      - 마제스틱
+      - 마제스틱(마블화이트)
+      - 키칼라 아이스골드
+      - 키칼라골드
+      키칼라메탈릭:
+      - 키칼라메탈릭
+      탄트지:
+      - 탄트지
+      트래져리컴포지션:
+      - 트래져리컴포지션
+      트레이싱지:
+      - 트레이싱지
+      팬시카드:
+      - 팬시카드
+      페르라:
+      - 페르라
+      페르라스터:
+      - 페르라스터
+      포레스트그린:
+      - 포레스트그린
+      프리즈마:
+      - 프리즈마
+      플로우:
+      - 플로우
+      휘라레:
+      - Extra 린넨
+      - Extra 휘라레(린넨)
+      - 린넨커버(휘라레) 솔라화이트
+      - 휘라레
+      - 휘라레 (린넨)
+      - 휘라레 (린넨커버) -당일판가능
+      - 휘라레 화이트
+    noise_suffix_regex: (\d+)\s*g.*$
+  coating:
+    _description: 코팅 = 약품 도포 처리 여부/종류. 면(side) 정보가 섞여 들어와도 종류만 추출.
+    default: 비코팅
+    allowed:
+    - 비코팅
+    - 무광코팅
+    - 유광코팅
+    - 벨벳코팅
+    aliases:
+      비코팅:
+      - ''
+      - 없음
+      - 안함
+      - 코팅없음
+      - 무코팅
+      무광코팅:
+      - 무광
+      - 양면무광코팅
+      - 양면무광
+      - 단면무광
+      유광코팅:
+      - 유광
+      - 코팅
+      - 양면유광코팅
+      - 양면유광
+      - 단면유광
+      벨벳코팅:
+      - 벨벳
+      - 양면벨벳코팅
+    _alias_notes:
+      유광코팅 ← 코팅: ecard21 '일반코팅명함' 카테고리의 default가 유광. raw 값 '코팅' 단독 = 유광코팅. (스노우화이트 216g 케이스 확인됨)
+    to_options:
+      _description: 특수 코팅은 매칭 축에서 빼고 options로 보존. coating 매칭값은 base 값(보통 비코팅)으로 정규화.
+      홀로그램코팅 도트-양면:
+        coating_base: 비코팅
+        options:
+          hologram: 도트
+      홀로그램코팅 심플-양면:
+        coating_base: 비코팅
+        options:
+          hologram: 심플
+      부분코팅-앞면:
+        coating_base: 비코팅
+        options:
+          partial_coating: true
+      부분코팅-뒷면:
+        coating_base: 비코팅
+        options:
+          partial_coating: true
+      부분코팅-양면:
+        coating_base: 비코팅
+        options:
+          partial_coating: true
+      부분UV코팅-앞면:
+        coating_base: 비코팅
+        options:
+          partial_coating: true
+      부분UV코팅-뒷면:
+        coating_base: 비코팅
+        options:
+          partial_coating: true
+      부분UV코팅-양면:
+        coating_base: 비코팅
+        options:
+          partial_coating: true
+  print_mode:
+    _description: 인쇄 면(side) + 색도(color)를 합친 정규화 값. 양면칼라 == 8도. 단면칼라 == 4도. 백색1도는 백색 1색.
+    default: 양면칼라
+    allowed:
+    - 양면칼라
+    - 단면칼라
+    - 양면백색1도
+    - 단면백색1도
+    aliases:
+      양면칼라:
+      - ''
+      - 양면
+      - 양면8도
+      - 양면8도(형광CMYK)
+      - 양면8도(형광CMY+K)
+      - 양면인쇄
+      - 양면4도
+      - 양면 칼라8도
+      - 양면 칼라4도
+      - 양면칼라
+      단면칼라:
+      - 단면
+      - 단면8도
+      - 단면4도
+      - 단면 칼라4도
+      - 단면 칼라8도
+      - 단면칼라
+      양면백색1도:
+      - 양면백색
+      단면백색1도:
+      - 단면백색
+    to_options:
+      _description: 박/특수 후가공이 color_mode에 섞여 들어온 경우 분리. 박은 현재 매칭 대상 아님 → options.note로 보존.
+      양면8도_단면금박:
+        _base: 양면칼라
+        note: 단면금박
+    _도수_참고:
+      양면칼라: 8도 (=CMYK × 2면)
+      단면칼라: 4도
+      양면백색1도: 2도
+      단면백색1도: 1도
+  size:
+    _description: 용지 크기. 가로x세로 mm 정수 형식으로 통일.
+    default: 90x50
+    format: '{W}x{H}'
+    allowed_examples:
+    - 90x50
+    - 86x54
+    - 86x52
+    - 90x100
+    _normalize_rules:
+    - 공백·㎜·mm·cm 단위 제거 후 숫자만 추출
+    - 구분자 *, ×, X 모두 x로 통일
+    - '''(가로형)'', ''(세로형)'' 같은 prefix 제거 (방향은 별도 옵션으로 보존 가능)'
+    - '''명함'', ''에폭명함'' 같은 product 단어 prefix 제거'
+    - 9x10cm → 90x100
+    regex: (\d+)\s*[x×*X]\s*(\d+)\s*(cm)?
+    _note_regex: 위 정규식으로 (W, H, unit) 추출 후 unit==cm이면 ×10.
+  qty:
+    _description: 수량. 정수 매수. 100/200/500/1000매 등 단위 다양화 예정 → 매칭 축으로 사용.
+    default: 200
+    common_units:
+    - 100
+    - 200
+    - 500
+    - 1000
+    - 2000
+    _note: ref와 output 양쪽 모두 같은 qty여야 매칭. ref에 qty가 명시 안 된 paper는 default 200으로 처리.
+  paper_name_extract:
+    _description: paper_name에 코팅 정보가 인코딩된 사이트용. coating 추출 룰. (alias 이전 단계)
+    applies_to:
+    - swadpia
+    - wowpress
+    - bizhows
+    rules:
+    - pattern: \((무광코팅|유광코팅|벨벳코팅|무코팅)\)
+      extract_to: coating
+      remove_from_paper_name: true
+      examples:
+        스노우지(무광코팅) 250g:
+          paper_name: 스노우지 250g
+          coating: 무광코팅
+        스노우지(유광코팅) 300g:
+          paper_name: 스노우지 300g
+          coating: 유광코팅
+        스노우지(무코팅) 250g:
+          paper_name: 스노우지 250g
+          coating: 비코팅
+        스노우지 백색 300g(무광코팅):
+          paper_name: 스노우지 백색 300g
+          coating: 무광코팅
+    - pattern: ^(무코팅|코팅)스노우
+      extract_to: coating
+      prefix_map:
+        무코팅: 비코팅
+        코팅: 유광코팅
+      _note: 'bizhows 표기: ''무코팅스노우 400g'' → 스노우 400g + 비코팅, ''코팅스노우 300g'' → 스노우 300g + 유광코팅(사용자 추정)'
+      examples:
+        무코팅스노우 400g:
+          paper_name: 스노우 400g
+          coating: 비코팅
+        코팅스노우 300g:
+          paper_name: 스노우 300g
+          coating: 유광코팅
+        코팅스노우 219g:
+          paper_name: 스노우 219g
+          coating: 유광코팅

@@ -21,12 +21,16 @@ class RawItem:
     url: str = ""
     url_ok: bool = True
     options: dict = field(default_factory=dict)
+    match_as: Optional[str] = None   # 평량 차이 매칭용 paper_name override (대시보드 그룹 키)
     item_id: str = ""
 
     def to_dict(self, include_item_id: bool = False) -> dict:
         d = asdict(self)
         if not include_item_id:
             d.pop("item_id", None)
+        # match_as 는 값이 있을 때만 포맷에 포함 (기존 raw 호환)
+        if d.get("match_as") is None:
+            d.pop("match_as", None)
         return d
 
 

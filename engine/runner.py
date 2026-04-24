@@ -23,7 +23,14 @@ from .logger import RunLogger
 ROOT = Path(__file__).resolve().parent.parent
 CONFIG_DIR = ROOT / "config"
 
-# 이관 전 단계 — 카테고리별 타겟/스키마는 기존 경로 유지, 어댑터 이관 완료 후 재배치.
+# 카테고리 → schema 공유 맵. card_offset / card_digital 은 동일 schemas/card.yaml 을 공유.
+# targets 는 카테고리별로 별도 파일.
+_SCHEMA_ALIAS = {
+    "card_offset": "card",
+    "card_digital": "card",
+}
+
+# 이관 과도기용 legacy JSON 경로. 신규 yaml 없으면 여기로 폴백.
 _LEGACY_TARGETS = {
     "card": CONFIG_DIR / "card_targets.json",
     "envelope": CONFIG_DIR / "envelope_targets.json",
@@ -37,31 +44,52 @@ _LEGACY_SCHEMA = {
 }
 
 
+def _read_structured(path: Path) -> dict:
+    """.yaml/.yml → yaml.safe_load, .json → json.loads."""
+    text = path.read_text(encoding="utf-8")
+    if path.suffix.lower() in (".yaml", ".yml"):
+        return yaml.safe_load(text) or {}
+    return json.loads(text)
+
+
 def _load_site_config(site: str) -> dict:
     path = CONFIG_DIR / "sites" / f"{site}.yaml"
     if not path.exists():
         raise FileNotFoundError(f"site config not found: {path}")
-    with open(path, "r", encoding="utf-8") as f:
-        return yaml.safe_load(f) or {}
+    return _read_structured(path)
 
 
 def _load_schema(category: str) -> dict:
-    new_path = CONFIG_DIR / "schemas" / f"{category}.json"
-    legacy = _LEGACY_SCHEMA.get(category)
-    path = new_path if new_path.exists() else legacy
-    if path is None or not path.exists():
-        raise FileNotFoundError(f"schema not found for category: {category}")
-    return json.loads(path.read_text(encoding="utf-8"))
+    """카테고리 스키마 로드. _SCHEMA_ALIAS 로 카테고리 공유 가능."""
+    schema_key = _SCHEMA_ALIAS.get(category, category)
+    new_yaml = CONFIG_DIR / "schemas" / f"{schema_key}.yaml"
+    new_json = CONFIG_DIR / "schemas" / f"{schema_key}.json"
+    if new_yaml.exists():
+        return _read_structured(new_yaml)
+    if new_json.exists():
+        return _read_structured(new_json)
+    legacy = _LEGACY_SCHEMA.get(schema_key)
+    if legacy and legacy.exists():
+        return _read_structured(legacy)
+    raise FileNotFoundError(f"schema not found for category: {category}")
 
 
-def _load_targets(site: str, category: str) -> list:
-    new_path = CONFIG_DIR / "targets" / f"{category}.json"
+def _load_targets(site: str, category: str):
+    """카테고리 targets 로드. 사이트 섹션만 반환.
+
+    반환 타입은 사이트마다 다를 수 있음:
+    - 타사: list[dict] (기존 구조)
+    - 프린트시티: dict (items/filters 포함)
+    어댑터가 자기에게 맞는 형태를 기대.
+    """
+    new_yaml = CONFIG_DIR / "targets" / f"{category}.yaml"
+    new_json = CONFIG_DIR / "targets" / f"{category}.json"
     legacy = _LEGACY_TARGETS.get(category)
-    path = new_path if new_path.exists() else legacy
-    if path is None or not path.exists():
-        raise FileNotFoundError(f"targets not found for category: {category}")
-    data = json.loads(path.read_text(encoding="utf-8"))
-    return data.get(site, [])
+    for p in (new_yaml, new_json, legacy):
+        if p and p.exists():
+            data = _read_structured(p)
+            return data.get(site, [])
+    raise FileNotFoundError(f"targets not found for category: {category}")
 
 
 def _load_adapter(site: str, category: str) -> SiteAdapter:
