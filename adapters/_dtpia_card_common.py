@@ -314,7 +314,7 @@ def build_item(page, t: dict, paper: dict, price: int, sel: dict, page_type: str
         size=dom["size"],
         qty=dom["qty"],
         price=price,
-        price_vat_included=True,  # dtpia 가격은 VAT 포함
+        price_vat_included=False,  # est_scroll_ord_am 은 공급가액 (VAT 제외)
         url=t["url"],
         url_ok=True,
         options=options,

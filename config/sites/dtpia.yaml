@@ -5,7 +5,7 @@
 name: "디티피아"
 base_url: "https://dtpia.co.kr"
 tech: "playwright"
-vat_included: true
+vat_included: false        # raw 에 공급가액(VAT 제외) 만 기록
 locale: "ko-KR"
 
 browser:
@@ -32,7 +32,7 @@ block_patterns:
 card_offset:
   selectors:
     # 가격 표시 (VAT 포함 총 결제금액)
-    price: "est_scroll_total_am"
+    price: "est_scroll_ord_am"      # 공급가액 (VAT 제외). est_scroll_total_am 은 합계, est_scroll_vat_am 은 부가세
     # 페이지별 option dropdown id
     coating_type: "coating_type"    # color page: paper×coating 결합 dropdown
     mtrl_cd: "mtrl_cd"              # special/uv page: 용지 코드
@@ -59,7 +59,7 @@ card_offset:
 #   인디고:   mtrl_01    + mtrl_02
 card_digital:
   selectors:
-    price: "est_scroll_total_am"
+    price: "est_scroll_ord_am"      # 공급가액 (VAT 제외). est_scroll_total_am 은 합계, est_scroll_vat_am 은 부가세
     # 소량명함용 (target 에서 sel_a/sel_b 로 명시 안 하면 fallback)
     mtrl_cd_01: "mtrl_cd_01"
     mtrl_cd_02: "mtrl_cd_02"
