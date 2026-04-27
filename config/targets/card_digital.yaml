@@ -2292,3 +2292,118 @@ printcity:
     size: 90x50
     qty: 200
     price: 3300
+dtpia:
+- category: 소량명함
+  product_name: 소량명함
+  url: https://dtpia.co.kr/Order/Businesscard/SmallQuantity.aspx
+  page_type: mtrl_split
+  size_value: TD03
+  qtys: &id001
+  - 100
+  - 200
+  - 500
+  - 1000
+  coating_select_value: N
+  color_modes:
+  - value: '8'
+    name: 양면칼라
+  - value: '4'
+    name: 단면칼라
+  papers:
+  - sel_a: mtrl_cd_01
+    sel_b: mtrl_cd_02
+    paper_value: RAT
+    weight_value: '200'
+    paper_name_out: 아트지 200g
+  - sel_a: mtrl_cd_01
+    sel_b: mtrl_cd_02
+    paper_value: RAT
+    weight_value: '250'
+    paper_name_out: 아트지 250g
+  - sel_a: mtrl_cd_01
+    sel_b: mtrl_cd_02
+    paper_value: RAT
+    weight_value: '300'
+    paper_name_out: 아트지 300g
+  - sel_a: mtrl_cd_01
+    sel_b: mtrl_cd_02
+    paper_value: RSW
+    weight_value: '200'
+    paper_name_out: 스노우지 200g
+  - sel_a: mtrl_cd_01
+    sel_b: mtrl_cd_02
+    paper_value: RSW
+    weight_value: '250'
+    paper_name_out: 스노우지 250g
+  - sel_a: mtrl_cd_01
+    sel_b: mtrl_cd_02
+    paper_value: RSW
+    weight_value: '300'
+    paper_name_out: 스노우지 300g
+  - sel_a: mtrl_cd_01
+    sel_b: mtrl_cd_02
+    paper_value: RMO
+    weight_value: '220'
+    paper_name_out: 모조지 220g
+  - sel_a: mtrl_cd_01
+    sel_b: mtrl_cd_02
+    paper_value: RMO
+    weight_value: '260'
+    paper_name_out: 모조지 260g
+- category: 인디고명함
+  product_name: 인디고명함
+  url: https://dtpia.co.kr/Order/Businesscard/Indigo.aspx
+  page_type: mtrl_split
+  size_value: TIXX
+  qtys: *id001
+  color_modes:
+  - value: '8'
+    name: 양면칼라
+  - value: '4'
+    name: 단면칼라
+  papers:
+  - sel_a: mtrl_01
+    sel_b: mtrl_02
+    paper_value: RVN
+    weight_value: '186'
+    paper_name_out: 반누보 204g
+  - sel_a: mtrl_01
+    sel_b: mtrl_02
+    paper_value: RVN
+    weight_value: '224'
+    paper_name_out: 반누보 224g
+  - sel_a: mtrl_01
+    sel_b: mtrl_02
+    paper_value: RRA
+    weight_value: '210'
+    paper_name_out: 랑데뷰 210g
+  - sel_a: mtrl_01
+    sel_b: mtrl_02
+    paper_value: RRA
+    weight_value: '240'
+    paper_name_out: 랑데뷰 240g
+  - sel_a: mtrl_01
+    sel_b: mtrl_02
+    paper_value: RMB
+    weight_value: '240'
+    paper_name_out: 몽블랑 240g
+  - sel_a: mtrl_01
+    sel_b: mtrl_02
+    paper_value: RMW
+    weight_value: '233'
+    paper_name_out: 마쉬멜로우 233g
+  - sel_a: mtrl_01
+    sel_b: mtrl_02
+    paper_value: RA2
+    weight_value: '250'
+    paper_name_out: 마제스틱(마블화이트) 250g
+  - sel_a: mtrl_01
+    sel_b: mtrl_02
+    paper_value: RSJ
+    weight_value: '250'
+    paper_name_out: 시리오펄(진주) 250g
+  - sel_a: mtrl_01
+    sel_b: mtrl_02
+    paper_value: RSP
+    weight_value: '300'
+    paper_name_out: 션샤인 300g

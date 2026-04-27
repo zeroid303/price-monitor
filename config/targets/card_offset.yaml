@@ -3174,3 +3174,294 @@ printcity:
     size: 90x50
     qty: 1000
     price: 16800
+dtpia:
+- category: 일반명함
+  product_name: 일반명함
+  url: https://dtpia.co.kr/Order/Businesscard/Color.aspx
+  page_type: page_fixed
+  size_value: CNXT
+  qtys: &id001
+  - 100
+  - 200
+  - 500
+  - 1000
+  color_modes:
+  - value: '8'
+    name: 양면칼라
+  - value: '4'
+    name: 단면칼라
+  papers:
+  - coating_select_value: ''
+    paper_name_out: 스노우지 250g 코팅없음
+  - coating_select_value: '4'
+    paper_name_out: 스노우지 250g 무광코팅
+- category: 고급지명함
+  product_name: 고급지명함
+  url: https://dtpia.co.kr/Order/Businesscard/Special.aspx?code=2
+  page_type: mtrl_cd_pair
+  size_value: TCXX
+  qtys: *id001
+  color_modes:
+  - value: '8'
+    name: 양면칼라
+  - value: '4'
+    name: 단면칼라
+  papers:
+  - mtrl_cd: RLW230
+    mtrl_cdw: '230'
+    paper_name_out: 럭셔리 반누보 화이트 230g
+  - mtrl_cd: RVN186
+    mtrl_cdw: '204'
+    paper_name_out: 반누보 204g
+  - mtrl_cd: RRA210
+    mtrl_cdw: '210'
+    paper_name_out: 랑데뷰 210g
+  - mtrl_cd: RED250
+    mtrl_cdw: '250'
+    paper_name_out: 유포블루 250g
+  - mtrl_cd: RMB210
+    mtrl_cdw: '210'
+    paper_name_out: 몽블랑 210g
+  - mtrl_cd: RAR230
+    mtrl_cdw: '230'
+    paper_name_out: 아르떼 230g
+  - mtrl_cd: RUN233
+    mtrl_cdw: '233'
+    paper_name_out: 유니트 백색 233g
+  - mtrl_cd: RMW209
+    mtrl_cdw: '209'
+    paper_name_out: 마쉬멜로우 화이트 209g
+  - mtrl_cd: RMV209
+    mtrl_cdw: '209'
+    paper_name_out: 마쉬멜로우 미색 209g
+  - mtrl_cd: RGS209
+    mtrl_cdw: '209'
+    paper_name_out: 그레이스 209g
+  - mtrl_cd: RSP240
+    mtrl_cdw: '230'
+    paper_name_out: 썬샤인 230g
+  - mtrl_cd: RSF216
+    mtrl_cdw: '216'
+    paper_name_out: 수퍼파인 216g
+  - mtrl_cd: REA209
+    mtrl_cdw: '209'
+    paper_name_out: 레이나 209g
+  - mtrl_cd: RIB216
+    mtrl_cdw: '216'
+    paper_name_out: 인바이런먼트 216g
+- category: 펄지명함
+  product_name: 펄지명함
+  url: https://dtpia.co.kr/Order/Businesscard/Special.aspx?code=3
+  page_type: mtrl_cd_pair
+  size_value: TCXX
+  qtys: *id001
+  color_modes:
+  - value: '8'
+    name: 양면칼라
+  - value: '4'
+    name: 단면칼라
+  papers:
+  - mtrl_cd: RST241
+    mtrl_cdw: '241'
+    paper_name_out: 스타드림 쿼츠 241g
+  - mtrl_cd: RST240
+    mtrl_cdw: '240'
+    paper_name_out: 스타드림 화이트 240g
+  - mtrl_cd: RSI250
+    mtrl_cdw: '250'
+    paper_name_out: 스타드림 다이아 250g
+  - mtrl_cd: RSG240
+    mtrl_cdw: '240'
+    paper_name_out: 스타드림 골드 240g
+  - mtrl_cd: RSS240
+    mtrl_cdw: '240'
+    paper_name_out: 스타드림 실버 240g
+  - mtrl_cd: RCO240
+    mtrl_cdw: '240'
+    paper_name_out: 컨셉 240g
+  - mtrl_cd: RPS240
+    mtrl_cdw: '240'
+    paper_name_out: 크리스탈 펄 240g
+  - mtrl_cd: RKM250
+    mtrl_cdw: '250'
+    paper_name_out: 메탈릭 화이트 250g
+  - mtrl_cd: RMG200
+    mtrl_cdw: '200'
+    paper_name_out: 메탈릭 골드 200g
+  - mtrl_cd: RMS200
+    mtrl_cdw: '200'
+    paper_name_out: 메탈릭 실버 200g
+  - mtrl_cd: RSH200
+    mtrl_cdw: '200'
+    paper_name_out: 샤이니 200g
+  - mtrl_cd: RSH250
+    mtrl_cdw: '250'
+    paper_name_out: 샤이니 골드펄 250g
+  - mtrl_cd: RSR300
+    mtrl_cdw: '300'
+    paper_name_out: 시리오 스노우 300g
+  - mtrl_cd: RSO300
+    mtrl_cdw: '300'
+    paper_name_out: 시리오 골드 300g
+  - mtrl_cd: RSU300
+    mtrl_cdw: '300'
+    paper_name_out: 시리오 실버 300g
+  - mtrl_cd: RSJ230
+    mtrl_cdw: '230'
+    paper_name_out: 시리오 진주 230g
+  - mtrl_cd: RMA250
+    mtrl_cdw: '250'
+    paper_name_out: 마제스틱 250g
+- category: 무늬지명함
+  product_name: 무늬지명함
+  url: https://dtpia.co.kr/Order/Businesscard/Special.aspx?code=4
+  page_type: mtrl_cd_pair
+  size_value: TCXX
+  qtys: *id001
+  color_modes:
+  - value: '8'
+    name: 양면칼라
+  - value: '4'
+    name: 단면칼라
+  papers:
+  - mtrl_cd: RRW230
+    mtrl_cdw: '230'
+    paper_name_out: 휘라레 (린넨) 230g
+  - mtrl_cd: RRW216
+    mtrl_cdw: '216'
+    paper_name_out: 휘라레 216g
+  - mtrl_cd: RDD250
+    mtrl_cdw: '250'
+    paper_name_out: 띤또레또 250g
+  - mtrl_cd: RLX265
+    mtrl_cdw: '265'
+    paper_name_out: 유니크라프트 265g
+  - mtrl_cd: RCL220
+    mtrl_cdw: '220'
+    paper_name_out: 스코틀랜드 220g
+  - mtrl_cd: RTT200
+    mtrl_cdw: '200'
+    paper_name_out: 탄트지 200g
+  - mtrl_cd: RR9200
+    mtrl_cdw: '200'
+    paper_name_out: 레자크 200g
+  - mtrl_cd: RSQ310
+    mtrl_cdw: '310'
+    paper_name_out: 스퀘어 310g
+  - mtrl_cd: RFW310
+    mtrl_cdw: '310'
+    paper_name_out: 플로우 310g
+  - mtrl_cd: RBB250
+    mtrl_cdw: '250'
+    paper_name_out: 비화이트 250g
+  - mtrl_cd: RVM200
+    mtrl_cdw: '200'
+    paper_name_out: 빌리지 미색 200g
+  - mtrl_cd: RDR209
+    mtrl_cdw: '209'
+    paper_name_out: 대례지(한지) 209g
+- category: UV옵셋명함
+  product_name: UV옵셋명함
+  url: https://dtpia.co.kr/Order/Businesscard/Uv.aspx
+  page_type: mtrl_cd_pair
+  size_value: TUXX
+  qtys: *id001
+  color_modes:
+  - value: '8'
+    name: 양면칼라
+  - value: '4'
+    name: 단면칼라
+  papers:
+  - mtrl_cd: RRW230
+    mtrl_cdw: '230'
+    paper_name_out: 휘라레 (린넨) 230g
+  - mtrl_cd: RST241
+    mtrl_cdw: '241'
+    paper_name_out: 스타드림 쿼츠 241g
+  - mtrl_cd: RLW230
+    mtrl_cdw: '230'
+    paper_name_out: 럭셔리 반누보 화이트 230g
+- category: 두꺼운명함
+  product_name: 두꺼운명함
+  url: https://dtpia.co.kr/Order/Businesscard/Extra.aspx
+  page_type: mtrl_cd_pair
+  size_value: TCXX
+  qtys: *id001
+  color_modes:
+  - value: '8'
+    name: 양면칼라
+  - value: '4'
+    name: 단면칼라
+  papers:
+  - mtrl_cd: RXT011
+    mtrl_cdw: '400'
+    paper_name_out: 아스트로 프리미엄 화이트 400g
+  - mtrl_cd: RXT001
+    mtrl_cdw: '320'
+    paper_name_out: 반누보 스노우 화이트 320g
+  - mtrl_cd: RBC300
+    mtrl_cdw: '300'
+    paper_name_out: 블랑 크림 300g
+  - mtrl_cd: RBW300
+    mtrl_cdw: '300'
+    paper_name_out: 블랑 순백색 300g
+  - mtrl_cd: RXT023
+    mtrl_cdw: '350'
+    paper_name_out: 올드밀 비앙크 350g
+  - mtrl_cd: RXT013
+    mtrl_cdw: '350'
+    paper_name_out: 마메이드 백색 350g
+  - mtrl_cd: RXT014
+    mtrl_cdw: '300'
+    paper_name_out: 마메이드 아이보리 300g
+  - mtrl_cd: RXT006
+    mtrl_cdw: '300'
+    paper_name_out: 비안코 플래시 300g
+  - mtrl_cd: RXT004
+    mtrl_cdw: '300'
+    paper_name_out: 인버코트 크레아토 300g
+  - mtrl_cd: RXT024
+    mtrl_cdw: '352'
+    paper_name_out: 클래식 우드그레인 352g
+  - mtrl_cd: RXT016
+    mtrl_cdw: '350'
+    paper_name_out: 팬시카드 350g
+  - mtrl_cd: RXT002
+    mtrl_cdw: '300'
+    paper_name_out: 잔팩 터치 300g
+  - mtrl_cd: RCP350
+    mtrl_cdw: '350'
+    paper_name_out: CCP 350g
+- category: PP카드명함
+  product_name: PP카드명함
+  url: https://dtpia.co.kr/Order/Businesscard/Pp.aspx
+  page_type: mtrl_cd_only
+  qtys: *id001
+  color_modes:
+  - value: '8'
+    name: 양면칼라
+  - value: '4'
+    name: 단면칼라
+  papers:
+  - mtrl_cd: RPP005
+    paper_name_out: 화이트
+  - mtrl_cd: RPP001
+    paper_name_out: 골드라운드
+  - mtrl_cd: RPP002
+    paper_name_out: 실버라운드
+  - mtrl_cd: RPP003
+    paper_name_out: 금지
+  - mtrl_cd: RPP004
+    paper_name_out: 은지
+  - mtrl_cd: RPP006
+    paper_name_out: 금펄
+  - mtrl_cd: RPP008
+    paper_name_out: 은펄
+  - mtrl_cd: RPP007
+    paper_name_out: 금펄반투명
+  - mtrl_cd: RPP009
+    paper_name_out: 은펄반투명
+  - mtrl_cd: RPP015
+    paper_name_out: 메탈펄골드 테
+  - mtrl_cd: RPP016
+    paper_name_out: 메탈펄실버 테
