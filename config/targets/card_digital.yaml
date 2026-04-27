@@ -101,7 +101,7 @@ printcity:
     color_code: COL:40
     size: 90x50
     qty: 100
-    price: 3000
+    price: 1500
   - product: 디지털명함
     paper: 스노우화이트-250g
     paper_code: MAT:SNW-250
@@ -111,7 +111,7 @@ printcity:
     color_code: COL:40
     size: 90x50
     qty: 200
-    price: 4500
+    price: 3000
   - product: 디지털명함
     paper: 스노우화이트-250g
     paper_code: MAT:SNW-250
@@ -141,7 +141,7 @@ printcity:
     color_code: COL:44
     size: 90x50
     qty: 100
-    price: 4000
+    price: 1500
   - product: 디지털명함
     paper: 스노우화이트-250g
     paper_code: MAT:SNW-250
@@ -151,7 +151,7 @@ printcity:
     color_code: COL:44
     size: 90x50
     qty: 200
-    price: 6000
+    price: 3000
   - product: 디지털명함
     paper: 스노우화이트-250g
     paper_code: MAT:SNW-250
@@ -1941,7 +1941,7 @@ printcity:
     color_code: COL:40
     size: 90x50
     qty: 100
-    price: null
+    price: 3500
   - product: 디지털명함
     paper: 크라프트-250g
     paper_code: MAT:CRA-250
@@ -1951,7 +1951,7 @@ printcity:
     color_code: COL:40
     size: 90x50
     qty: 200
-    price: null
+    price: 4500
   - product: 디지털명함
     paper: 크라프트-250g
     paper_code: MAT:CRA-250
@@ -1971,7 +1971,7 @@ printcity:
     color_code: COL:40
     size: 90x50
     qty: 1000
-    price: null
+    price: 15400
   - product: 디지털명함
     paper: 크라프트-250g
     paper_code: MAT:CRA-250
@@ -1981,7 +1981,7 @@ printcity:
     color_code: COL:44
     size: 90x50
     qty: 100
-    price: null
+    price: 4500
   - product: 디지털명함
     paper: 크라프트-250g
     paper_code: MAT:CRA-250
@@ -1991,7 +1991,7 @@ printcity:
     color_code: COL:44
     size: 90x50
     qty: 200
-    price: null
+    price: 5400
   - product: 디지털명함
     paper: 크라프트-250g
     paper_code: MAT:CRA-250
@@ -2011,7 +2011,7 @@ printcity:
     color_code: COL:44
     size: 90x50
     qty: 1000
-    price: null
+    price: 20900
   - product: 디지털명함
     paper: 크리스탈 펄(팝셋)-235g
     paper_code: MAT:CTP-235
@@ -2021,7 +2021,7 @@ printcity:
     color_code: COL:40
     size: 90x50
     qty: 100
-    price: null
+    price: 4500
   - product: 디지털명함
     paper: 크리스탈 펄(팝셋)-235g
     paper_code: MAT:CTP-235
@@ -2031,7 +2031,7 @@ printcity:
     color_code: COL:40
     size: 90x50
     qty: 200
-    price: null
+    price: 5500
   - product: 디지털명함
     paper: 크리스탈 펄(팝셋)-235g
     paper_code: MAT:CTP-235
@@ -2051,7 +2051,7 @@ printcity:
     color_code: COL:40
     size: 90x50
     qty: 1000
-    price: null
+    price: 25000
   - product: 디지털명함
     paper: 크리스탈 펄(팝셋)-235g
     paper_code: MAT:CTP-235
@@ -2061,7 +2061,7 @@ printcity:
     color_code: COL:44
     size: 90x50
     qty: 100
-    price: null
+    price: 5500
   - product: 디지털명함
     paper: 크리스탈 펄(팝셋)-235g
     paper_code: MAT:CTP-235
@@ -2071,7 +2071,7 @@ printcity:
     color_code: COL:44
     size: 90x50
     qty: 200
-    price: null
+    price: 6000
   - product: 디지털명함
     paper: 크리스탈 펄(팝셋)-235g
     paper_code: MAT:CTP-235
@@ -2091,7 +2091,7 @@ printcity:
     color_code: COL:44
     size: 90x50
     qty: 1000
-    price: null
+    price: 30000
   - product: 디지털명함
     paper: 띤또레또-250g
     paper_code: MAT:TIN-250
@@ -2101,7 +2101,7 @@ printcity:
     color_code: COL:40
     size: 90x50
     qty: 100
-    price: null
+    price: 4900
   - product: 디지털명함
     paper: 띤또레또-250g
     paper_code: MAT:TIN-250
@@ -2111,7 +2111,7 @@ printcity:
     color_code: COL:40
     size: 90x50
     qty: 200
-    price: null
+    price: 5900
   - product: 디지털명함
     paper: 띤또레또-250g
     paper_code: MAT:TIN-250
@@ -2131,7 +2131,7 @@ printcity:
     color_code: COL:40
     size: 90x50
     qty: 1000
-    price: null
+    price: 29500
   - product: 디지털명함
     paper: 띤또레또-250g
     paper_code: MAT:TIN-250
@@ -2141,7 +2141,7 @@ printcity:
     color_code: COL:44
     size: 90x50
     qty: 100
-    price: null
+    price: 5800
   - product: 디지털명함
     paper: 띤또레또-250g
     paper_code: MAT:TIN-250
@@ -2151,7 +2151,7 @@ printcity:
     color_code: COL:44
     size: 90x50
     qty: 200
-    price: null
+    price: 6800
   - product: 디지털명함
     paper: 띤또레또-250g
     paper_code: MAT:TIN-250
@@ -2171,7 +2171,7 @@ printcity:
     color_code: COL:44
     size: 90x50
     qty: 1000
-    price: null
+    price: 34000
   - product: 디지털명함
     paper: 탄트지-200g
     paper_code: MAT:TT-200
@@ -2181,7 +2181,7 @@ printcity:
     color_code: COL:40
     size: 90x50
     qty: 100
-    price: null
+    price: 3600
   - product: 디지털명함
     paper: 탄트지-200g
     paper_code: MAT:TT-200
@@ -2191,7 +2191,7 @@ printcity:
     color_code: COL:40
     size: 90x50
     qty: 200
-    price: null
+    price: 4600
   - product: 디지털명함
     paper: 탄트지-200g
     paper_code: MAT:TT-200
@@ -2211,7 +2211,7 @@ printcity:
     color_code: COL:40
     size: 90x50
     qty: 1000
-    price: null
+    price: 23000
   - product: 디지털명함
     paper: 탄트지-200g
     paper_code: MAT:TT-200
@@ -2221,7 +2221,7 @@ printcity:
     color_code: COL:44
     size: 90x50
     qty: 100
-    price: null
+    price: 4500
   - product: 디지털명함
     paper: 탄트지-200g
     paper_code: MAT:TT-200
@@ -2231,7 +2231,7 @@ printcity:
     color_code: COL:44
     size: 90x50
     qty: 200
-    price: null
+    price: 5500
   - product: 디지털명함
     paper: 탄트지-200g
     paper_code: MAT:TT-200
@@ -2251,7 +2251,7 @@ printcity:
     color_code: COL:44
     size: 90x50
     qty: 1000
-    price: null
+    price: 27500
   - product: 디지털명함
     paper: 스노우화이트-300g
     paper_code: MAT:SNW-300
