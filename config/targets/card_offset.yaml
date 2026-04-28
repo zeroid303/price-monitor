@@ -3218,7 +3218,7 @@ dtpia:
     paper_name_out: 랑데뷰 210g
   - mtrl_cd: RED250
     mtrl_cdw: '250'
-    paper_name_out: 유포블루 250g
+    paper_name_out: 유포블루(방수명함) 250g
   - mtrl_cd: RMB210
     mtrl_cdw: '210'
     paper_name_out: 몽블랑 210g

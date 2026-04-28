@@ -1,12 +1,13 @@
 """실측 회귀 테스트 (T1): output/{site}_{cat}_raw_now.json 의 raw 값이
-실제 사이트의 셀렉터/페이지 표시값과 일치하는지 검증.
+실제 사이트의 DOM 표시값과 일치하는지 검증.
 
 원리:
-  raw item 마다 사이트 다시 방문 → 그 조합으로 셀렉터 셋팅 →
-  현재 DOM 의 .mtrl-name / select text / 페이지 표시값을 다시 읽음 →
+  raw item 마다 사이트 다시 방문 → target yaml 의 papers 에서 매칭 paper 찾기 →
+  그 paper 의 셋팅 정보(mtrl_cd / mtrl_cdw / sel_a/sel_b 등)로 DOM 셋팅 →
+  현재 DOM 의 .mtrl-name / select text / 페이지 표시값 다시 읽음 →
   raw 와 비교.
 
-지원 사이트: dtpia (현재 — 추후 다른 사이트 추가 가능)
+raw 자체엔 셋팅 정보(config_*)가 없음 — target 라벨(paper_name_out)을 매개로 매칭.
 
 사용:
   python -m scripts.verify_raw_against_dom dtpia card_offset
@@ -15,7 +16,6 @@
 import argparse
 import json
 import sys
-import time
 from pathlib import Path
 from typing import Optional
 
@@ -52,10 +52,46 @@ JS_GET_PP_SIZE = """() => {
 }"""
 
 
-def setup_dom_for_item(page, raw: dict, target: dict, sel: dict) -> bool:
-    """raw item 의 조합대로 DOM 셋팅. 성공 여부 반환."""
-    page_type = raw.get("options", {}).get("page_type")
-    opts = raw.get("options", {})
+def find_target_paper(target: dict, raw: dict) -> Optional[dict]:
+    """raw 의 표시값으로 target.papers 의 어떤 paper 인지 매칭.
+
+    매칭 키: page_type 별로 다름.
+      page_fixed: coating (DOM 의 coating text 와 paper.coating_out / paper_name_out 의 코팅 부분)
+      mtrl_cd_pair / mtrl_cd_only / mtrl_split: paper_name_out 이 raw 의 paper_name+weight 와 매칭
+    """
+    page_type = target.get("page_type")
+    papers = target.get("papers", [])
+    raw_paper = raw.get("paper_name") or ""
+    raw_weight = raw.get("paper_weight_text") or ""
+    raw_coating = raw.get("coating") or ""
+
+    if page_type == "page_fixed":
+        # 일반명함: paper_name_out 이 "스노우지 250g 코팅없음" 같은 형태.
+        # raw paper_name="스노우지 250g", coating="코팅없음" 와 매칭.
+        for p in papers:
+            label = p.get("paper_name_out", "")
+            if raw_paper in label and raw_coating in label:
+                return p
+        return None
+
+    # mtrl_cd_pair / mtrl_cd_only / mtrl_split:
+    #   paper_name_out 이 raw paper_name + (선택적) weight 를 모두 포함하는 paper 매칭
+    for p in papers:
+        label = p.get("paper_name_out", "")
+        if raw_paper and raw_paper in label:
+            if raw_weight and raw_weight not in label:
+                continue
+            return p
+    # weight 없는 케이스 (PP카드)
+    for p in papers:
+        label = p.get("paper_name_out", "")
+        if label == raw_paper:
+            return p
+    return None
+
+
+def setup_dom_for_item(page, raw: dict, target: dict, paper: dict, sel: dict) -> bool:
+    page_type = target.get("page_type")
 
     # size (PP카드는 size select 없음)
     if page_type != "mtrl_cd_only" and target.get("size_value"):
@@ -64,32 +100,26 @@ def setup_dom_for_item(page, raw: dict, target: dict, sel: dict) -> bool:
 
     # paper 셋팅 (page_type 분기)
     if page_type == "page_fixed":
-        # 일반명함: coating_select_value
-        cv = opts.get("config_coating_select_value", "")
+        cv = paper.get("coating_select_value", "")
         page.evaluate(JS_SET_SELECT, {"sel_id": sel.get("coating_type"), "value": cv})
         page.wait_for_timeout(400)
     elif page_type == "mtrl_cd_pair":
-        page.evaluate(JS_SET_SELECT, {"sel_id": sel.get("mtrl_cd"), "value": opts.get("config_mtrl_cd")})
+        page.evaluate(JS_SET_SELECT, {"sel_id": sel.get("mtrl_cd"), "value": paper.get("mtrl_cd")})
         page.wait_for_timeout(500)
-        page.evaluate(JS_SET_SELECT, {"sel_id": sel.get("mtrl_cdw"), "value": opts.get("config_mtrl_cdw")})
-        page.wait_for_timeout(500)
+        if "mtrl_cdw" in paper:
+            page.evaluate(JS_SET_SELECT, {"sel_id": sel.get("mtrl_cdw"), "value": paper["mtrl_cdw"]})
+            page.wait_for_timeout(500)
     elif page_type == "mtrl_cd_only":
-        page.evaluate(JS_SET_SELECT, {"sel_id": sel.get("mtrl_cd"), "value": opts.get("config_mtrl_cd")})
+        page.evaluate(JS_SET_SELECT, {"sel_id": sel.get("mtrl_cd"), "value": paper.get("mtrl_cd")})
         page.wait_for_timeout(500)
     elif page_type == "mtrl_split":
-        # sel_a/sel_b 는 raw options 에 보존 안 됨 → target 의 papers 에서 paper_name_out 으로 매칭
-        sel_a = None; sel_b = None
-        paper_value = opts.get("config_paper_value")
-        weight_value = opts.get("config_weight_value")
-        for p in target.get("papers", []):
-            if p.get("paper_value") == paper_value and p.get("weight_value") == weight_value:
-                sel_a = p.get("sel_a"); sel_b = p.get("sel_b")
-                break
+        sel_a = paper.get("sel_a")
+        sel_b = paper.get("sel_b")
         if not (sel_a and sel_b):
             return False
-        page.evaluate(JS_SET_SELECT, {"sel_id": sel_a, "value": paper_value})
+        page.evaluate(JS_SET_SELECT, {"sel_id": sel_a, "value": paper.get("paper_value")})
         page.wait_for_timeout(500)
-        page.evaluate(JS_SET_SELECT, {"sel_id": sel_b, "value": weight_value})
+        page.evaluate(JS_SET_SELECT, {"sel_id": sel_b, "value": paper.get("weight_value")})
         page.wait_for_timeout(500)
 
     # coating (소량명함의 coating_select_value)
@@ -116,21 +146,32 @@ def setup_dom_for_item(page, raw: dict, target: dict, sel: dict) -> bool:
     if page_type != "mtrl_cd_only" and target.get("size_value"):
         page.evaluate(JS_SET_SELECT, {"sel_id": sel.get("size", "ppr_cut_tmp"), "value": target["size_value"]})
         page.wait_for_timeout(300)
-
     return True
 
 
-def read_dom_actual(page, raw: dict, sel: dict) -> dict:
-    page_type = raw.get("options", {}).get("page_type")
-    paper_name = page.evaluate(JS_GET_MTRL_NAME)
-    if isinstance(paper_name, str):
-        paper_name = paper_name.strip() or None
+def read_dom_actual(page, target: dict, sel: dict) -> dict:
+    """어댑터의 read_dom_state 와 동일한 로직 — page_type 별 paper_name 출처 분기."""
+    page_type = target.get("page_type")
+
+    paper_name = None
+    if page_type == "page_fixed":
+        paper_name = page.evaluate(JS_GET_MTRL_NAME)
+        if isinstance(paper_name, str):
+            paper_name = paper_name.strip() or None
+    elif page_type in ("mtrl_cd_pair", "mtrl_cd_only"):
+        paper_name = page.evaluate(JS_GET_SELECT_TEXT, sel.get("mtrl_cd")) or None
+    elif page_type == "mtrl_split":
+        for cand in (sel.get("mtrl_cd_01"), sel.get("mtrl_01")):
+            if cand:
+                v = page.evaluate(JS_GET_SELECT_TEXT, cand)
+                if v:
+                    paper_name = v
+                    break
 
     weight_text = None
     if page_type == "mtrl_cd_pair":
         weight_text = page.evaluate(JS_GET_SELECT_TEXT, sel.get("mtrl_cdw")) or None
     elif page_type == "mtrl_split":
-        # sel_b 가 raw 에 직접 안 보이므로 mtrl_cd_02 / mtrl_02 둘 다 시도
         for cand in (sel.get("mtrl_cd_02"), sel.get("mtrl_02")):
             if cand:
                 v = page.evaluate(JS_GET_SELECT_TEXT, cand)
@@ -177,8 +218,6 @@ def verify(site: str, category: str, limit: Optional[int] = None) -> int:
     targets = yaml.safe_load((ROOT / "config/targets" / f"{category}.yaml").read_text(encoding="utf-8"))[site]
     cat_cfg = site_cfg.get(category, {})
     sel = cat_cfg.get("selectors", {})
-
-    # url 별로 target 매칭
     target_by_url = {t["url"]: t for t in targets}
 
     mismatches = []
@@ -187,9 +226,7 @@ def verify(site: str, category: str, limit: Optional[int] = None) -> int:
     print(f"검증 대상: {len(items)} items (site={site}, category={category})")
     with sync_playwright() as pw:
         browser = pw.chromium.launch(headless=True)
-        context = browser.new_context(
-            viewport={"width": 1280, "height": 900}, locale="ko-KR",
-        )
+        context = browser.new_context(viewport={"width": 1280, "height": 900}, locale="ko-KR")
         for pat in site_cfg.get("block_patterns", []):
             context.route(pat, lambda r: r.abort())
         context.on("dialog", lambda d: d.dismiss())
@@ -202,6 +239,13 @@ def verify(site: str, category: str, limit: Optional[int] = None) -> int:
                 if not target:
                     mismatches.append({"item_idx": i, "raw": raw, "error": f"target 매칭 없음: {url}"})
                     continue
+                paper = find_target_paper(target, raw)
+                if not paper:
+                    mismatches.append({
+                        "item_idx": i, "raw": raw,
+                        "error": f"target paper 매칭 없음 — paper_name={raw.get('paper_name')!r} weight={raw.get('paper_weight_text')!r}",
+                    })
+                    continue
                 if url != cur_url:
                     try:
                         page.goto(url, wait_until="domcontentloaded", timeout=30000)
@@ -210,11 +254,11 @@ def verify(site: str, category: str, limit: Optional[int] = None) -> int:
                     except PwTimeout:
                         mismatches.append({"item_idx": i, "raw": raw, "error": "page goto timeout"})
                         continue
-                if not setup_dom_for_item(page, raw, target, sel):
+                if not setup_dom_for_item(page, raw, target, paper, sel):
                     mismatches.append({"item_idx": i, "raw": raw, "error": "DOM 셋팅 실패"})
                     continue
 
-                actual = read_dom_actual(page, raw, sel)
+                actual = read_dom_actual(page, target, sel)
 
                 fields = ("paper_name", "paper_weight_text", "coating", "print_mode", "size", "qty")
                 diffs = {}
@@ -227,7 +271,7 @@ def verify(site: str, category: str, limit: Optional[int] = None) -> int:
                     mismatches.append({
                         "item_idx": i,
                         "product": raw.get("product"),
-                        "config_paper_name_out": raw.get("options", {}).get("config_paper_name_out"),
+                        "paper": raw.get("paper_name"),
                         "qty": raw.get("qty"),
                         "diffs": diffs,
                     })
@@ -246,7 +290,6 @@ def verify(site: str, category: str, limit: Optional[int] = None) -> int:
         out = ROOT / "output" / f"_verify_{site}_{category}.json"
         out.write_text(json.dumps(mismatches, ensure_ascii=False, indent=2), encoding="utf-8")
         print(f"  상세: {out}")
-        # 처음 10개 출력
         for m in mismatches[:10]:
             print(f"  - idx={m.get('item_idx')} product={m.get('product')} qty={m.get('qty')} err={m.get('error') or m.get('diffs')}")
     return 0 if not mismatches else 1

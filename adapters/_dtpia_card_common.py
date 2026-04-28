@@ -115,18 +115,37 @@ def read_price(page, price_sel_id: str, after_trigger_ms: int) -> Optional[int]:
 # ── DOM 실측 (raw 추출 핵심) ──
 
 def read_dom_state(page, sel: dict, page_type: str) -> dict:
-    """현재 DOM 상태에서 raw 필드 추출. 합성 X, 표시값 그대로."""
-    # paper_name = .mtrl-name div text (모든 페이지 일관)
-    paper_name = page.evaluate(JS_GET_MTRL_NAME)
-    if isinstance(paper_name, str):
-        paper_name = paper_name.strip() or None
+    """현재 DOM 상태에서 raw 필드 추출. 합성 X, 표시값 그대로.
 
-    # paper_weight_text = weight select text (페이지마다 다른 select id)
+    paper_name 출처 (page_type 별):
+      - page_fixed (일반명함): .mtrl-name div (paper select 자체가 없으므로)
+      - mtrl_cd_pair / mtrl_cd_only: mtrl_cd select 의 selected text
+      - mtrl_split: mtrl_cd_01 또는 mtrl_01 select 의 selected text
+
+    .mtrl-name 대신 select text 사용 — page JS 가 .mtrl-name 갱신하기 전에
+    select.value 는 즉시 반영되므로 stale 값 위험 없음.
+    """
+    # paper_name 추출
+    paper_name = None
+    if page_type == "page_fixed":
+        paper_name = page.evaluate(JS_GET_MTRL_NAME)
+        if isinstance(paper_name, str):
+            paper_name = paper_name.strip() or None
+    elif page_type in ("mtrl_cd_pair", "mtrl_cd_only"):
+        paper_name = js_get_select_text(page, sel.get("mtrl_cd", "mtrl_cd")) or None
+    elif page_type == "mtrl_split":
+        for cand in (sel.get("mtrl_cd_01"), sel.get("mtrl_01")):
+            if cand:
+                v = js_get_select_text(page, cand)
+                if v:
+                    paper_name = v
+                    break
+
+    # paper_weight_text = weight select text
     weight_text = None
     if page_type == "mtrl_cd_pair":
         weight_text = js_get_select_text(page, sel.get("mtrl_cdw", "mtrl_cdw")) or None
     elif page_type == "mtrl_split":
-        # 페이지마다 weight select id 다름 — 양쪽 후보 시도 (소량=mtrl_cd_02, 인디고=mtrl_02)
         for cand in (sel.get("mtrl_cd_02"), sel.get("mtrl_02")):
             if cand:
                 v = js_get_select_text(page, cand)
@@ -226,11 +245,30 @@ def set_paper_type_a(page, sel: dict, paper: dict, timeouts: dict) -> bool:
     return ok
 
 
+def wait_mtrl_name_synced(page, paper_select_id: str, timeout_ms: int = 2000) -> None:
+    """paper select 변경 후 .mtrl-name div 가 그 select 의 selected text 와 동기화될 때까지 대기.
+    페이지 JS 가 .mtrl-name 을 비동기로 업데이트하는 케이스(인디고 등)에서 stale 값 방지."""
+    js = """({sid}) => {
+        const sel = document.getElementById(sid);
+        const opt = sel?.options[sel?.selectedIndex];
+        const expected = (opt?.textContent || '').trim();
+        const m = document.querySelector('.mtrl-name');
+        const actual = (m?.textContent || '').trim();
+        if (!expected) return true;
+        return actual.includes(expected);
+    }"""
+    try:
+        page.wait_for_function(js, arg={"sid": paper_select_id}, timeout=timeout_ms)
+    except Exception:
+        pass
+
+
 def set_paper_type_b(page, sel: dict, paper: dict, timeouts: dict) -> bool:
     """type-B mtrl_cd + mtrl_cdw."""
     if not js_set(page, sel["mtrl_cd"], paper["mtrl_cd"]):
         return False
     page.wait_for_timeout(timeouts.get("after_select_ms", 500))
+    wait_mtrl_name_synced(page, sel["mtrl_cd"])
     if "mtrl_cdw" in paper:
         js_set(page, sel["mtrl_cdw"], paper["mtrl_cdw"])
         page.wait_for_timeout(timeouts.get("after_select_ms", 500))
@@ -241,6 +279,7 @@ def set_paper_type_c(page, sel: dict, paper: dict, timeouts: dict) -> bool:
     """type-C mtrl_cd only (PP카드). 평량/사이즈 select 없음."""
     ok = js_set(page, sel["mtrl_cd"], paper["mtrl_cd"])
     page.wait_for_timeout(timeouts.get("after_select_ms", 500))
+    wait_mtrl_name_synced(page, sel["mtrl_cd"])
     return ok
 
 
@@ -251,6 +290,7 @@ def set_paper_type_d(page, sel: dict, paper: dict, timeouts: dict) -> bool:
     if not js_set(page, sel_a, paper["paper_value"]):
         return False
     page.wait_for_timeout(timeouts.get("after_select_ms", 500))
+    wait_mtrl_name_synced(page, sel_a)
     js_set(page, sel_b, paper["weight_value"])
     page.wait_for_timeout(timeouts.get("after_select_ms", 500))
     return True
@@ -290,20 +330,8 @@ def yield_items_for_paper(
 
 
 def build_item(page, t: dict, paper: dict, price: int, sel: dict, page_type: str) -> RawItem:
-    """현재 DOM 상태로 RawItem 생성."""
+    """현재 DOM 상태로 RawItem 생성. options 비움, match_as 미설정 — raw 원칙 엄수."""
     dom = read_dom_state(page, sel, page_type)
-
-    options = {
-        "config_paper_name_out": paper.get("paper_name_out"),
-        "config_color_name": None,  # 호출 측에서 안 채움 (DOM color text 가 정답)
-        "page_type": page_type,
-    }
-    # 추가 추적 필드
-    for k in ("mtrl_cd", "mtrl_cdw", "coating_select_value",
-              "paper_value", "weight_value", "actual_weight_g", "note"):
-        if k in paper:
-            options[f"config_{k}"] = paper[k]
-
     return RawItem(
         product=t["product_name"],
         category=t.get("category", t["product_name"]),
@@ -317,6 +345,5 @@ def build_item(page, t: dict, paper: dict, price: int, sel: dict, page_type: str
         price_vat_included=False,  # est_scroll_ord_am 은 공급가액 (VAT 제외)
         url=t["url"],
         url_ok=True,
-        options=options,
-        match_as=paper.get("match_as"),
+        options={},
     )
