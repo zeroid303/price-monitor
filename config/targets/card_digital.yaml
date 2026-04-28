@@ -2407,3 +2407,62 @@ dtpia:
     paper_value: RSP
     weight_value: '300'
     paper_name_out: 션샤인 300g
+swadpia:
+- category: 디지털명함
+  product_name: 디지털명함
+  url: https://www.swadpia.co.kr/goods/goods_view/COD1000/GOD1001
+  page_type: type_code_pair
+  size_value: N0100
+  qtys:
+  - 100
+  - 200
+  - 500
+  - 1000
+  color_modes:
+  - value: DPD10
+    name: 양면8도(컬러)
+  - value: DPD20
+    name: 단면4도(컬러)
+  papers:
+  - paper_type: ARE
+    paper_code: ARE230W00
+    paper_name_out: 아르떼 울트라화이트 230g
+  - paper_type: RDV
+    paper_code: RDV190N00
+    paper_name_out: 랑데뷰 내츄럴 190g
+  - paper_type: RDV
+    paper_code: RDV240N00
+    paper_name_out: 랑데뷰 내츄럴 240g
+  - paper_type: VNV
+    paper_code: VNV227SW0
+    paper_name_out: 반누보 스노우화이트 227g
+  - paper_type: BLA
+    paper_code: BLA300W01
+    paper_name_out: 블랑 순백색 300g
+  - paper_type: CFT
+    paper_code: CFT25000N
+    paper_name_out: 크라프트 뉴크라프트보드 250g
+  - paper_type: OLM
+    paper_code: OLM220BA1
+    paper_name_out: 올드밀 비안코 220g
+  - paper_type: CND
+    paper_code: CND200OW0
+    paper_name_out: 켄도 화이트 200g
+  - paper_type: KYC
+    paper_code: KYC250GD0
+    paper_name_out: 키칼라 아이스골드 250g
+  - paper_type: SLD
+    paper_code: SLD220W00
+    paper_name_out: 스코트랜드 백색(스노우) 220g
+  - paper_type: STD
+    paper_code: STD240SV0
+    paper_name_out: 스타드림 실버 240g
+  - paper_type: STD
+    paper_code: STD240QZ0
+    paper_name_out: 스타드림 쿼츠 240g
+  - paper_type: MGO
+    paper_code: MGO300W01
+    paper_name_out: 매직콤마 백색 300g
+  - paper_type: ILN
+    paper_code: ILN220W01
+    paper_name_out: 아인스린넨 슈퍼화이트 220g

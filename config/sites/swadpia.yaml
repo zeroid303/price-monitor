@@ -1,0 +1,66 @@
+# 성원애드피아(www.swadpia.co.kr) 사이트 기술 상수.
+
+name: "성원애드피아"
+base_url: "https://www.swadpia.co.kr"
+tech: "playwright"
+vat_included: false        # tr.estimate_supply_amt td.price 에서 공급가만 추출
+locale: "ko-KR"
+
+browser:
+  headless: true
+  viewport:
+    width: 1280
+    height: 900
+
+block_patterns:
+  - "**/google-analytics.com/**"
+  - "**/googletagmanager.com/**"
+  - "**/facebook.net/**"
+  - "**/facebook.com/tr/**"
+  - "**/doubleclick.net/**"
+  - "**/criteo.net/**"
+  - "**/criteo.com/**"
+  - "**/analytics.tiktok.com/**"
+
+# 오프셋 명함 — CNC1000~CNC6000
+# 페이지 구조: paper_code select + coating radio + paper_size/print_color_type/paper_qty_select select
+card_offset:
+  selectors:
+    paper_code:        "select[name=paper_code]"
+    paper_size:        "select[name=paper_size]"
+    color_mode:        "select[name=print_color_type]"
+    qty:               "select[name=paper_qty]"           # 오프셋 페이지는 paper_qty 가 사용자 select
+    coating_gloss:     "input[type=radio][name=paper_gloss]"    # 무광/유광
+    coating_gloss2:    "input[type=radio][name=paper_gloss2]"   # 무광/코팅없음
+    price_supply:      "tr.estimate_supply_amt td.price"        # 공급가 (₩X,XXX 텍스트)
+  timeouts:
+    page_goto_ms: 30000
+    after_goto_ms: 2500
+    after_select_ms: 600
+    after_qty_ms: 400
+    after_price_trigger_ms: 700
+    retry_price_ms: 1500
+  low_price_guard:
+    floor_abs: 500
+    per_qty_multiplier: 3
+
+# 디지털 명함 — COD1000
+# 페이지 구조: paper_type select + paper_code select (동적) + size/color/qty select. coating 없음.
+card_digital:
+  selectors:
+    paper_type:        "select[name=paper_type]"
+    paper_code:        "select[name=paper_code]"
+    paper_size:        "select[name=paper_size]"
+    color_mode:        "select[name=print_color_type]"
+    qty:               "select[name=paper_qty_select]"
+    price_supply:      "tr.estimate_supply_amt td.price"
+  timeouts:
+    page_goto_ms: 30000
+    after_goto_ms: 2500
+    after_select_ms: 600
+    after_qty_ms: 400
+    after_price_trigger_ms: 700
+    retry_price_ms: 1500
+  low_price_guard:
+    floor_abs: 500
+    per_qty_multiplier: 3

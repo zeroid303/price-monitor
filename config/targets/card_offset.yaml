@@ -3465,3 +3465,159 @@ dtpia:
     paper_name_out: 메탈펄골드 테
   - mtrl_cd: RPP016
     paper_name_out: 메탈펄실버 테
+swadpia:
+- category: 일반지명함
+  product_name: 일반지명함
+  url: https://www.swadpia.co.kr/goods/goods_view/CNC1000/GNC1001
+  page_type: select_radio
+  size_value: N0100
+  qtys: &id002
+  - 100
+  - 200
+  - 500
+  - 1000
+  color_modes: &id003
+  - value: CTN40
+    name: 양면칼라
+  - value: CTN10
+    name: 단면칼라
+  coatings: &id004
+  - name: 코팅없음
+    radio_name: paper_gloss2
+    value: PAG99
+  - name: 무광코팅
+    radio_name: paper_gloss
+    value: PAG10
+  - name: 유광코팅
+    radio_name: paper_gloss
+    value: PAG20
+  papers:
+  - paper_code: SNW250W00
+    paper_name_out: 스노우지 백색 250g
+  - paper_code: SNW300W00
+    paper_name_out: 스노우지 백색 300g
+- category: 고급지명함
+  product_name: 고급지명함
+  url: https://www.swadpia.co.kr/goods/goods_view/CNC2000/GNC2001
+  page_type: select_radio
+  size_value: N0100
+  qtys: *id002
+  color_modes: *id003
+  coatings: *id004
+  papers:
+  - paper_code: VNV186W00
+    paper_name_out: 반누보 화이트 204g
+  - paper_code: VNV227SW0
+    paper_name_out: 반누보 스노우화이트 227g
+  - paper_code: VNV320W00
+    paper_name_out: 반누보 화이트 320g
+  - paper_code: ARM230W00
+    paper_name_out: 아르미 울트라화이트 230g
+  - paper_code: ARM310W00
+    paper_name_out: 아르미 울트라화이트 310g
+  - paper_code: ETM350W00
+    paper_name_out: 엑스트라매트 백색 350g
+  - paper_code: BAS233W00
+    paper_name_out: 베이직 백색 233g
+  - paper_code: STD240QZ0
+    paper_name_out: 스타드림 쿼츠 240g
+  - paper_code: RNC216SW0
+    paper_name_out: 린넨커버(휘라레) 솔라화이트 216g
+  - paper_code: TDR300W00
+    paper_name_out: 띤또레또 백색 300g
+  - paper_code: CST235PW0
+    paper_name_out: 크리스탈 펄화이트(팝셋) 235g
+  - paper_code: RDV310N00
+    paper_name_out: 랑데뷰 내츄럴 310g
+  - paper_code: MSM209W00
+    paper_name_out: 매쉬맬로우 화이트 209g
+  - paper_code: DNT250GP0
+    paper_name_out: 다이니티 골드펄 250g
+  - paper_code: EGS400WH1
+    paper_name_out: 에그쉘 엑스트라화이트 400g
+  - paper_code: BKN380BL0
+    paper_name_out: 매트블랙 380g
+  - paper_code: UPP250FB0
+    paper_name_out: 유포지 FEB 250μ
+  - paper_code: CFT30000N
+    paper_name_out: 뉴크라프트보드 300g
+  - paper_code: VVT359W00
+    paper_name_out: 벨벳 화이트 359g
+  - paper_code: DUO400W01
+    paper_name_out: 듀오 화이트 400g
+  - paper_code: STA250BP0
+    paper_name_out: 블루펄스타(글라시 실버블루) 250g
+  - paper_code: ETP370W00
+    paper_name_out: 엑스트라폴라 백색 370g
+  - paper_code: KYC250GD0
+    paper_name_out: 키칼라 아이스골드 250g
+- category: 카드명함
+  product_name: 카드명함
+  url: https://www.swadpia.co.kr/goods/goods_view/CNC3000/GNC3001
+  page_type: select_radio
+  size_value: N0400
+  qtys: *id002
+  color_modes: *id003
+  coatings: *id004
+  papers:
+  - paper_code: LUX250W0U
+    paper_name_out: Luxury 화이트 250μ
+  - paper_code: LUX200SVU
+    paper_name_out: Luxury 실버 200μ
+  - paper_code: LUX200GDU
+    paper_name_out: Luxury 골드 200μ
+- category: 하이브리드명함
+  product_name: 하이브리드명함
+  url: https://www.swadpia.co.kr/goods/goods_view/CNC4000/GNC4001
+  page_type: select_radio
+  size_value: N0100
+  qtys: *id002
+  color_modes: *id003
+  coatings: *id004
+  papers:
+  - paper_code: ART300W00
+    paper_name_out: 아트지 백색 300g
+- category: 투명하이브리드명함
+  product_name: 투명하이브리드명함
+  url: https://www.swadpia.co.kr/goods/goods_view/CNC5000/GNC5001
+  page_type: select_radio
+  size_value: N0300
+  qtys: *id002
+  color_modes:
+  - value: CTN10
+    name: 단면칼라
+  coatings: *id004
+  papers:
+  - paper_code: PET300TRU
+    paper_name_out: PET(투명) 300μ
+- category: 디지털박에폭시명함
+  product_name: 디지털박에폭시명함
+  url: https://www.swadpia.co.kr/goods/goods_view/CNC6000/GNC6001
+  page_type: select_radio
+  size_value: N0100
+  qtys: *id002
+  color_modes: *id003
+  coatings: *id004
+  papers:
+  - paper_code: ARM230W00
+    paper_name_out: 아르미 울트라화이트 230g
+  - paper_code: ARM310W00
+    paper_name_out: 아르미 울트라화이트 310g
+  - paper_code: AQS256W00
+    paper_name_out: 아쿠아사틴256g
+  - paper_code: INV350MT0
+    paper_name_out: 인버코트 350g
+  - paper_code: SNW300W00
+    paper_name_out: 스노우지 백색 300g(무광코팅)
+  - paper_code: ETM350W00
+    paper_name_out: 엑스트라매트 백색 350g
+  - paper_code: VNV186W00
+    paper_name_out: 반누보 화이트 204g
+  - paper_code: VNV233W00
+    paper_name_out: 반누보 화이트 250g
+  - paper_code: VNV227SW0
+    paper_name_out: 반누보 스노우화이트 227g
+  - paper_code: VNV320W00
+    paper_name_out: 반누보 화이트 320g
+  - paper_code: RDV310N00
+    paper_name_out: 랑데뷰 내츄럴 310g
