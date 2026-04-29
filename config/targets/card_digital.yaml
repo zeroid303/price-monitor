@@ -2466,3 +2466,74 @@ swadpia:
   - paper_type: ILN
     paper_code: ILN220W01
     paper_name_out: 아인스린넨 슈퍼화이트 220g
+wowpress:
+- category: 디지털AP명함
+  product_name: 디지털AP명함
+  url: https://wowpress.co.kr/ordr/prod/dets?ProdNo=40064
+  prod_no: '40064'
+  size_value: '5458'
+  qtys:
+  - 100
+  - 200
+  - 500
+  - 1000
+  color_modes:
+  - value: '255'
+    name: 단면 칼라4도
+  - value: '256'
+    name: 양면 칼라8도
+  papers:
+  - paper_no: 20072
+  - paper_no: 25301
+  - paper_no: 20238
+  - paper_no: 20432
+  - paper_no: 20440
+  - paper_no: 20448
+  - paper_no: 20444
+  - paper_no: 20436
+  - paper_no: 20837
+  - paper_no: 20146
+  - paper_no: 21123
+  - paper_no: 21110
+  - paper_no: 20784
+  - paper_no: 20932
+  - paper_no: 20455
+  - paper_no: 20467
+  - paper_no: 20810
+  - paper_no: 20842
+  - paper_no: 20426
+  - paper_no: 20855
+  - paper_no: 20364
+  - paper_no: 20355
+  - paper_no: 20732
+  - paper_no: 20406
+  - paper_no: 20786
+  - paper_no: 20421
+  - paper_no: 20175
+  - paper_no: 20181
+  - paper_no: 20840
+  - paper_no: 20453
+  - paper_no: 20062
+  - paper_no: 20123
+- category: 디지털인디고명함
+  product_name: 디지털인디고명함
+  url: https://wowpress.co.kr/ordr/prod/dets?ProdNo=40061
+  prod_no: '40061'
+  size_value: '5458'
+  qtys:
+  - 100
+  - 200
+  - 500
+  - 1000
+  color_modes:
+  - value: '255'
+    name: 단면 칼라4도
+  - value: '256'
+    name: 양면 칼라8도
+  papers:
+  - paper_no: 20950
+  - paper_no: 20806
+  - paper_no: 20719
+  - paper_no: 20672
+  - paper_no: 20846
+  - paper_no: 20677

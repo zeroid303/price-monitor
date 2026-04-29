@@ -1,0 +1,73 @@
+# 와우프레스(wowpress.co.kr) 사이트 기술 상수.
+
+name: "와우프레스"
+base_url: "https://wowpress.co.kr"
+tech: "playwright"
+vat_included: false        # raw 에 공급가(VAT 제외) 만 기록 — od_00_totalcost - od_00_taxcost 로 계산
+locale: "ko-KR"
+
+browser:
+  headless: true
+  viewport:
+    width: 1280
+    height: 900
+
+block_patterns:
+  - "**/google-analytics.com/**"
+  - "**/googletagmanager.com/**"
+  - "**/facebook.net/**"
+  - "**/facebook.com/tr/**"
+  - "**/doubleclick.net/**"
+  - "**/criteo.net/**"
+  - "**/criteo.com/**"
+  - "**/analytics.tiktok.com/**"
+
+# 명함 페이지 공통 구조 (offset/digital 동일):
+#   pdata_00_sizeno · pdata_00_colorno · spdata_00_paperno3/4(/5) · spdata_00_ordqty
+#   가격: od_00_prscost(공급가) / od_00_taxcost(부가세) / od_00_totalcost(합계)
+#   - 공급가 = totalcost - taxcost (addon 항목 변동에 안전)
+card_offset:
+  selectors:
+    size:        "pdata_00_sizeno"
+    color_mode:  "pdata_00_colorno"
+    paper_no3:   "spdata_00_paperno3"
+    paper_no4:   "spdata_00_paperno4"
+    paper_no5:   "spdata_00_paperno5"
+    qty:         "spdata_00_ordqty"
+    paper_list:  "paperList"          # leaf paper_no → 부모 체인 추출용 JSON
+    price_total: "od_00_totalcost"
+    price_tax:   "od_00_taxcost"
+    price_supply: "od_00_prscost"     # 참조용 (필요시 cross-check)
+  timeouts:
+    page_goto_ms: 30000
+    after_goto_ms: 2500
+    after_select_ms: 800
+    after_paper_ms: 800
+    after_qty_ms: 1200
+    retry_price_ms: 1500
+  low_price_guard:
+    floor_abs: 500
+    per_qty_multiplier: 3
+
+card_digital:
+  selectors:
+    size:        "pdata_00_sizeno"
+    color_mode:  "pdata_00_colorno"
+    paper_no3:   "spdata_00_paperno3"
+    paper_no4:   "spdata_00_paperno4"
+    paper_no5:   "spdata_00_paperno5"
+    qty:         "spdata_00_ordqty"
+    paper_list:  "paperList"
+    price_total: "od_00_totalcost"
+    price_tax:   "od_00_taxcost"
+    price_supply: "od_00_prscost"
+  timeouts:
+    page_goto_ms: 30000
+    after_goto_ms: 2500
+    after_select_ms: 800
+    after_paper_ms: 800
+    after_qty_ms: 1200
+    retry_price_ms: 1500
+  low_price_guard:
+    floor_abs: 500
+    per_qty_multiplier: 3

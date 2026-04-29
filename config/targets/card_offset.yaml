@@ -3621,3 +3621,197 @@ swadpia:
     paper_name_out: 반누보 화이트 320g
   - paper_code: RDV310N00
     paper_name_out: 랑데뷰 내츄럴 310g
+wowpress:
+- category: 일반명함
+  product_name: 일반명함
+  url: https://wowpress.co.kr/ordr/prod/dets?ProdNo=40073
+  prod_no: '40073'
+  size_value: '5458'
+  qtys:
+  - 500
+  - 1000
+  color_modes:
+  - value: '255'
+    name: 단면 칼라4도
+  - value: '256'
+    name: 양면 칼라8도
+  papers:
+  - paper_no: 22907
+  - paper_no: 22908
+  - paper_no: 22904
+- category: 특수지명함
+  product_name: 특수지명함
+  url: https://wowpress.co.kr/ordr/prod/dets?ProdNo=40070
+  prod_no: '40070'
+  size_value: '5458'
+  qtys:
+  - 100
+  - 200
+  - 1000
+  color_modes:
+  - value: '255'
+    name: 단면 칼라4도
+  - value: '256'
+    name: 양면 칼라8도
+  papers:
+  - paper_no: 20364
+  - paper_no: 20844
+  - paper_no: 20855
+  - paper_no: 20837
+  - paper_no: 20723
+  - paper_no: 20932
+  - paper_no: 20432
+  - paper_no: 20448
+  - paper_no: 20444
+  - paper_no: 20436
+  - paper_no: 20687
+  - paper_no: 20784
+  - paper_no: 20800
+  - paper_no: 20383
+  - paper_no: 20181
+  - paper_no: 20426
+- category: 고평량명함
+  product_name: 고평량명함
+  url: https://wowpress.co.kr/ordr/prod/dets?ProdNo=40066
+  prod_no: '40066'
+  size_value: '5458'
+  qtys:
+  - 100
+  - 200
+  - 500
+  - 1000
+  color_modes:
+  - value: '255'
+    name: 단면 칼라4도
+  - value: '256'
+    name: 양면 칼라8도
+  papers:
+  - paper_no: 21116
+  - paper_no: 21119
+  - paper_no: 20705
+  - paper_no: 20707
+  - paper_no: 20075
+  - paper_no: 22909
+  - paper_no: 22911
+  - paper_no: 22905
+  - paper_no: 22906
+  - paper_no: 20432
+  - paper_no: 20440
+  - paper_no: 20787
+  - paper_no: 20696
+  - paper_no: 20673
+  - paper_no: 20678
+- category: 고평량에코명함
+  product_name: 고평량에코명함
+  url: https://wowpress.co.kr/ordr/prod/dets?ProdNo=40446
+  prod_no: '40446'
+  size_value: '5458'
+  qtys:
+  - 100
+  - 200
+  - 500
+  - 1000
+  color_modes:
+  - value: '255'
+    name: 단면 칼라4도
+  - value: '256'
+    name: 양면 칼라8도
+  papers:
+  - paper_no: 25051
+  - paper_no: 25053
+  - paper_no: 25059
+  - paper_no: 25057
+  - paper_no: 25061
+- category: 카드명함
+  product_name: 카드명함
+  url: https://wowpress.co.kr/ordr/prod/dets?ProdNo=40067
+  prod_no: '40067'
+  size_value: '5461'
+  qtys:
+  - 200
+  - 1000
+  color_modes:
+  - value: '255'
+    name: 단면 칼라4도
+  - value: '256'
+    name: 양면 칼라8도
+  - value: '301'
+    name: 단면 1도
+  - value: '1302'
+    name: 양면 2도
+  papers:
+  - paper_no: 21145
+  - paper_no: 21129
+  - paper_no: 21135
+  - paper_no: 21139
+  - paper_no: 21141
+  - paper_no: 21137
+  - paper_no: 21133
+  - paper_no: 21163
+  - paper_no: 21165
+  - paper_no: 21164
+  - paper_no: 21161
+  - paper_no: 21162
+  - paper_no: 21166
+  - paper_no: 21168
+- category: 반투명명함
+  product_name: 반투명명함
+  url: https://wowpress.co.kr/ordr/prod/dets?ProdNo=40068
+  prod_no: '40068'
+  size_value: '5458'
+  qtys:
+  - 100
+  - 200
+  - 500
+  - 1000
+  color_modes:
+  - value: '255'
+    name: 단면 칼라4도
+  papers:
+  - paper_no: 21127
+- category: 색지명함
+  product_name: 색지명함
+  url: https://wowpress.co.kr/ordr/prod/dets?ProdNo=40069
+  prod_no: '40069'
+  size_value: '5458'
+  qtys:
+  - 100
+  - 200
+  - 500
+  - 1000
+  color_modes:
+  - value: '253'
+    name: 단면 백색
+  - value: '254'
+    name: 양면 백색
+  - value: '1355'
+    name: 단면 칼라+백색
+  - value: '1356'
+    name: 양면 칼라+백색
+  papers:
+  - paper_no: 20480
+  - paper_no: 20483
+  - paper_no: 20486
+  - paper_no: 20489
+- category: 미니명함
+  product_name: 미니명함
+  url: https://wowpress.co.kr/ordr/prod/dets?ProdNo=40599
+  prod_no: '40599'
+  size_value: '10724'
+  qtys:
+  - 100
+  - 200
+  - 500
+  - 1000
+  color_modes:
+  - value: '255'
+    name: 단면 칼라4도
+  - value: '256'
+    name: 양면 칼라8도
+  papers:
+  - paper_no: 22909
+  - paper_no: 20705
+  - paper_no: 20707
+  - paper_no: 20075
+  - paper_no: 22911
+  - paper_no: 20423
