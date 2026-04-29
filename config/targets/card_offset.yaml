@@ -3815,3 +3815,100 @@ wowpress:
   - paper_no: 20075
   - paper_no: 22911
   - paper_no: 20423
+adsland:
+- category: 스페셜 특가 명함
+  product_name: 스페셜 특가 명함
+  url: https://www.adsland.com/shop/order.php?IC=IC00175
+  page_type: size_paper_dosu
+  size_value: 90×50
+  qtys:
+  - 200
+  - 1000
+  papers:
+  - paper_value: 아트지 90
+  dosus:
+  - value: 4/4
+    name: 양면8도
+  - value: 4/0
+    name: 단면4도
+- category: 일반지 명함
+  product_name: 일반지 명함(포카)
+  url: https://www.adsland.com/shop/order.php?IC=IC00001
+  page_type: size_paper_dosu
+  size_value: 90×50
+  qtys:
+  - 200
+  - 500
+  - 1000
+  papers:
+  - paper_value: 코팅
+  - paper_value: 유광코팅
+  - paper_value: 비코팅
+  - paper_value: 벨벳코팅
+  dosus:
+  - value: 4/4
+    name: 양면8도
+  - value: 4/0
+    name: 단면4도
+- category: 친환경수입지명함
+  product_name: 친환경수입지명함
+  url: https://www.adsland.com/shop/order.php?IC=IC00002
+  page_type: size_paper_dosu
+  size_value: 90×50
+  qtys:
+  - 100
+  - 200
+  - 1000
+  papers:
+  - paper_value: 반누보화이트
+  - paper_value: 랑데뷰
+  - paper_value: 린넨커버
+  - paper_value: 샤인스타
+  - paper_value: 스타드림 쿼츠
+  - paper_value: 스타드림 실버
+  - paper_value: 스타드림 골드
+  - paper_value: 스코틀랜드
+  - paper_value: 매쉬멜로우
+  - paper_value: 콩코르 컨셉
+  - paper_value: 크리스탈 펄
+  - paper_value: 그라시 아이스골드
+  - paper_value: 뉴크라프트보드
+  - paper_value: 유포지
+  - paper_value: 베스트매트
+  - paper_value: 아코팩
+  - paper_value: 인버코트
+  - paper_value: 아르떼 UW
+  - paper_value: 엑스트라 메트
+  dosus:
+  - value: 4/4
+    name: 양면8도
+  - value: 4/0
+    name: 단면4도
+- category: 567별색명함
+  product_name: 567별색명함
+  url: https://www.adsland.com/shop/order.php?IC=IC00091
+  page_type: size_paper_spot
+  size_value: 90×50
+  qtys:
+  - 200
+  - 1000
+  papers:
+  - paper_value: 반누보화이트
+  - paper_value: 랑데뷰
+  dosu_outs:
+  - value: '4'
+    name: 4도
+  - value: 4|C002+C001+C004
+    name: 4도+은별색+금별색+형광그린
+  - value: 4|C002+C001
+    name: 4도+은별색+금별색
+  - value: 4|C002+C004
+    name: 4도+은별색+형광그린
+  - value: 4|C001+C004
+    name: 4도+금별색+형광그린
+  - value: 4|C002
+    name: 4도+은별색
+  - value: 4|C001
+    name: 4도+금별색
+  - value: 4|C004
+    name: 4도+형광그린

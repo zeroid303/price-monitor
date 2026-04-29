@@ -2537,3 +2537,407 @@ wowpress:
   - paper_no: 20672
   - paper_no: 20846
   - paper_no: 20677
+adsland:
+- category: 디지털 일반명함
+  product_name: 디지털 일반명함
+  url: https://www.adsland.com/shop/order.php?IC=IC00144
+  size_value: 90x50
+  paper_sorts:
+  - 일반지
+  back_dosus:
+  - value: '147'
+    name: 뒷면 4도 (컬러)
+  - value: '150'
+    name: 뒷면 인쇄없음
+  coats:
+  - value: ''
+    name: 코팅없음
+  - value: 단면-무광-코팅
+    name: 단면(무광) 코팅
+  - value: 단면-유광-코팅
+    name: 단면(유광) 코팅
+  - value: 양면-무광-코팅
+    name: 양면(무광) 코팅
+  - value: 양면-유광-코팅
+    name: 양면(유광) 코팅
+  busu_targets:
+  - 96
+  - 192
+  - 504
+  - 1008
+- category: 고급명함
+  product_name: 고급명함
+  url: https://www.adsland.com/shop/order.php?IC=IC00145
+  size_value: 90x50
+  paper_sorts:
+  - 고급지
+  back_dosus:
+  - value: '149'
+    name: 뒷면 4도 (컬러)
+  - value: '151'
+    name: 뒷면 인쇄없음
+  coats:
+  - value: ''
+    name: 코팅없음
+  - value: 단면-무광-코팅
+    name: 단면(무광) 코팅
+  - value: 단면-유광-코팅
+    name: 단면(유광) 코팅
+  - value: 양면-무광-코팅
+    name: 양면(무광) 코팅
+  - value: 양면-유광-코팅
+    name: 양면(유광) 코팅
+  busu_targets:
+  - 96
+  - 192
+  - 504
+  - 1008
+- category: 백색인쇄 색지명함
+  product_name: 백색인쇄 색지명함
+  url: https://www.adsland.com/shop/order.php?IC=IC00146
+  size_value: 90x50
+  paper_sorts:
+  - 고급지
+  back_dosus:
+  - value: '153'
+    name: 뒷면 1도 (백색)
+  - value: '154'
+    name: 뒷면 인쇄없음
+  coats:
+  - value: ''
+    name: 코팅없음
+  - value: 단면-무광-코팅
+    name: 단면(무광) 코팅
+  - value: 단면-유광-코팅
+    name: 단면(유광) 코팅
+  - value: 양면-무광-코팅
+    name: 양면(무광) 코팅
+  - value: 양면-유광-코팅
+    name: 양면(유광) 코팅
+  busu_targets:
+  - 96
+  - 192
+  - 504
+  - 1008
+- category: 한지명함
+  product_name: 한지명함
+  url: https://www.adsland.com/shop/order.php?IC=IC00147
+  size_value: 90x50
+  paper_sorts:
+  - 고급지
+  back_dosus:
+  - value: '156'
+    name: 뒷면 4도 (컬러)
+  - value: '157'
+    name: 뒷면 인쇄없음
+  coats:
+  - value: ''
+    name: 코팅없음
+  - value: 단면-무광-코팅
+    name: 단면(무광) 코팅
+  - value: 단면-유광-코팅
+    name: 단면(유광) 코팅
+  - value: 양면-무광-코팅
+    name: 양면(무광) 코팅
+  - value: 양면-유광-코팅
+    name: 양면(유광) 코팅
+  busu_targets:
+  - 96
+  - 192
+  - 504
+  - 1008
+- category: 펄지명함
+  product_name: 펄지명함
+  url: https://www.adsland.com/shop/order.php?IC=IC00148
+  size_value: 90x50
+  paper_sorts:
+  - 펄지
+  back_dosus:
+  - value: '159'
+    name: 뒷면 4도 (컬러)
+  - value: '160'
+    name: 뒷면 인쇄없음
+  coats:
+  - value: ''
+    name: 코팅없음
+  - value: 단면-무광-코팅
+    name: 단면(무광) 코팅
+  - value: 단면-유광-코팅
+    name: 단면(유광) 코팅
+  - value: 양면-무광-코팅
+    name: 양면(무광) 코팅
+  - value: 양면-유광-코팅
+    name: 양면(유광) 코팅
+  busu_targets:
+  - 96
+  - 192
+  - 504
+  - 1008
+- category: 두꺼운명함
+  product_name: 두꺼운명함
+  url: https://www.adsland.com/shop/order.php?IC=IC00149
+  size_value: 90x50
+  paper_sorts:
+  - 고급지
+  - 친환경 재생지
+  back_dosus:
+  - value: '162'
+    name: 뒷면 4도 (컬러)
+  - value: '163'
+    name: 뒷면 인쇄없음
+  coats:
+  - value: ''
+    name: 코팅없음
+  - value: 단면-무광-코팅
+    name: 단면(무광) 코팅
+  - value: 단면-유광-코팅
+    name: 단면(유광) 코팅
+  - value: 양면-무광-코팅
+    name: 양면(무광) 코팅
+  - value: 양면-유광-코팅
+    name: 양면(유광) 코팅
+  busu_targets:
+  - 96
+  - 192
+  - 504
+  - 1008
+- category: 모양커팅 일반명함
+  product_name: 모양커팅 일반명함
+  url: https://www.adsland.com/shop/order.php?IC=IC00150
+  size_value: 90x50
+  paper_sorts:
+  - 일반지
+  back_dosus:
+  - value: '165'
+    name: 뒷면 4도 (컬러)
+  - value: '166'
+    name: 뒷면 인쇄없음
+  coats:
+  - value: ''
+    name: 코팅없음
+  - value: 단면-무광-코팅
+    name: 단면(무광) 코팅
+  - value: 단면-유광-코팅
+    name: 단면(유광) 코팅
+  - value: 양면-무광-코팅
+    name: 양면(무광) 코팅
+  - value: 양면-유광-코팅
+    name: 양면(유광) 코팅
+  busu_targets:
+  - 96
+  - 192
+  - 504
+  - 1008
+  sc_blade:
+    sweep:
+    - value: A
+      name: A형-원 사각같이 단순
+    - value: B
+      name: B형-A형이 변형된 복합
+    - value: C
+      name: C형-사물 캐릭터같이 복잡
+- category: 모양커팅 고급명함
+  product_name: 모양커팅 고급명함
+  url: https://www.adsland.com/shop/order.php?IC=IC00151
+  size_value: 90x50
+  paper_sorts:
+  - 고급지
+  back_dosus:
+  - value: '168'
+    name: 뒷면 4도 (컬러)
+  - value: '169'
+    name: 뒷면 인쇄없음
+  coats:
+  - value: ''
+    name: 코팅없음
+  - value: 단면-무광-코팅
+    name: 단면(무광) 코팅
+  - value: 단면-유광-코팅
+    name: 단면(유광) 코팅
+  - value: 양면-무광-코팅
+    name: 양면(무광) 코팅
+  - value: 양면-유광-코팅
+    name: 양면(유광) 코팅
+  busu_targets:
+  - 96
+  - 192
+  - 504
+  - 1008
+  sc_blade:
+    sweep:
+    - value: A
+      name: A형-원 사각같이 단순
+    - value: B
+      name: B형-A형이 변형된 복합
+    - value: C
+      name: C형-사물 캐릭터같이 복잡
+- category: 모양커팅 백색인쇄 색지명함
+  product_name: 모양커팅 백색인쇄 색지명함
+  url: https://www.adsland.com/shop/order.php?IC=IC00152
+  size_value: 90x50
+  paper_sorts:
+  - 고급지
+  back_dosus:
+  - value: '171'
+    name: 뒷면 1도 (백색)
+  - value: '172'
+    name: 뒷면 인쇄없음
+  coats:
+  - value: ''
+    name: 코팅없음
+  - value: 단면-무광-코팅
+    name: 단면(무광) 코팅
+  - value: 단면-유광-코팅
+    name: 단면(유광) 코팅
+  - value: 양면-무광-코팅
+    name: 양면(무광) 코팅
+  - value: 양면-유광-코팅
+    name: 양면(유광) 코팅
+  busu_targets:
+  - 96
+  - 192
+  - 504
+  - 1008
+  sc_blade:
+    sweep:
+    - value: A
+      name: A형-원 사각같이 단순
+    - value: B
+      name: B형-A형이 변형된 복합
+    - value: C
+      name: C형-사물 캐릭터같이 복잡
+- category: 모양커팅 펄지명함
+  product_name: 모양커팅 펄지명함
+  url: https://www.adsland.com/shop/order.php?IC=IC00154
+  size_value: 90x50
+  paper_sorts:
+  - 펄지
+  back_dosus:
+  - value: '177'
+    name: 뒷면 4도 (컬러)
+  - value: '178'
+    name: 뒷면 인쇄없음
+  coats:
+  - value: ''
+    name: 코팅없음
+  - value: 단면-무광-코팅
+    name: 단면(무광) 코팅
+  - value: 단면-유광-코팅
+    name: 단면(유광) 코팅
+  - value: 양면-무광-코팅
+    name: 양면(무광) 코팅
+  - value: 양면-유광-코팅
+    name: 양면(유광) 코팅
+  busu_targets:
+  - 96
+  - 192
+  - 504
+  - 1008
+  sc_blade:
+    sweep:
+    - value: A
+      name: A형-원 사각같이 단순
+    - value: B
+      name: B형-A형이 변형된 복합
+    - value: C
+      name: C형-사물 캐릭터같이 복잡
+- category: 모양커팅 두꺼운명함
+  product_name: 모양커팅 두꺼운명함
+  url: https://www.adsland.com/shop/order.php?IC=IC00155
+  size_value: 90x50
+  paper_sorts:
+  - 고급지
+  - 친환경 재생지
+  back_dosus:
+  - value: '180'
+    name: 뒷면 4도 (컬러)
+  - value: '181'
+    name: 뒷면 인쇄없음
+  coats:
+  - value: ''
+    name: 코팅없음
+  - value: 단면-무광-코팅
+    name: 단면(무광) 코팅
+  - value: 단면-유광-코팅
+    name: 단면(유광) 코팅
+  - value: 양면-무광-코팅
+    name: 양면(무광) 코팅
+  - value: 양면-유광-코팅
+    name: 양면(유광) 코팅
+  busu_targets:
+  - 96
+  - 192
+  - 504
+  - 1008
+  sc_blade:
+    sweep:
+    - value: A
+      name: A형-원 사각같이 단순
+    - value: B
+      name: B형-A형이 변형된 복합
+    - value: C
+      name: C형-사물 캐릭터같이 복잡
+- category: 소량 명함
+  product_name: 소량 명함
+  url: https://www.adsland.com/shop/order.php?IC=IC00107
+  size_value: 90x50
+  paper_sorts:
+  - 일반지
+  - 고급지
+  - 펄지
+  back_dosus:
+  - value: '20'
+    name: 뒷면 4도 (컬러)
+  - value: '21'
+    name: 뒷면 인쇄없음
+  coats:
+  - value: ''
+    name: 코팅없음
+  - value: 단면-무광-코팅
+    name: 단면(무광) 코팅
+  - value: 단면-유광-코팅
+    name: 단면(유광) 코팅
+  - value: 양면-무광-코팅
+    name: 양면(무광) 코팅
+  - value: 양면-유광-코팅
+    name: 양면(유광) 코팅
+  - value: 양면-(글래스)홀로그램-코팅
+    name: 양면(글래스)홀로그램
+  - value: 양면-(모래별)홀로그램-코팅
+    name: 양면(모래별)홀로그램
+  - value: 양면-(무지개)홀로그램-코팅
+    name: 양면(무지개)홀로그램
+  busu_targets:
+  - 96
+  - 192
+  - 504
+  - 1008
+  sc_blade:
+    fix: ''
+- category: 에코 명함
+  product_name: 에코 명함
+  url: https://www.adsland.com/shop/order.php?IC=IC00131
+  size_value: 90x50
+  paper_sorts:
+  - 친환경 재생지
+  back_dosus:
+  - value: '99'
+    name: 뒷면 4도 (컬러)
+  - value: '100'
+    name: 뒷면 인쇄없음
+  coats:
+  - value: ''
+    name: 코팅없음
+  - value: 단면-무광-코팅
+    name: 단면(무광) 코팅
+  - value: 단면-유광-코팅
+    name: 단면(유광) 코팅
+  - value: 양면-무광-코팅
+    name: 양면(무광) 코팅
+  - value: 양면-유광-코팅
+    name: 양면(유광) 코팅
+  busu_targets:
+  - 96
+  - 192
+  - 504
+  - 1008
