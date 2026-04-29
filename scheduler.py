@@ -29,19 +29,20 @@ logger = logging.getLogger("scheduler")
 
 
 # ── 카테고리별 설정 ──
-# crawlers: (company_id, module_path, crawl_fn, save_fn)
+# 두 종류:
+#  (a) "engine": 신규 엔진 사용 — sites 각각에 대해 engine.runner.run(site, sub_cat) 호출
+#  (b) "legacy": 기존 크롤러 직접 호출 (점차 (a) 로 이관 중)
+#
+# 카드(card) 는 (a) 로 이관 완료 — card_offset / card_digital 두 sub-category 를
+# 5개 사이트(printcity, dtpia, swadpia, wowpress, adsland) 에 대해 실행.
 CATEGORIES = {
     "card": {
-        "rule_path": os.path.join(CONFIG_DIR, "card_mapping_rule.json"),
-        "crawlers": [
-            ("printcity", "crawlers.PrintcityCardCrawler", "crawl_all", "save"),
-            ("bizhows",   "crawlers.BizhowsCardCrawler",   "crawl_all", "save"),
-            ("swadpia",   "crawlers.SwadpiaCardCrawler",   "crawl_all", "save"),
-            ("wowpress",  "crawlers.WowpressCardCrawler",  "crawl_all", "save"),
-            ("dtpia",     "crawlers.DtpiaCardCrawler",     "crawl_all", "save"),
-        ],
+        "type": "engine",
+        "sites": ["printcity", "dtpia", "swadpia", "wowpress", "adsland"],
+        "sub_categories": ["card_offset", "card_digital"],
     },
     "sticker": {
+        "type": "legacy",
         "rule_path": os.path.join(CONFIG_DIR, "sticker_mapping_rule.json"),
         "crawlers": [
             ("printcity", "crawlers.PrintcityStickerCrawler", "crawl_all", "save"),
@@ -52,6 +53,7 @@ CATEGORIES = {
         ],
     },
     "envelope": {
+        "type": "legacy",
         "rule_path": os.path.join(CONFIG_DIR, "envelope_mapping_rule.json"),
         "crawlers": [
             ("printcity", "crawlers.PrintcityEnvelopeCrawler", "crawl_all", "save"),
@@ -102,20 +104,33 @@ def normalize_file(company: str, category: str, rule_path: str):
 
 
 # ── 카테고리 실행 ──
-def run_category(category: str) -> list[dict]:
-    if category not in CATEGORIES:
-        logger.error(f"지원하지 않는 카테고리: {category}. 지원: {list(CATEGORIES)}")
-        return []
+def _run_engine_category(category: str, cat_cfg: dict) -> None:
+    """신규 엔진(engine.runner) 기반 실행. 각 site × sub_category 마다 runner.run() 호출.
 
-    cat = CATEGORIES[category]
-    rule_path = cat["rule_path"]
-    os.makedirs(OUTPUT_DIR, exist_ok=True)
+    runner 가 자체적으로 raw_now/past 회전 + normalize + store.write 처리하므로
+    scheduler 는 단지 호출만.
+    """
+    from engine.runner import run as engine_run
 
-    logger.info("=" * 60)
-    logger.info(f"[{category}] 파이프라인 시작")
-    logger.info("=" * 60)
+    sites = cat_cfg["sites"]
+    sub_cats = cat_cfg["sub_categories"]
+    for sub in sub_cats:
+        for site in sites:
+            logger.info(f"\n▶ {site}/{sub}")
+            try:
+                result = engine_run(site, sub)
+                logger.info(f"  완료: {result}")
+            except FileNotFoundError as e:
+                # site config / targets 없는 경우 — 그 site 는 이 sub_category 미지원
+                logger.warning(f"  스킵 ({site}/{sub}): {e}")
+            except Exception as e:
+                logger.error(f"  실패 ({site}/{sub}): {e}")
 
-    for company, module_path, crawl_fn_name, save_fn_name in cat["crawlers"]:
+
+def _run_legacy_category(category: str, cat_cfg: dict) -> None:
+    """기존 크롤러(crawlers/*) 기반 실행. 점차 engine 으로 이관 중."""
+    rule_path = cat_cfg["rule_path"]
+    for company, module_path, crawl_fn_name, save_fn_name in cat_cfg["crawlers"]:
         logger.info(f"\n▶ {company}")
 
         # 1. 로테이션 (raw, normalize 양쪽)
@@ -138,7 +153,25 @@ def run_category(category: str) -> list[dict]:
             logger.error(f"  정규화 실패 ({company}): {e}")
             continue
 
-    # 4. URL 생존 체크 (HEAD) — 타입 A(URL 자체 404) 감지
+
+def run_category(category: str) -> list[dict]:
+    if category not in CATEGORIES:
+        logger.error(f"지원하지 않는 카테고리: {category}. 지원: {list(CATEGORIES)}")
+        return []
+
+    cat = CATEGORIES[category]
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
+
+    logger.info("=" * 60)
+    logger.info(f"[{category}] 파이프라인 시작 (type={cat.get('type', 'legacy')})")
+    logger.info("=" * 60)
+
+    if cat.get("type") == "engine":
+        _run_engine_category(category, cat)
+    else:
+        _run_legacy_category(category, cat)
+
+    # URL 생존 체크 (HEAD) — 타입 A(URL 자체 404) 감지
     try:
         from scripts.check_urls import run as check_urls_run
         logger.info(f"\n▶ [{category}] URL 생존 체크")
