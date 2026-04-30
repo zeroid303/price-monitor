@@ -27,8 +27,50 @@ def _build_alias_lookup(rule_section: dict) -> dict[str, str]:
     for canonical, raws in rule_section.get("aliases", {}).items():
         lookup[canonical] = canonical
         for r in raws:
-            lookup[r] = canonical
+            if r is not None:
+                lookup[r] = canonical
     return lookup
+
+
+def _build_paper_lookup(canonical_section: dict) -> dict[str, tuple]:
+    """new schema (canonical[name].weights[w].aliases) → flat alias → (canonical, weight) map.
+
+    weight 0 = (평량없음). 평량 strip 변형도 등록 (fallback).
+    """
+    out = {}
+    for name, info in canonical_section.items():
+        weights = info.get("weights", {}) or {}
+        for w_key, w_info in weights.items():
+            try:
+                weight = int(w_key) if w_key not in ("(평량없음)", None) else 0
+            except (ValueError, TypeError):
+                weight = 0
+            aliases = (w_info or {}).get("aliases", {}) or {}
+            for site_aliases in aliases.values():
+                for a in site_aliases or []:
+                    if not a: continue
+                    a = a.strip()
+                    if a not in out:
+                        out[a] = (name, weight)
+                    base = re.sub(r"\s*\d{2,4}\s*[gμu]\S*\s*$", "", a).strip()
+                    base = re.sub(r"\s*\d{2,4}\s*g\s*/\s*㎡\s*$", "", base).strip()
+                    if base and base != a and base not in out:
+                        out[base] = (name, weight)
+    return out
+
+
+# 부가 표기 strip 패턴 (매칭 fallback)
+_AUX_STRIP_RES = [
+    re.compile(r"\s*\((FSC|D|신상품(-?[가-힣A-Za-z]*)?)\)\s*"),
+    re.compile(r"\s*-?\s*당일판가능\s*"),
+]
+
+
+def _strip_aux(s: str) -> str:
+    out = s
+    for pat in _AUX_STRIP_RES:
+        out = pat.sub(" ", out)
+    return re.sub(r"\s+", " ", out).strip()
 
 
 def _normalize_coating(raw: str, rule: dict) -> tuple[str, dict]:
@@ -102,28 +144,101 @@ def _normalize_qty(raw, rule: dict) -> int:
         return rule.get("default", 200)
 
 
-def _normalize_paper_name(raw: str, rule: dict) -> tuple[str, str | None]:
-    """용지명 공통 파서. 카드/스티커 모두 동일 로직.
+def _normalize_paper_name_new(raw: str, paper_weight_text: str | None,
+                               canonical_section: dict, rule: dict) -> tuple[str, str | None]:
+    """new schema 매칭 — flat alias → (canonical, weight) 역인덱스 활용."""
+    lookup = _build_paper_lookup(canonical_section)
 
-    처리 순서:
-      1. 전체 문자열 alias 매칭 (히트하면 즉시 반환)
-      2. prefix 코팅 추출 ("무코팅아트지" → 비코팅 + "아트지")
-         2-1. prefix 제거 후 전체 문자열 재매칭
-      3. 괄호 코팅 추출 ("(무광코팅)" → 무광코팅)
-      4. weight 분리 ("아트지 250g" → base="아트지", weight=250)
-      5. base alias 매칭 (longest match)
-      6. '{canonical} {weight}g' 재조립
+    # 코팅 hint
+    coat_hint = None
+    m = re.search(r"\((무광코팅|유광코팅|벨벳코팅|무코팅|비코팅|UV유광코팅|UV코팅)\)", raw)
+    if m:
+        tok = m.group(1)
+        if "무코팅" in tok or "비코팅" in tok:
+            coat_hint = "비코팅"
+        elif "무광" in tok:
+            coat_hint = "무광코팅"
+        elif "유광" in tok:
+            coat_hint = "유광코팅"
+        elif "벨벳" in tok:
+            coat_hint = "벨벳코팅"
 
-    예:
-      "초강접스티커(아트지 90g)"  → 1번에서 매칭 → ("초강접아트지 90g", None)
-      "무코팅아트지90g"          → 2번 prefix 추출 → ("강접아트지 90g", "비코팅")
-      "스노우지(무광코팅) 250g"  → 3번 괄호 추출 + 4~6번 → ("스노우화이트 250g", "무광코팅")
-      "무코팅스노우 400g"        → 2번 prefix + 4~6번 → ("스노우화이트 400g", "비코팅")
+    # 후보 변형
+    cands = [raw]
+    # adsland paperSort prefix strip
+    m_ps = re.match(r"^(일반지|고급지|펄지|친환경 재생지|색지|한지)\s+(.+?)\s+(\d{2,4})\s*g\s*/\s*㎡\s*$", raw)
+    if m_ps:
+        cands.append(f"{m_ps.group(2)} {m_ps.group(3)}g")
+    # g/㎡ → g
+    cand_g = re.sub(r"(\d+)\s*g\s*/\s*㎡", r"\1g", raw)
+    if cand_g != raw:
+        cands.append(cand_g)
+    # printcity dash 형식: "스노우화이트-300g" → "스노우화이트 300g"
+    cand_dash_w = re.sub(r"-(\d{2,4}g)", r" \1", raw)
+    if cand_dash_w != raw:
+        cands.append(cand_dash_w)
+    # printcity dash 코팅 strip
+    cand_dash = re.sub(r"-\s*(양면|단면)?(무광|유광|벨벳|무|비)코팅?[, ]?.*$", "", raw).strip()
+    if cand_dash and cand_dash != raw:
+        cands.append(cand_dash)
+    # 부가 표기 strip
+    cand_aux = _strip_aux(raw)
+    if cand_aux != raw:
+        cands.append(cand_aux)
+    # 평량 suffix strip
+    base = re.sub(r"\s*\d{2,4}\s*[gμu]\S*\s*$", "", raw).strip()
+    base = re.sub(r"\s*\d{2,4}\s*g\s*/\s*㎡\s*$", "", base).strip()
+    if base and base != raw:
+        cands.append(base)
+
+    # 매칭
+    matched = None
+    for c in cands:
+        if c in lookup:
+            matched = lookup[c]
+            break
+
+    if matched:
+        canonical_name, weight = matched
+        # weight 0 (평량 추출 실패) 이면 raw 또는 paper_weight_text 에서 보강
+        if weight == 0:
+            mw = re.search(r"(\d{2,4})\s*g", raw)
+            if mw:
+                weight = int(mw.group(1))
+            elif paper_weight_text:
+                mw = re.search(r"(\d{2,4})", paper_weight_text)
+                if mw: weight = int(mw.group(1))
+        if weight > 0:
+            return (f"{canonical_name} {weight}g", coat_hint)
+        return (canonical_name, coat_hint)
+
+    # 미매칭 — raw 그대로
+    return (raw, coat_hint)
+
+
+def _normalize_paper_name(raw: str, rule: dict, paper_weight_text: str | None = None) -> tuple[str, str | None]:
+    """용지명 정규화 — new schema (paper_name.canonical[name].weights[w].aliases).
+
+    반환: (canonical_name + ' Wg', coating_hint).
+    coating_hint 는 raw paper_name 의 괄호 코팅 표기 ("(무광코팅)" 등) 추출.
+
+    매칭 순서:
+      1. raw 그대로 alias 매칭
+      2. 변형 매칭 (paperSort strip / g/㎡→g / dash 코팅 strip / 부가 표기 strip / 평량 suffix strip)
+      3. 매칭 시 weight 가 0(평량없음) 이면 raw paper_name 또는 paper_weight_text 에서 평량 추출 보강
+      4. 매칭 실패 시 raw 그대로 반환
     """
     raw = (raw or "").strip()
     if not raw:
         return "", None
 
+    canonical_section = rule.get("canonical", {}) or {}
+    if canonical_section and isinstance(next(iter(canonical_section.values()), {}), dict) \
+            and "weights" in next(iter(canonical_section.values()), {}):
+        # new schema
+        return _normalize_paper_name_new(raw, paper_weight_text, canonical_section, rule)
+
+    # legacy fallback (구 schema)
     lookup = _build_alias_lookup(rule)
 
     # ── 1. 전체 문자열 alias 매칭 ──
@@ -205,9 +320,12 @@ def apply(item: dict, norm_rule: dict) -> dict:
     out = deepcopy(item)
     options = dict(out.get("options") or {})
 
-    # paper_name (+ 내부에서 발견한 coating 힌트)
+    # paper_name (+ 내부에서 발견한 coating 힌트). paper_weight_text 도 함께 전달.
     paper_rule = norm_rule.get("paper_name", {})
-    paper_val, paper_coating = _normalize_paper_name(out.get("paper_name", ""), paper_rule)
+    paper_val, paper_coating = _normalize_paper_name(
+        out.get("paper_name", ""), paper_rule,
+        paper_weight_text=out.get("paper_weight_text"),
+    )
     out["paper_name"] = paper_val
 
     # coating — paper_name에서 추출된 coating이 있으면 우선, 없으면 원본 coating 필드 정규화

@@ -141,8 +141,18 @@ def read_supply_price(page, selector: str, after_trigger_ms: int) -> Optional[in
 # ── DOM 실측 ──
 
 def read_dom_state(page, sel: dict, has_coating: bool = True) -> dict:
-    """DOM 표시값 추출. paper_name = paper_code select selected text."""
+    """DOM 표시값 추출. paper_name = paper_code select selected text.
+
+    digital 페이지(paper_type 별도 select 존재)의 경우 paper_code 가 색깔만 표기되는
+    paper 도 있어 paper_type text 도 합쳐서 paper_name 생성.
+    """
     paper_name = js_get_select_text(page, sel.get("paper_code", "select[name=paper_code]")) or None
+    paper_type_sel = sel.get("paper_type")
+    if paper_type_sel:
+        paper_type_text = js_get_select_text(page, paper_type_sel) or ""
+        # paper_type text 가 의미있고 paper_name 안에 이미 포함 안 되어 있으면 prefix
+        if paper_type_text and paper_name and paper_type_text not in paper_name:
+            paper_name = f"{paper_type_text} {paper_name}".strip()
     size = js_get_select_text(page, sel.get("paper_size", "select[name=paper_size]")) or None
     print_mode = js_get_select_text(page, sel.get("color_mode", "select[name=print_color_type]")) or None
     qty_val = page.evaluate(JS_GET_SELECT_VALUE, sel.get("qty", "select[name=paper_qty_select]"))

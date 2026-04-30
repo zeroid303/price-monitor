@@ -1,0 +1,944 @@
+_description: 카드 명함 (디지털) 정규화 룰. canonical key = (paper, weight_g, coating). raw paper_name → 사이트별 alias 매칭으로 canonical 결정. 평량 ±20g 위반 시 동일 paper 안에서 별 weight 행으로 분리.
+_match_axes:
+  axes:
+  - paper_name
+  - paper_weight_g
+  - coating
+  - print_mode
+  - size
+  - qty
+  weight_tolerance_g: 20
+_normalization:
+  paper_name:
+    _description: 용지명 정규화. canonical paper-level + weight-level 분기. 각 weight entry 의 aliases 가 사이트별 raw paper_name.
+    canonical:
+      골드린넨펄:
+        weights:
+          227:
+            aliases:
+              printcity:
+              - 골드린넨펄-227g
+            memo: auto-canonical (피드백 X)
+        all_weights_g:
+        - 227
+      그레이스:
+        weights:
+          256:
+            aliases:
+              printcity:
+              - 그레이스-256g
+        all_weights_g:
+        - 256
+      기본 화이트카드:
+        weights:
+          200:
+            aliases:
+              wowpress:
+              - 스타라이트 화이트 200g
+          250:
+            aliases:
+              wowpress:
+              - 메탈아이스 250g
+        all_weights_g:
+        - 200
+        - 250
+      네추럴린넨펄:
+        weights:
+          227:
+            aliases:
+              printcity:
+              - 네추럴린넨펄-227g
+            memo: auto-canonical (피드백 X)
+        all_weights_g:
+        - 227
+      누브지:
+        weights:
+          210:
+            aliases:
+              printcity:
+              - 누브지-210g
+        all_weights_g:
+        - 210
+      대례지:
+        weights:
+          209:
+            aliases:
+              wowpress:
+              - 대례지 209g
+        all_weights_g:
+        - 209
+      띤또레또 순백색:
+        weights:
+          250:
+            aliases:
+              adsland:
+              - 띤또레또 순백색 250g
+            memo: auto-canonical (피드백 X)
+        all_weights_g:
+        - 250
+      랑데뷰:
+        weights:
+          210:
+            aliases:
+              dtpia:
+              - 랑데뷰
+          240:
+            aliases:
+              dtpia:
+              - 랑데뷰
+        all_weights_g:
+        - 210
+        - 240
+      랑데뷰 네츄럴:
+        weights:
+          200:
+            aliases:
+              printcity:
+              - 랑데뷰 내츄럴 210g
+              swadpia:
+              - 랑데뷰 내츄럴 190g
+              adsland:
+              - 랑데뷰 네츄럴 210g
+            memo: 'adsland 실제 평량 210g (대표 200g 로 통합 — ±20g 안) | auto-canonical (피드백 X) | printcity 실제 평량 210g (대표 200g 로 통합 — ±20g 안) | swadpia 실제 평량 190g (대표 200g 로 통합 — ±20g 안) | 평량 ±20g 위반 (피드백 범위: 310)
+              — 분리됨'
+          240:
+            aliases:
+              swadpia:
+              - 랑데뷰 내츄럴 240g
+              adsland:
+              - 랑데뷰 네츄럴 240g
+            memo: 'auto-canonical (피드백 X) | 평량 ±20g 위반 (피드백 범위: 310) — 분리됨'
+        all_weights_g:
+        - 200
+        - 240
+      로얄썬더스 펠트 B.화이트:
+        weights:
+          270:
+            aliases:
+              adsland:
+              - 로얄썬더스 펠트 B.화이트 270g
+            memo: auto-canonical (피드백 X)
+        all_weights_g:
+        - 270
+      리액션알파인:
+        weights:
+          310:
+            aliases:
+              wowpress:
+              - 리액션알파인 310g
+        all_weights_g:
+        - 310
+      마분지:
+        weights:
+          209:
+            aliases:
+              wowpress:
+              - 마분지 209g
+        all_weights_g:
+        - 209
+      마제스틱 캔들라이트크림:
+        weights:
+          250:
+            aliases:
+              adsland:
+              - 마제스틱 캔들라이트크림 250g
+            memo: auto-canonical (피드백 X)
+        all_weights_g:
+        - 250
+      마테리카 순백색:
+        weights:
+          250:
+            aliases:
+              adsland:
+              - 마테리카 순백색 250g
+            memo: auto-canonical (피드백 X)
+        all_weights_g:
+        - 250
+      마테리카 클레이:
+        weights:
+          250:
+            aliases:
+              adsland:
+              - 마테리카 클레이 250g
+            memo: auto-canonical (피드백 X)
+        all_weights_g:
+        - 250
+      매직콤마 백색:
+        weights:
+          300:
+            aliases:
+              swadpia:
+              - 매직콤마 백색 300g
+            memo: auto-canonical (피드백 X)
+        all_weights_g:
+        - 300
+      머쉬멜로우:
+        weights:
+          209:
+            aliases:
+              printcity:
+              - 머쉬멜로우-209g
+              wowpress:
+              - 매쉬멜로우 209g
+          233:
+            aliases:
+              dtpia:
+              - 마쉬멜로우
+        all_weights_g:
+        - 209
+        - 233
+      모조지:
+        weights:
+          220:
+            aliases:
+              printcity:
+              - 화이트모조 220g
+              wowpress:
+              - 모조지 백색 220g
+            memo: '평량 ±20g 위반 (피드백 범위: 200~122) — 분리됨'
+        all_weights_g:
+        - 220
+      몽블랑:
+        weights:
+          240:
+            aliases:
+              printcity:
+              - 몽블랑-240g
+              dtpia:
+              - 몽블랑
+        all_weights_g:
+        - 240
+      반누보화이트:
+        weights:
+          204:
+            aliases:
+              dtpia:
+              - 반누보
+            memo: 성원의 반누보화이트204와 320은 용지 두께 차이가 많이 나지만 그래도 비교차 그대로 두어도 될 것 같습니다.
+          224:
+            aliases:
+              dtpia:
+              - 반누보
+            memo: 성원의 반누보화이트204와 320은 용지 두께 차이가 많이 나지만 그래도 비교차 그대로 두어도 될 것 같습니다.
+          227:
+            aliases:
+              swadpia:
+              - 반누보 스노우화이트 227g
+              wowpress:
+              - 반누보 내츄럴 227g
+              - 반누보 화이트 227g
+              adsland:
+              - 반누보 227g
+            memo: auto-canonical (피드백 X) | 성원의 반누보화이트204와 320은 용지 두께 차이가 많이 나지만 그래도 비교차 그대로 두어도 될 것 같습니다.
+          250:
+            aliases:
+              printcity:
+              - 반누보화이트-250g
+            memo: 성원의 반누보화이트204와 320은 용지 두께 차이가 많이 나지만 그래도 비교차 그대로 두어도 될 것 같습니다.
+        all_weights_g:
+        - 204
+        - 224
+        - 227
+        - 250
+      밤부 내추럴:
+        weights:
+          300:
+            aliases:
+              adsland:
+              - 밤부 내추럴 300g
+            memo: auto-canonical (피드백 X)
+        all_weights_g:
+        - 300
+      블랑 순백색:
+        weights:
+          300:
+            aliases:
+              swadpia:
+              - 블랑 순백색 300g
+        all_weights_g:
+        - 300
+      수페이퍼 연미색:
+        weights:
+          200:
+            aliases:
+              wowpress:
+              - 수페이퍼 연미색 200g
+        all_weights_g:
+        - 200
+      슈퍼파인 울트라화이트:
+        weights:
+          324:
+            aliases:
+              adsland:
+              - 슈퍼파인 울트라화이트 324g
+            memo: auto-canonical (피드백 X)
+        all_weights_g:
+        - 324
+      스노우화이트:
+        weights:
+          250:
+            aliases:
+              printcity:
+              - 스노우화이트-250g
+              wowpress:
+              - 스노우지 250g
+              adsland:
+              - 스노우지 250g
+            memo: auto-canonical (피드백 X) | 무광코팅과 비코팅지는 따로 분류해서 가격 비교
+          300:
+            aliases:
+              printcity:
+              - 스노우화이트-300g
+              adsland:
+              - 스노우지 300g
+            memo: auto-canonical (피드백 X) | 무광코팅과 비코팅지는 따로 분류해서 가격 비교
+        all_weights_g:
+        - 250
+        - 300
+      스코트랜드:
+        weights:
+          220:
+            aliases:
+              wowpress:
+              - 스코틀랜드 220g
+        all_weights_g:
+        - 220
+      스코트랜드 백색(스노우):
+        weights:
+          220:
+            aliases:
+              swadpia:
+              - 스코트랜드 백색(스노우) 220g
+            memo: auto-canonical (피드백 X)
+        all_weights_g:
+        - 220
+      스타골드:
+        weights:
+          200:
+            aliases:
+              wowpress:
+              - 스타라이트 골드 200g
+          245:
+            aliases:
+              printcity:
+              - 스타골드-250g
+              wowpress:
+              - 스타드림 골드 240g
+            memo: printcity 실제 평량 250g (대표 245g 로 통합 — ±20g 안) | wowpress 실제 평량 240g (대표 245g 로 통합 — ±20g 안)
+        all_weights_g:
+        - 200
+        - 245
+      스타드림:
+        weights:
+          240:
+            aliases:
+              printcity:
+              - 스타드림 다이아 240g
+              - 스타드림-240g
+              wowpress:
+              - 스타드림 다이아몬드 240g
+            memo: 명함천국, 프린트시티에서는 스타드림으로 명칭
+        all_weights_g:
+        - 240
+      스타드림 골드:
+        weights:
+          240:
+            aliases:
+              adsland:
+              - 스타드림골드(D) 240g
+            memo: auto-canonical (피드백 X)
+        all_weights_g:
+        - 240
+      스타드림 수정:
+        weights:
+          240:
+            aliases:
+              swadpia:
+              - 스타드림 쿼츠 240g
+              wowpress:
+              - 스타드림 쿼츠 240g
+              adsland:
+              - 스타드림쿼츠(D) 240g
+            memo: auto-canonical (피드백 X)
+        all_weights_g:
+        - 240
+      스타드림 실버:
+        weights:
+          200:
+            aliases:
+              wowpress:
+              - 스타라이트 실버 200g
+          240:
+            aliases:
+              swadpia:
+              - 스타드림 실버 240g
+              wowpress:
+              - 스타드림 실버 240g
+              adsland:
+              - 스타드림실버(D) 240g
+            memo: auto-canonical (피드백 X)
+        all_weights_g:
+        - 200
+        - 240
+      스타드림 오팔:
+        weights:
+          240:
+            aliases:
+              wowpress:
+              - 스타드림 오팔 240g
+        all_weights_g:
+        - 240
+      스타드림핀포인트:
+        weights:
+          240:
+            aliases:
+              wowpress:
+              - 스타드림핀포인트 240g
+        all_weights_g:
+        - 240
+      시로에코 화이트:
+        weights:
+          250:
+            aliases:
+              adsland:
+              - 시로에코 화이트 250g
+            memo: auto-canonical (피드백 X)
+        all_weights_g:
+        - 250
+      시리오 스노우:
+        weights:
+          250:
+            aliases:
+              dtpia:
+              - 시리오펄(진주)
+        all_weights_g:
+        - 250
+      시리오 칼라 레드:
+        weights:
+          290:
+            aliases:
+              adsland:
+              - 시리오 칼라 레드 290g
+            memo: auto-canonical (피드백 X)
+        all_weights_g:
+        - 290
+      시리오 칼라 블랙:
+        weights:
+          290:
+            aliases:
+              adsland:
+              - 시리오 칼라 블랙 290g
+            memo: auto-canonical (피드백 X)
+        all_weights_g:
+        - 290
+      시리오 칼라 블루:
+        weights:
+          290:
+            aliases:
+              adsland:
+              - 시리오 칼라 블루 290g
+            memo: auto-canonical (피드백 X)
+        all_weights_g:
+        - 290
+      시리오펄 골드:
+        weights:
+          300:
+            aliases:
+              adsland:
+              - 시리오펄 골드 300g
+            memo: auto-canonical (피드백 X)
+        all_weights_g:
+        - 300
+      시리오펄 스노우:
+        weights:
+          300:
+            aliases:
+              adsland:
+              - 시리오펄 스노우 300g
+            memo: auto-canonical (피드백 X)
+        all_weights_g:
+        - 300
+      시리오펄 실버:
+        weights:
+          300:
+            aliases:
+              adsland:
+              - 시리오펄 실버 300g
+            memo: auto-canonical (피드백 X)
+        all_weights_g:
+        - 300
+      시리오펄 진주:
+        weights:
+          230:
+            aliases:
+              adsland:
+              - 시리오펄 진주 230g
+            memo: auto-canonical (피드백 X)
+        all_weights_g:
+        - 230
+      심볼퓨전:
+        weights:
+          200:
+            aliases:
+              wowpress:
+              - 심볼퓨전 200g
+        all_weights_g:
+        - 200
+      썬샤인화이트:
+        weights:
+          230:
+            aliases:
+              wowpress:
+              - 썬샤인화이트 230g
+              adsland:
+              - 썬샤인 230g
+            memo: auto-canonical (피드백 X)
+          300:
+            aliases:
+              dtpia:
+              - 션샤인
+            memo: '평량 ±20g 위반 (피드백 범위: 204~240) — 분리됨'
+        all_weights_g:
+        - 230
+        - 300
+      아르떼 울트라화이트:
+        weights:
+          230:
+            aliases:
+              swadpia:
+              - 아르떼 울트라화이트 230g
+            memo: auto-canonical (피드백 X)
+        all_weights_g:
+        - 230
+      아인스린넨 슈퍼화이트:
+        weights:
+          220:
+            aliases:
+              swadpia:
+              - 아인스린넨 슈퍼화이트 220g
+            memo: auto-canonical (피드백 X)
+        all_weights_g:
+        - 220
+      아코팩 리싸이클 웜:
+        weights:
+          300:
+            aliases:
+              adsland:
+              - 아코팩 리싸이클 웜 300g
+            memo: auto-canonical (피드백 X)
+        all_weights_g:
+        - 300
+      아트지:
+        weights:
+          250:
+            aliases:
+              adsland:
+              - 아트지 250g
+          300:
+            aliases:
+              adsland:
+              - 아트지 300g
+            memo: 시티는 아트지 300은 없고,300유광코팅지와 무광코팅지 두종류가 있습니다.
+        all_weights_g:
+        - 250
+        - 300
+      얼스팩:
+        weights:
+          226:
+            aliases:
+              wowpress:
+              - 얼스팩 226g
+          250:
+            aliases:
+              wowpress:
+              - 뉴크라프트보드 250g
+            memo: '평량 ±20g 위반 (피드백 범위: 226.0) — 분리됨'
+        all_weights_g:
+        - 226
+        - 250
+      엑스트라 누브지:
+        weights:
+          250:
+            aliases:
+              printcity:
+              - Extra 누브-250g
+        all_weights_g:
+        - 250
+      엑스트라 띤또레또:
+        weights:
+          250:
+            aliases:
+              printcity:
+              - 띤또레또-250g
+              wowpress:
+              - 띤또레또 250g
+        all_weights_g:
+        - 250
+      엑스트라 린넨:
+        weights:
+          250:
+            aliases:
+              printcity:
+              - Extra 린넨-250g
+        all_weights_g:
+        - 250
+      엑스트라 매트화이트:
+        weights:
+          200:
+            aliases:
+              wowpress:
+              - 메탈화이트 200g
+        all_weights_g:
+        - 200
+      엑스트라 머쉬멜로우:
+        weights:
+          250:
+            aliases:
+              printcity:
+              - Extra 머쉬-250g
+        all_weights_g:
+        - 250
+      엑스트라 센토 엑스트라화이트:
+        weights:
+          350:
+            aliases:
+              adsland:
+              - 센토 엑스트라화이트 350g
+            memo: auto-canonical (피드백 X)
+        all_weights_g:
+        - 350
+      엑스트라 엠보:
+        weights:
+          270:
+            aliases:
+              printcity:
+              - Extra 엠보-270g
+            memo: auto-canonical (피드백 X)
+        all_weights_g:
+        - 270
+      올드밀 리싸이클 비앙코:
+        weights:
+          300:
+            aliases:
+              adsland:
+              - 올드밀 리싸이클 비앙코 300g
+            memo: auto-canonical (피드백 X)
+        all_weights_g:
+        - 300
+      올드밀 비안코:
+        weights:
+          220:
+            aliases:
+              swadpia:
+              - 올드밀 비안코 220g
+            memo: auto-canonical (피드백 X)
+        all_weights_g:
+        - 220
+      올드밀 프리미엄화이트:
+        weights:
+          300:
+            aliases:
+              adsland:
+              - 올드밀 프리미엄화이트 300g
+            memo: auto-canonical (피드백 X)
+        all_weights_g:
+        - 300
+      우드스탁 미색:
+        weights:
+          285:
+            aliases:
+              adsland:
+              - 우드스탁 미색 285g
+            memo: auto-canonical (피드백 X)
+        all_weights_g:
+        - 285
+      유포지:
+        weights:
+          250:
+            aliases:
+              wowpress:
+              - 유포블루 250g
+            memo: 와우프레스>유포블루는 디지털 계열에 있음 (https://wowpress.co.kr/ordr/prod/dets?ProdNo=40061)
+        all_weights_g:
+        - 250
+      인바이런먼트 화이트:
+        weights:
+          216:
+            aliases:
+              adsland:
+              - 인바이런먼트 화이트 216g
+            memo: auto-canonical (피드백 X)
+          352:
+            aliases:
+              adsland:
+              - 인바이런먼트 화이트 352g
+            memo: auto-canonical (피드백 X)
+        all_weights_g:
+        - 216
+        - 352
+      인버코트(알바토):
+        weights:
+          250:
+            aliases:
+              adsland:
+              - 인버코트(알바토) 250g
+            memo: auto-canonical (피드백 X)
+          270:
+            aliases:
+              adsland:
+              - 인버코트(알바토) 270g
+            memo: auto-canonical (피드백 X)
+        all_weights_g:
+        - 250
+        - 270
+      쟈데 비단:
+        weights:
+          215:
+            aliases:
+              wowpress:
+              - 쟈데 비단 215g
+        all_weights_g:
+        - 215
+      전통한지:
+        weights:
+          235:
+            aliases:
+              adsland:
+              - 전통한지 235g
+            memo: auto-canonical (피드백 X)
+        all_weights_g:
+        - 235
+      체크레자크 백색:
+        weights:
+          200:
+            aliases:
+              wowpress:
+              - 체크레자크 백색 200g
+        all_weights_g:
+        - 200
+      친환경용지:
+        weights:
+          209:
+            aliases:
+              printcity:
+              - 친환경용지-209g
+            memo: 와우프레스>얼스팩은 다른 계열
+        all_weights_g:
+        - 209
+      컨셉:
+        weights:
+          235:
+            aliases:
+              printcity:
+              - 크리스탈 펄(팝셋)-235g
+          240:
+            aliases:
+              printcity:
+              - 팝셋-240g
+              wowpress:
+              - 팝셋 화이트 240g
+          250:
+            aliases:
+              printcity:
+              - 컨셉(블루펄)-250g
+              wowpress:
+              - 컨셉블루펄 250g
+        all_weights_g:
+        - 235
+        - 240
+        - 250
+      켄도:
+        weights:
+          200:
+            aliases:
+              wowpress:
+              - 켄도 200g
+        all_weights_g:
+        - 200
+      켄도 화이트:
+        weights:
+          200:
+            aliases:
+              swadpia:
+              - 켄도 화이트 200g
+            memo: auto-canonical (피드백 X)
+        all_weights_g:
+        - 200
+      크라프트:
+        weights:
+          250:
+            aliases:
+              printcity:
+              - 크라프트-250g
+              swadpia:
+              - 뉴크라프트보드 250g
+            memo: '디티피아>잔팩터치는 다른 계열 (https://dtpia.co.kr/Order/Businesscard/Extra.aspx?mtrl_cd=RXT0 | 평량 ±20g 위반 (피드백 범위: 300) — 분리됨 | 디티피아>잔팩터치는 다른 계열 (https://dtpia.co.kr/Order/Businesscard/Extra.aspx?mtrl_cd=RXT0'
+        all_weights_g:
+        - 250
+      키칼라골드:
+        weights:
+          200:
+            aliases:
+              printcity:
+              - 키칼라골드-200g
+            memo: 키칼라 아이스골드는 색감이 화이트계열
+          250:
+            aliases:
+              swadpia:
+              - 키칼라 아이스골드 250g
+              dtpia:
+              - 마제스틱(마블화이트)
+            memo: '키칼라 아이스골드는 색감이 화이트계열 | 평량 ±20g 위반 (피드백 범위: 200~224) — 분리됨 | 키칼라 아이스골드는 색감이 화이트계열'
+        all_weights_g:
+        - 200
+        - 250
+      키칼라메탈릭:
+        weights:
+          200:
+            aliases:
+              printcity:
+              - 키칼라메탈릭-200g
+        all_weights_g:
+        - 200
+      탄트지:
+        weights:
+          200:
+            aliases:
+              printcity:
+              - 탄트지-200g
+              wowpress:
+              - 탄트지 200g
+            memo: 우리는 디지털에 있음
+        all_weights_g:
+        - 200
+      트래져리컴포지션:
+        weights:
+          310:
+            aliases:
+              wowpress:
+              - 트래져리컴포지션 310g
+        all_weights_g:
+        - 310
+      페르라:
+        weights:
+          209:
+            aliases:
+              wowpress:
+              - 페르라 209g
+        all_weights_g:
+        - 209
+      페르라스터:
+        weights:
+          209:
+            aliases:
+              wowpress:
+              - 페르라스터 209g
+        all_weights_g:
+        - 209
+      프리즈마:
+        weights:
+          250:
+            aliases:
+              wowpress:
+              - 프리즈마 250g
+        all_weights_g:
+        - 250
+      프리즈마 화이트:
+        weights:
+          250:
+            aliases:
+              adsland:
+              - 프리즈마 화이트 250g
+            memo: auto-canonical (피드백 X)
+        all_weights_g:
+        - 250
+      화이트린넨펄:
+        weights:
+          227:
+            aliases:
+              printcity:
+              - 화이트린넨펄-227g
+            memo: auto-canonical (피드백 X)
+        all_weights_g:
+        - 227
+      휘라레:
+        weights:
+          216:
+            aliases:
+              printcity:
+              - 휘라레-216g
+              wowpress:
+              - 휘라레 화이트 216g
+        all_weights_g:
+        - 216
+    noise_suffix_regex: (\d+)\s*g.*$
+  coating:
+    _description: coating 정규화. raw → 비코팅/무광코팅/유광코팅/벨벳코팅/홀로그램코팅
+    default: 비코팅
+    allowed:
+    - 비코팅
+    - 무광코팅
+    - 유광코팅
+    - 벨벳코팅
+    - 홀로그램코팅
+    aliases:
+      비코팅:
+      - 코팅없음
+      - 무코팅
+      - (무코팅)
+      - (비코팅)
+      - null
+      무광코팅:
+      - 양면무광코팅
+      - 단면(무광) 코팅
+      - 양면(무광) 코팅
+      - (무광코팅)
+      유광코팅:
+      - 양면유광코팅
+      - 단면(유광) 코팅
+      - 양면(유광) 코팅
+      - (유광코팅)
+      - UV유광코팅
+      - UV코팅
+      벨벳코팅:
+      - 양면벨벳코팅
+      - (벨벳코팅)
+      홀로그램코팅:
+      - 홀로그램코팅 도트-양면
+      - 홀로그램코팅 심플-양면
+  print_mode:
+    _description: 도수/색도 정규화. 기본 양면칼라.
+    default: 양면칼라
+    allowed:
+    - 단면칼라
+    - 양면칼라
+    - 단면별색
+    - 양면별색
+    - 백색
+    - 별색
+    aliases:
+      단면칼라:
+      - 단면4도
+      - 단면 4도 (컬러)
+      - 단면 칼라4도
+      - 4/0
+      - 단면4도 (인쇄)
+      양면칼라:
+      - 양면8도
+      - 양면 칼라8도
+      - 4/4
+      - 앞면 4도 (컬러) / 뒷면 4도 (컬러)
+      단면별색:
+      - 단면 별색
+      양면별색:
+      - 양면 별색
+      백색:
+      - 앞면 1도 (백색) / 뒷면 1도 (백색)
+  size:
+    _description: 사이즈 정규화 — '90x50' 표준
+    default: 90x50
+    format: WxH
+    regex: (\d+)\s*[x×*X]\s*(\d+)
+  qty:
+    _description: 수량 정규화 — int 변환
+    default: 200

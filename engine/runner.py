@@ -23,12 +23,8 @@ from .logger import RunLogger
 ROOT = Path(__file__).resolve().parent.parent
 CONFIG_DIR = ROOT / "config"
 
-# 카테고리 → schema 공유 맵. card_offset / card_digital 은 동일 schemas/card.yaml 을 공유.
-# targets 는 카테고리별로 별도 파일.
-_SCHEMA_ALIAS = {
-    "card_offset": "card",
-    "card_digital": "card",
-}
+# 카테고리 별 schema 파일. card_offset / card_digital 각자 별도 yaml.
+# (이전 _SCHEMA_ALIAS 제거 — 각 카테고리가 독립 schema 사용)
 
 # 이관 과도기용 legacy JSON 경로. 신규 yaml 없으면 여기로 폴백.
 _LEGACY_TARGETS = {
@@ -60,15 +56,14 @@ def _load_site_config(site: str) -> dict:
 
 
 def _load_schema(category: str) -> dict:
-    """카테고리 스키마 로드. _SCHEMA_ALIAS 로 카테고리 공유 가능."""
-    schema_key = _SCHEMA_ALIAS.get(category, category)
-    new_yaml = CONFIG_DIR / "schemas" / f"{schema_key}.yaml"
-    new_json = CONFIG_DIR / "schemas" / f"{schema_key}.json"
+    """카테고리 스키마 로드."""
+    new_yaml = CONFIG_DIR / "schemas" / f"{category}.yaml"
+    new_json = CONFIG_DIR / "schemas" / f"{category}.json"
     if new_yaml.exists():
         return _read_structured(new_yaml)
     if new_json.exists():
         return _read_structured(new_json)
-    legacy = _LEGACY_SCHEMA.get(schema_key)
+    legacy = _LEGACY_SCHEMA.get(category)
     if legacy and legacy.exists():
         return _read_structured(legacy)
     raise FileNotFoundError(f"schema not found for category: {category}")
