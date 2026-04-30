@@ -3432,39 +3432,6 @@ dtpia:
   - mtrl_cd: RCP350
     mtrl_cdw: '350'
     paper_name_out: CCP 350g
-- category: PP카드명함
-  product_name: PP카드명함
-  url: https://dtpia.co.kr/Order/Businesscard/Pp.aspx
-  page_type: mtrl_cd_only
-  qtys: *id001
-  color_modes:
-  - value: '8'
-    name: 양면칼라
-  - value: '4'
-    name: 단면칼라
-  papers:
-  - mtrl_cd: RPP005
-    paper_name_out: 화이트
-  - mtrl_cd: RPP001
-    paper_name_out: 골드라운드
-  - mtrl_cd: RPP002
-    paper_name_out: 실버라운드
-  - mtrl_cd: RPP003
-    paper_name_out: 금지
-  - mtrl_cd: RPP004
-    paper_name_out: 은지
-  - mtrl_cd: RPP006
-    paper_name_out: 금펄
-  - mtrl_cd: RPP008
-    paper_name_out: 은펄
-  - mtrl_cd: RPP007
-    paper_name_out: 금펄반투명
-  - mtrl_cd: RPP009
-    paper_name_out: 은펄반투명
-  - mtrl_cd: RPP015
-    paper_name_out: 메탈펄골드 테
-  - mtrl_cd: RPP016
-    paper_name_out: 메탈펄실버 테
 swadpia:
 - category: 일반지명함
   product_name: 일반지명함
@@ -3551,21 +3518,6 @@ swadpia:
     paper_name_out: 엑스트라폴라 백색 370g
   - paper_code: KYC250GD0
     paper_name_out: 키칼라 아이스골드 250g
-- category: 카드명함
-  product_name: 카드명함
-  url: https://www.swadpia.co.kr/goods/goods_view/CNC3000/GNC3001
-  page_type: select_radio
-  size_value: N0400
-  qtys: *id002
-  color_modes: *id003
-  coatings: *id004
-  papers:
-  - paper_code: LUX250W0U
-    paper_name_out: Luxury 화이트 250μ
-  - paper_code: LUX200SVU
-    paper_name_out: Luxury 실버 200μ
-  - paper_code: LUX200GDU
-    paper_name_out: Luxury 골드 200μ
 - category: 하이브리드명함
   product_name: 하이브리드명함
   url: https://www.swadpia.co.kr/goods/goods_view/CNC4000/GNC4001
@@ -3577,19 +3529,6 @@ swadpia:
   papers:
   - paper_code: ART300W00
     paper_name_out: 아트지 백색 300g
-- category: 투명하이브리드명함
-  product_name: 투명하이브리드명함
-  url: https://www.swadpia.co.kr/goods/goods_view/CNC5000/GNC5001
-  page_type: select_radio
-  size_value: N0300
-  qtys: *id002
-  color_modes:
-  - value: CTN10
-    name: 단면칼라
-  coatings: *id004
-  papers:
-  - paper_code: PET300TRU
-    paper_name_out: PET(투명) 300μ
 - category: 디지털박에폭시명함
   product_name: 디지털박에폭시명함
   url: https://www.swadpia.co.kr/goods/goods_view/CNC6000/GNC6001
@@ -3722,38 +3661,6 @@ wowpress:
   - paper_no: 25059
   - paper_no: 25057
   - paper_no: 25061
-- category: 카드명함
-  product_name: 카드명함
-  url: https://wowpress.co.kr/ordr/prod/dets?ProdNo=40067
-  prod_no: '40067'
-  size_value: '5461'
-  qtys:
-  - 200
-  - 1000
-  color_modes:
-  - value: '255'
-    name: 단면 칼라4도
-  - value: '256'
-    name: 양면 칼라8도
-  - value: '301'
-    name: 단면 1도
-  - value: '1302'
-    name: 양면 2도
-  papers:
-  - paper_no: 21145
-  - paper_no: 21129
-  - paper_no: 21135
-  - paper_no: 21139
-  - paper_no: 21141
-  - paper_no: 21137
-  - paper_no: 21133
-  - paper_no: 21163
-  - paper_no: 21165
-  - paper_no: 21164
-  - paper_no: 21161
-  - paper_no: 21162
-  - paper_no: 21166
-  - paper_no: 21168
 - category: 반투명명함
   product_name: 반투명명함
   url: https://wowpress.co.kr/ordr/prod/dets?ProdNo=40068
