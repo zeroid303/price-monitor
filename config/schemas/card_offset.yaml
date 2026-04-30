@@ -531,17 +531,11 @@ _normalization:
               - 아르미 울트라화이트 310g
               wowpress:
               - 아르떼울트라화이트 310g
-        all_weights_g:
-        - 230
-        - 310
-      아르떼 UW:
-        weights:
-          310:
-            aliases:
               adsland:
               - 아르떼 UW 310g
             memo: adsland 에폭명함 고유 표기
         all_weights_g:
+        - 230
         - 310
       아스트로 프리미엄 화이트:
         weights:

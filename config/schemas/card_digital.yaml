@@ -12,15 +12,6 @@ _normalization:
   paper_name:
     _description: 용지명 정규화. canonical paper-level + weight-level 분기. 각 weight entry 의 aliases 가 사이트별 raw paper_name.
     canonical:
-      골드린넨펄:
-        weights:
-          227:
-            aliases:
-              printcity:
-              - 골드린넨펄-227g
-            memo: auto-canonical (피드백 X)
-        all_weights_g:
-        - 227
       그레이스:
         weights:
           256:
@@ -42,15 +33,6 @@ _normalization:
         all_weights_g:
         - 200
         - 250
-      네추럴린넨펄:
-        weights:
-          227:
-            aliases:
-              printcity:
-              - 네추럴린넨펄-227g
-            memo: auto-canonical (피드백 X)
-        all_weights_g:
-        - 227
       누브지:
         weights:
           210:
@@ -163,15 +145,6 @@ _normalization:
             memo: auto-canonical (피드백 X)
         all_weights_g:
         - 250
-      매직콤마 백색:
-        weights:
-          300:
-            aliases:
-              swadpia:
-              - 매직콤마 백색 300g
-            memo: auto-canonical (피드백 X)
-        all_weights_g:
-        - 300
       머쉬멜로우:
         weights:
           209:
@@ -501,7 +474,7 @@ _normalization:
         all_weights_g:
         - 230
         - 300
-      아르떼 울트라화이트:
+      아르떼:
         weights:
           230:
             aliases:
@@ -588,8 +561,14 @@ _normalization:
             aliases:
               wowpress:
               - 메탈화이트 200g
+          300:
+            aliases:
+              swadpia:
+              - 매직콤마 백색 300g
+            memo: auto-canonical (피드백 X)
         all_weights_g:
         - 200
+        - 300
       엑스트라 머쉬멜로우:
         weights:
           250:
@@ -607,41 +586,21 @@ _normalization:
             memo: auto-canonical (피드백 X)
         all_weights_g:
         - 350
-      엑스트라 엠보:
-        weights:
-          270:
-            aliases:
-              printcity:
-              - Extra 엠보-270g
-            memo: auto-canonical (피드백 X)
-        all_weights_g:
-        - 270
-      올드밀 리싸이클 비앙코:
-        weights:
-          300:
-            aliases:
-              adsland:
-              - 올드밀 리싸이클 비앙코 300g
-            memo: auto-canonical (피드백 X)
-        all_weights_g:
-        - 300
-      올드밀 비안코:
+      올드밀 비앙크:
         weights:
           220:
             aliases:
               swadpia:
               - 올드밀 비안코 220g
             memo: auto-canonical (피드백 X)
-        all_weights_g:
-        - 220
-      올드밀 프리미엄화이트:
-        weights:
           300:
             aliases:
               adsland:
+              - 올드밀 리싸이클 비앙코 300g
               - 올드밀 프리미엄화이트 300g
             memo: auto-canonical (피드백 X)
         all_weights_g:
+        - 220
         - 300
       우드스탁 미색:
         weights:
@@ -751,16 +710,10 @@ _normalization:
         weights:
           200:
             aliases:
-              wowpress:
-              - 켄도 200g
-        all_weights_g:
-        - 200
-      켄도 화이트:
-        weights:
-          200:
-            aliases:
               swadpia:
               - 켄도 화이트 200g
+              wowpress:
+              - 켄도 200g
             memo: auto-canonical (피드백 X)
         all_weights_g:
         - 200
@@ -841,26 +794,11 @@ _normalization:
             aliases:
               wowpress:
               - 프리즈마 250g
-        all_weights_g:
-        - 250
-      프리즈마 화이트:
-        weights:
-          250:
-            aliases:
               adsland:
               - 프리즈마 화이트 250g
             memo: auto-canonical (피드백 X)
         all_weights_g:
         - 250
-      화이트린넨펄:
-        weights:
-          227:
-            aliases:
-              printcity:
-              - 화이트린넨펄-227g
-            memo: auto-canonical (피드백 X)
-        all_weights_g:
-        - 227
       휘라레:
         weights:
           216:
