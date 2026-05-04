@@ -53,6 +53,11 @@ CATEGORIES = {
         "sites": _CARD_SITES,
         "sub_categories": ["card_digital"],
     },
+    "flyer": {
+        "type": "engine",
+        "sites": _CARD_SITES,   # 5 사이트 모두 활성
+        "sub_categories": ["flyer"],
+    },
     "sticker": {
         "type": "legacy",
         "rule_path": os.path.join(CONFIG_DIR, "sticker_mapping_rule.json"),

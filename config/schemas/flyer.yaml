@@ -1,0 +1,101 @@
+_description: 합판 전단 카테고리 정규화 룰. canonical key = (paper, weight_g, size, qty).
+_match_axes:
+  axes:
+  - paper_name
+  - paper_weight_g
+  - coating
+  - print_mode
+  - size
+  - qty
+  weight_tolerance_g: 20
+_defaults:
+  qty: 2000           # 표준 매수 2000매 (printcity 4연 / dtpia 0.5R / wowpress 4연 / swadpia 2000 / adsland 2000)
+  match_method: substring
+_normalization:
+  paper_name:
+    _description: 합판전단 용지 정규화. paper-level canonical + weight 별 분기. 사이트 가용 paper 모두 등록.
+    canonical:
+      아트지:
+        weights:
+          90:
+            aliases:
+              printcity: [아트-90g]
+              dtpia: [아트지 90g]
+              swadpia: [아트지 백색 90g]
+              adsland: [90 아트]
+          100:
+            aliases:
+              wowpress: [아트지 100g]
+          120:
+            aliases:
+              dtpia: [아트지 120g]
+              swadpia: [아트지 백색 120g]
+              adsland: [120 아트]
+          150:
+            aliases:
+              dtpia: [아트지 150g]
+              swadpia: [아트지 백색 150g]
+              wowpress: [아트지 150g]
+              adsland: [150 아트]
+          180:
+            aliases:
+              dtpia: [아트지 180g]
+              swadpia: [아트지 백색 180g]
+              adsland: [180 아트]
+      모조지:
+        weights:
+          80:
+            aliases:
+              printcity: [모조-80g]
+              dtpia: [모조지 80g]
+              swadpia: [모조지 백색 80g]
+              adsland: [80 모조]
+      스노우지:
+        weights:
+          120:
+            aliases:
+              swadpia: [스노우지 백색 120g]
+              adsland: [120 스노우]
+          150:
+            aliases:
+              swadpia: [스노우지 백색 150g]
+              adsland: [150 스노우]
+          180:
+            aliases:
+              swadpia: [스노우지 백색 180g]
+              adsland: [180 스노우]
+          80:
+            aliases:
+              adsland: [80 스노우]
+      랑데뷰:
+        weights:
+          190:
+            aliases:
+              swadpia: [랑데뷰 내츄럴 190g]
+    noise_suffix_regex: (\d+)\s*g.*$
+  coating:
+    _description: 합판전단은 기본 비코팅. 코팅 옵션 있어도 별도 axis 로 처리.
+    default: 비코팅
+    allowed: [비코팅]
+  print_mode:
+    _description: 도수. 단면4도 / 양면8도.
+    default: 양면8도
+    allowed: [단면4도, 양면8도]
+    aliases:
+      단면4도: [단면4도, 단면 4도, '4/0', 단면칼라, 단면 칼라4도]
+      양면8도: [양면8도, 양면 8도, '4/4', 양면칼라, 양면 칼라8도]
+  size:
+    _description: 합판전단 표준 — A2/A3/A4/B3/B4 (5사이트 공통).
+    default: A4
+    format: 표준 사이즈 라벨
+    allowed: [A2, A3, A4, B3, B4]
+    aliases:
+      A2: [A2 국2절(420x597), A2(국2절), A2 (국2절)]
+      A3: [A3 국4절(297x420), A3(국4절), 'A3 (국4절)']
+      A4: [A4 국8절(210x297), A4(국8절), 'A4 (국8절)']
+      B3: [B3 4절(367x517), B3(4절), '4절']
+      B4: [B4 8절(257x367), B4(8절), '8절', 'B4 (8절)']
+  qty:
+    _description: 합판전단 표준 — 2000매 단일 (= printcity 4연 / dtpia 0.5R / wowpress 4연).
+    default: 2000
+    common_units: [2000]

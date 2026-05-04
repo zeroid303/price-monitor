@@ -64,3 +64,24 @@ card_digital:
   low_price_guard:
     floor_abs: 500
     per_qty_multiplier: 3
+
+# 합판 전단지
+flyer:
+  selectors:
+    paper_type: select[name=paper_type]
+    paper_code: select[name=paper_code]
+    paper_size: select[name=paper_size]
+    paper_qty: select[name=paper_qty]
+    fside_color_amount: select[name=fside_color_amount]
+    bside_color_amount: select[name=bside_color_amount]
+    price_supply: tr.estimate_supply_amt td.price
+  timeouts:
+    page_goto_ms: 30000
+    after_goto_ms: 2500
+    after_select_ms: 600
+    after_qty_ms: 400
+    after_price_trigger_ms: 700
+    retry_price_ms: 1500
+  low_price_guard:
+    floor_abs: 5000
+    per_qty_multiplier: 5

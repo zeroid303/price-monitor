@@ -36,6 +36,7 @@ CARD_SITES = ["printcity", "dtpia", "swadpia", "wowpress", "adsland"]
 CATEGORIES = [
     {"id": "card_offset", "name": "명함 (오프셋)"},
     {"id": "card_digital", "name": "명함 (디지털)"},
+    {"id": "flyer", "name": "합판 전단"},
     {"id": "sticker", "name": "스티커"},
     {"id": "envelope", "name": "봉투"},
 ]
@@ -72,10 +73,10 @@ def _load_site_yaml(site_id: str) -> dict:
 def get_active_sites(category: str) -> list[dict]:
     """카테고리별 활성 사이트 list.
 
-    카드(card_offset/card_digital): config/sites/*.yaml 5사이트.
+    카드(card_offset/card_digital) / 합판전단(flyer): config/sites/*.yaml 5사이트.
     레거시(sticker/envelope): config/{cat}_mapping_rule.json 의 sites.
     """
-    if category in ("card_offset", "card_digital"):
+    if category in ("card_offset", "card_digital", "flyer"):
         out = []
         for sid in CARD_SITES:
             site_cfg = _load_site_yaml(sid)
@@ -248,6 +249,77 @@ def _build_card_grid(sites, site_ids, items_by_site, raw_items_by_site, latest_c
     }
 
 
+# ── 합판전단 grid ──
+# qty=2000 고정. rows=size (A2/A3/A4/B3/B4), site cell sub-cols=print_mode (단면/양면).
+
+FLYER_SIZES = ["A2", "A3", "A4", "B3", "B4"]
+FLYER_PRINT_MODES = ["단면4도", "양면8도"]
+
+
+def _flyer_print_mode(raw: str) -> str | None:
+    """raw print_mode → canonical (단면4도/양면8도)."""
+    if not raw: return None
+    if "단면" in raw: return "단면4도"
+    if "양면" in raw: return "양면8도"
+    return None
+
+
+def _build_flyer_grid(sites, site_ids, items_by_site, raw_items_by_site, latest_crawled):
+    """합판전단 그리드. paper 별 카드, 각 카드 안에서 size × print_mode × site 매트릭스."""
+    sizes = FLYER_SIZES
+    modes = FLYER_PRINT_MODES
+
+    # paper canonical 수집 + 사이트 수 정렬
+    key_sites = {}    # paper → set(sid)
+    key_records = {}
+    for sid in site_ids:
+        for it in items_by_site[sid]:
+            pn = it.get("paper_name", "")
+            key_sites.setdefault(pn, set()).add(sid)
+            key_records[pn] = key_records.get(pn, 0) + 1
+
+    def _sort_key(k):
+        return (-len(key_sites[k]), -key_records[k], k)
+    sorted_papers = sorted(key_sites.keys(), key=_sort_key)
+
+    papers = []
+    for paper_name in sorted_papers:
+        entry = {"label": paper_name, "paper_name": paper_name, "sites": {}}
+        for site in sites:
+            sid = site["id"]
+            matching = [it for it in items_by_site[sid] if it.get("paper_name", "") == paper_name]
+            if not matching:
+                entry["sites"][sid] = None
+                continue
+            url = matching[0].get("url") or site["base_url"]
+            url_ok = matching[0].get("url_ok", True)
+            prices = {m: {s: None for s in sizes} for m in modes}
+            products_seen = []
+            for it in matching:
+                p = it.get("product", "")
+                if p and p not in products_seen:
+                    products_seen.append(p)
+                m = _flyer_print_mode(it.get("print_mode", ""))
+                if m not in prices: continue
+                sz = it.get("size", "")
+                if sz in sizes:
+                    prices[m][sz] = it.get("price")
+            raw_paper = _find_raw_paper_name(matching, items_by_site[sid], raw_items_by_site.get(sid, []))
+            entry["sites"][sid] = {
+                "product": " + ".join(products_seen),
+                "raw_paper_name": raw_paper,
+                "url": url, "url_ok": url_ok,
+                "prices": prices,
+            }
+        papers.append(entry)
+
+    return {
+        "type": "flyer", "sites": sites,
+        "sizes": sizes, "print_modes": modes, "qty": 2000,
+        "papers": papers, "updated_at": latest_crawled,
+    }
+
+
 # ── 스티커 grid ──
 STICKER_SIZES = ["45x45", "55x55", "65x65", "75x75", "85x85", "95x95"]
 
@@ -387,6 +459,8 @@ def api_grid():
         return jsonify(_build_sticker_grid(sites, site_ids, items_by_site, raw_items_by_site, latest_crawled))
     if category == "envelope":
         return jsonify(_build_envelope_grid(sites, site_ids, items_by_site, raw_items_by_site, latest_crawled))
+    if category == "flyer":
+        return jsonify(_build_flyer_grid(sites, site_ids, items_by_site, raw_items_by_site, latest_crawled))
     # card_offset / card_digital (둘 다 카드 그리드)
     return jsonify(_build_card_grid(sites, site_ids, items_by_site, raw_items_by_site, latest_crawled))
 

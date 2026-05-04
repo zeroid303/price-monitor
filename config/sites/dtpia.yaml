@@ -81,3 +81,23 @@ card_digital:
   low_price_guard:
     floor_abs: 500
     per_qty_multiplier: 3
+
+# 합판 전단지
+flyer:
+  selectors:
+    mtrl_cd: mtrl_cd
+    sdiv: sdiv
+    sdiv_cd: sdiv_cd
+    color_mode: prn_clr_cn_gb
+    qty: ream_cn
+    price: est_scroll_ord_am
+  timeouts:
+    page_goto_ms: 30000
+    after_goto_ms: 2500
+    after_select_ms: 500
+    after_qty_ms: 400
+    after_price_trigger_ms: 900
+    retry_price_ms: 1500
+  low_price_guard:
+    floor_abs: 5000
+    per_qty_multiplier: 5

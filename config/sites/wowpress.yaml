@@ -71,3 +71,26 @@ card_digital:
   low_price_guard:
     floor_abs: 500
     per_qty_multiplier: 3
+
+# 합판 전단지
+flyer:
+  selectors:
+    size: pdata_00_sizeno
+    color_mode: pdata_00_colorno
+    paper_no3: spdata_00_paperno3
+    paper_no4: spdata_00_paperno4
+    qty: spdata_00_ordqty
+    paper_list: paperList
+    price_total: od_00_totalcost
+    price_tax: od_00_taxcost
+    price_supply: od_00_prscost
+  timeouts:
+    page_goto_ms: 30000
+    after_goto_ms: 2500
+    after_select_ms: 800
+    after_paper_ms: 800
+    after_qty_ms: 1200
+    retry_price_ms: 1500
+  low_price_guard:
+    floor_abs: 5000
+    per_qty_multiplier: 5

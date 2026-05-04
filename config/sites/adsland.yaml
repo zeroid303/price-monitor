@@ -75,3 +75,23 @@ card_digital:
   low_price_guard:
     floor_abs: 500
     per_qty_multiplier: 3
+
+# 합판 전단지
+flyer:
+  selectors:
+    size: select#size_book
+    paper: select[name=paper]
+    dosu: select#dosu
+    busu: select#busu
+    kind: select#kind
+    price_supply: input[name="bill_ttl_sub"]
+    price_tax: input[name="bill_tax"]
+  timeouts:
+    page_goto_ms: 30000
+    after_goto_ms: 2500
+    after_select_ms: 500
+    after_smart_ms: 600
+    retry_price_ms: 1500
+  low_price_guard:
+    floor_abs: 5000
+    per_qty_multiplier: 5
