@@ -2,7 +2,11 @@
 경쟁사 가격 모니터링 대시보드.
 - 스케줄러가 생성한 normalize_now.json을 그대로 읽어 표시.
 - 값 변환 로직 없음 (정규화는 스케줄러가 담당).
-- 카테고리별 (card, sticker) 가격 비교 + 변동 감지.
+- 카테고리별 가격 비교 + 변동 감지.
+
+카테고리:
+  card_offset / card_digital — 신규 schema (config/schemas/*.yaml + config/sites/*.yaml)
+  sticker / envelope        — 레거시 (config/{cat}_mapping_rule.json)
 """
 import json
 import os
@@ -11,6 +15,7 @@ import threading
 import time
 from datetime import datetime
 
+import yaml
 from flask import Flask, Response, jsonify, render_template, request, stream_with_context
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -19,14 +24,18 @@ sys.path.insert(0, BASE_DIR)
 CONFIG_DIR = os.path.join(BASE_DIR, "config")
 OUTPUT_DIR = os.path.join(BASE_DIR, "output")
 
-RULE_PATHS = {
-    "card": os.path.join(CONFIG_DIR, "card_mapping_rule.json"),
+# 레거시 카테고리 (sticker / envelope) 만 mapping_rule.json 사용. 카드는 schemas/*.yaml.
+LEGACY_RULE_PATHS = {
     "sticker": os.path.join(CONFIG_DIR, "sticker_mapping_rule.json"),
     "envelope": os.path.join(CONFIG_DIR, "envelope_mapping_rule.json"),
 }
 
+# 신규 카드 카테고리의 사이트 list (config/sites/*.yaml 에서 읽음)
+CARD_SITES = ["printcity", "dtpia", "swadpia", "wowpress", "adsland"]
+
 CATEGORIES = [
-    {"id": "card", "name": "명함"},
+    {"id": "card_offset", "name": "명함 (오프셋)"},
+    {"id": "card_digital", "name": "명함 (디지털)"},
     {"id": "sticker", "name": "스티커"},
     {"id": "envelope", "name": "봉투"},
 ]
@@ -53,8 +62,36 @@ def update_status(**kwargs):
 
 
 # ── 사이트 목록 ──
-def get_active_sites(category: str = "card") -> list[dict]:
-    rule_path = RULE_PATHS.get(category, RULE_PATHS["card"])
+def _load_site_yaml(site_id: str) -> dict:
+    path = os.path.join(CONFIG_DIR, "sites", f"{site_id}.yaml")
+    if not os.path.exists(path): return {}
+    with open(path, "r", encoding="utf-8") as f:
+        return yaml.safe_load(f) or {}
+
+
+def get_active_sites(category: str) -> list[dict]:
+    """카테고리별 활성 사이트 list.
+
+    카드(card_offset/card_digital): config/sites/*.yaml 5사이트.
+    레거시(sticker/envelope): config/{cat}_mapping_rule.json 의 sites.
+    """
+    if category in ("card_offset", "card_digital"):
+        out = []
+        for sid in CARD_SITES:
+            site_cfg = _load_site_yaml(sid)
+            if not site_cfg: continue
+            out.append({
+                "id": sid,
+                "name": site_cfg.get("name", sid),
+                "base_url": site_cfg.get("base_url", ""),
+                "ownership": site_cfg.get("ownership", "competitor"),
+                "vat_adjusted": False,
+            })
+        return out
+
+    # 레거시
+    rule_path = LEGACY_RULE_PATHS.get(category)
+    if not rule_path: return []
     rule = load_json(rule_path) or {}
     out = []
     for sid, conf in rule.get("sites", {}).items():
@@ -65,7 +102,7 @@ def get_active_sites(category: str = "card") -> list[dict]:
             "name": conf.get("name", sid),
             "base_url": conf.get("base_url", ""),
             "ownership": conf.get("ownership", "competitor"),
-            "vat_adjusted": False,  # 모든 사이트 공급가 기준 통일이라 별도 보정 표시 없음
+            "vat_adjusted": False,
         })
     return out
 
@@ -78,27 +115,7 @@ def _side(print_mode: str) -> str | None:
     return None
 
 
-# ── 명함 grid 표시 순서 ──
-CARD_GRID_ORDER = [
-    ("스노우화이트 250g", "비코팅", False),
-    ("스노우화이트 250g", "유광코팅", False),
-    ("스노우화이트 250g", "무광코팅", False),
-    ("스노우화이트 216g", "비코팅", False),
-    ("스노우화이트 216g", "유광코팅", False),
-    ("스노우화이트 216g", "무광코팅", False),
-    ("스노우화이트 300g", "비코팅", False),
-    ("스노우화이트 300g", "유광코팅", False),
-    ("스노우화이트 300g", "무광코팅", False),
-    ("스노우화이트 400g", "비코팅", False),
-    ("스노우화이트 400g", "유광코팅", False),
-    ("스노우화이트 400g", "무광코팅", False),
-    ("누브 210g", "비코팅", False),
-    ("반누보화이트 250g", "비코팅", False),
-    ("아르떼 울트라화이트 310g", "비코팅", False),
-    ("누브 350g", "비코팅", False),
-    ("휘라레 216g", "비코팅", False),
-    ("스노우화이트 300g", "비코팅", True),
-]
+# 명함 grid 표시 순서는 동적 — 다사이트 매칭 paper 우선, 그 다음 record 많은 순.
 
 
 # ── 공통: 사이트별 데이터 로드 ──
@@ -130,67 +147,105 @@ def _find_raw_paper_name(matching, items_by_site_sid, raw_items_by_site_sid):
 
 
 # ── 명함 grid ──
-def _build_card_grid(sites, site_ids, items_by_site, raw_items_by_site, latest_crawled):
-    # 그룹핑 키 = match_as(canonical, ±25g) 우선, 없으면 paper_name
-    def _gkey(it):
-        return it.get("match_as") or it.get("paper_name", "")
+def _build_card_grid(sites, site_ids, items_by_site, raw_items_by_site, latest_crawled,
+                    qtys=None):
+    """카드 그리드 빌드 (offset / digital 공통).
 
-    seen_keys = []
-    for key in CARD_GRID_ORDER:
-        paper_name, coating, partial = key
-        for sid in site_ids:
-            for it in items_by_site[sid]:
-                if (_gkey(it) == paper_name
-                    and it.get("coating") == coating
-                    and bool(it.get("options", {}).get("partial_coating")) == partial):
-                    seen_keys.append(key)
-                    break
-            else:
-                continue
-            break
-
-    qtys = [100, 200, 500, 1000]
+    그룹핑 키 = (paper_name, coating). raw 매칭은 paper_name 만 (match_as 미사용).
+    표시 순서: 다사이트 매칭 paper 우선 + record 많은 순.
+    """
+    qtys = qtys or [100, 200, 500, 1000]
     sides = ["단면", "양면"]
 
+    # 1) 모든 (paper_name, coating) 키 + 사이트 set / record count 수집
+    key_sites = {}    # (paper, coating) → set(sid)
+    key_records = {}  # (paper, coating) → 총 record 수
+    for sid in site_ids:
+        for it in items_by_site[sid]:
+            pn = it.get("paper_name", "")
+            coat = it.get("coating", "")
+            k = (pn, coat)
+            key_sites.setdefault(k, set()).add(sid)
+            key_records[k] = key_records.get(k, 0) + 1
+    # 2) 정렬 — 다사이트 매칭 우선, 동수면 record 많은 순, 그 다음 paper 이름
+    def _sort_key(k):
+        n_sites = len(key_sites[k])
+        return (-n_sites, -key_records[k], k[0], k[1])
+    sorted_keys = sorted(key_sites.keys(), key=_sort_key)
+
+    # 표시용 qty = 표준 [100,200,500,1000]. 사이트별 매수가 다르면 (예: adsland 96/192/504/1008)
+    # 표준 qty 의 ±tolerance 안 가장 가까운 매수의 가격으로 보간 (raw 매수 표시는 메타).
+    qtys_to_show = qtys
+    QTY_TOLERANCE = 0.10  # ±10% 안 가장 가까운 매수로 보간
+
+    def _closest_qty(target: int, available: set[int]) -> int | None:
+        if target in available: return target
+        # ±10% 범위 안의 가장 가까운 매수
+        candidates = [q for q in available if abs(q - target) / target <= QTY_TOLERANCE]
+        if not candidates: return None
+        return min(candidates, key=lambda q: abs(q - target))
+
     papers = []
-    for paper_name, coating, partial in seen_keys:
-        prefix = "[부분코팅] " if partial else ""
-        label = f"{prefix}{paper_name} {coating}".strip()
-        entry = {"label": label, "paper_name": paper_name, "coating": coating, "partial_coating": partial, "sites": {}}
+    for paper_name, coating in sorted_keys:
+        label = f"{paper_name} · {coating}" if coating else paper_name
+        entry = {"label": label, "paper_name": paper_name, "coating": coating, "sites": {}}
         for site in sites:
             sid = site["id"]
             matching = [
                 it for it in items_by_site[sid]
-                if _gkey(it) == paper_name
-                and it.get("coating") == coating
-                and bool(it.get("options", {}).get("partial_coating")) == partial
+                if it.get("paper_name", "") == paper_name and it.get("coating", "") == coating
             ]
             if not matching:
                 entry["sites"][sid] = None
                 continue
             url = matching[0].get("url") or site["base_url"]
             url_ok = matching[0].get("url_ok", True)
-            prices = {s: {str(q): None for q in qtys} for s in sides}
+            prices = {s: {str(q): None for q in qtys_to_show} for s in sides}
+            # 보간 정보: target → actual (보간된 매수). target == actual 이면 보간 X
+            interp_map = {s: {} for s in sides}
             products_seen = []
+            # 사이트의 (side, actual_qty) → price 맵 구성
+            by_side_qty = {s: {} for s in sides}
             for it in matching:
                 p = it.get("product", "")
                 if p and p not in products_seen:
                     products_seen.append(p)
                 side = _side(it.get("print_mode", ""))
-                if side not in prices:
-                    continue
+                if side not in by_side_qty: continue
                 q = it.get("qty")
-                if q in qtys:
-                    prices[side][str(q)] = it.get("price")
+                if q is not None:
+                    by_side_qty[side][q] = it.get("price")
+            # 각 표준 qty 에 대해 사이트의 매수에서 ±10% 안 가장 가까운 매수의 가격 사용
+            site_has_interpolation = False
+            interp_pairs = set()  # (target, actual) 보간된 매수 페어
+            for side in sides:
+                avail = set(by_side_qty[side].keys())
+                if not avail: continue
+                for target_q in qtys_to_show:
+                    cq = _closest_qty(target_q, avail)
+                    if cq is not None:
+                        prices[side][str(target_q)] = by_side_qty[side][cq]
+                        interp_map[side][str(target_q)] = cq
+                        if cq != target_q:
+                            site_has_interpolation = True
+                            interp_pairs.add((target_q, cq))
             raw_paper_name = _find_raw_paper_name(matching, items_by_site[sid], raw_items_by_site.get(sid, []))
+            interp_note = None
+            if site_has_interpolation:
+                pairs_sorted = sorted(interp_pairs, key=lambda p: p[0])
+                interp_note = "수량 보간: " + ", ".join(f"{a}→{t}" for t, a in pairs_sorted)
             entry["sites"][sid] = {
                 "product": " + ".join(products_seen),
                 "raw_paper_name": raw_paper_name,
                 "url": url, "url_ok": url_ok, "prices": prices,
+                "interp_note": interp_note,
             }
         papers.append(entry)
 
-    return {"type": "card", "sites": sites, "sides": sides, "qtys": qtys, "papers": papers, "updated_at": latest_crawled}
+    return {
+        "type": "card", "sites": sites, "sides": sides, "qtys": qtys_to_show,
+        "papers": papers, "updated_at": latest_crawled,
+    }
 
 
 # ── 스티커 grid ──
@@ -323,7 +378,7 @@ def _build_envelope_grid(sites, site_ids, items_by_site, raw_items_by_site, late
 # ── grid API ──
 @app.route("/api/data/grid")
 def api_grid():
-    category = request.args.get("category", "card")
+    category = request.args.get("category", "card_offset")
     sites = get_active_sites(category)
     site_ids = [s["id"] for s in sites]
     items_by_site, raw_items_by_site, latest_crawled = _load_site_data(category, site_ids)
@@ -332,6 +387,7 @@ def api_grid():
         return jsonify(_build_sticker_grid(sites, site_ids, items_by_site, raw_items_by_site, latest_crawled))
     if category == "envelope":
         return jsonify(_build_envelope_grid(sites, site_ids, items_by_site, raw_items_by_site, latest_crawled))
+    # card_offset / card_digital (둘 다 카드 그리드)
     return jsonify(_build_card_grid(sites, site_ids, items_by_site, raw_items_by_site, latest_crawled))
 
 
@@ -343,17 +399,14 @@ def _match_key(item: dict) -> tuple:
         item.get("print_mode", ""),
         item.get("size", ""),
         item.get("qty", 0),
-        bool(item.get("options", {}).get("partial_coating")),
     )
 
 
 @app.route("/api/data/changes")
 def api_changes():
-    category = request.args.get("category", "card")
+    category = request.args.get("category", "card_offset")
     sites = get_active_sites(category)
-    rule_path = RULE_PATHS.get(category, RULE_PATHS["card"])
-    rule = load_json(rule_path) or {}
-    site_names = {sid: conf.get("name", sid) for sid, conf in rule.get("sites", {}).items()}
+    site_names = {s["id"]: s["name"] for s in sites}
 
     changes = []
     past_time = now_time = None
@@ -379,7 +432,7 @@ def api_changes():
             changes.append({
                 "company": sid, "company_name": site_names.get(sid, sid),
                 "paper_name": k[0], "coating": k[1], "print_mode": k[2],
-                "size": k[3], "qty": k[4], "partial_coating": k[5],
+                "size": k[3], "qty": k[4],
                 "past_price": pp, "now_price": np_, "diff": np_ - pp,
                 "pct": round((np_ - pp) / pp * 100, 2),
                 "direction": "up" if np_ > pp else "down",

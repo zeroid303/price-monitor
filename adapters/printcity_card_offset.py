@@ -12,6 +12,20 @@ from engine.adapter import SiteAdapter
 from engine.context import RawItem, RunContext
 
 
+# 프린트시티 product 별 상세 페이지 URL slug
+PRODUCT_URL_SLUGS = {
+    "일반명함": "NameCard",
+    "고급명함": "NameCardUnited",
+    "부분코팅 명함": "NameCardPartialCoating",
+    "디지털명함": "DigitalNameCardGroup1",
+}
+
+
+def _product_url(base_url: str, product: str) -> str:
+    slug = PRODUCT_URL_SLUGS.get(product)
+    return f"{base_url.rstrip('/')}/product/{slug}" if slug else base_url
+
+
 def _yield_from_targets(ctx: RunContext, expected_products: tuple[str, ...]) -> Iterator[RawItem]:
     pc = ctx.targets
     if not isinstance(pc, dict) or "items" not in pc:
@@ -47,7 +61,7 @@ def _yield_from_targets(ctx: RunContext, expected_products: tuple[str, ...]) -> 
             qty=it.get("qty"),
             price=it.get("price"),  # None 가능 (엑셀 value=0)
             price_vat_included=vat_included,
-            url=base_url,
+            url=_product_url(base_url, product),
             url_ok=True,
             options={
                 "source": "xlsx",

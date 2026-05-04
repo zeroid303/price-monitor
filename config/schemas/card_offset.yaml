@@ -214,8 +214,6 @@ _normalization:
             aliases:
               printcity:
               - 반누보화이트-250g
-              swadpia:
-              - 반누보 화이트 250g
               wowpress:
               - 프리미엄반누보 250g
             memo: 성원의 반누보화이트204와 320은 용지 두께 차이가 많이 나지만 그래도 비교차 그대로 두어도 될 것 같습니다.
@@ -348,7 +346,6 @@ _normalization:
               - 스노우화이트-300g
               swadpia:
               - 스노우지 백색 300g
-              - 스노우지 백색 300g(무광코팅)
               wowpress:
               - 스노우지 300g
               - 스노우지(무광코팅) 300g
@@ -553,14 +550,6 @@ _normalization:
               - 아코팩 300g (신상품)
         all_weights_g:
         - 300
-      아쿠아사틴:
-        weights:
-          256:
-            aliases:
-              swadpia:
-              - 아쿠아사틴256g
-        all_weights_g:
-        - 256
       아트지:
         weights:
           90:
@@ -738,8 +727,6 @@ _normalization:
             memo: '평량 ±20g 위반 (피드백 범위: 400) — 분리됨'
           350:
             aliases:
-              swadpia:
-              - 인버코트 350g
               adsland:
               - 인버코트 350g (신상품-FSC)
         all_weights_g:

@@ -78,7 +78,8 @@
     <div class="sidebar">
         <div class="sidebar-title">가격 모니터링</div>
         <ul class="sidebar-nav" id="sidebarNav">
-            <li><a href="#" data-category="card" class="active">명함</a></li>
+            <li><a href="#" data-category="card_offset" class="active">명함 (오프셋)</a></li>
+            <li><a href="#" data-category="card_digital">명함 (디지털)</a></li>
             <li><a href="#" data-category="sticker">스티커</a></li>
             <li><a href="#" data-category="envelope">봉투</a></li>
         </ul>
@@ -131,14 +132,22 @@
     </div>
 
     <script>
-    let currentCategory = location.hash.replace('#', '') || 'card';
+    // 옛 hash (card) 호환 — card 면 card_offset 으로
+    let currentCategory = location.hash.replace('#', '') || 'card_offset';
+    if (currentCategory === 'card') currentCategory = 'card_offset';
 
     const META = {
-        card: `<span>사이즈: 90x50mm</span>
+        card_offset: `<span>사이즈: 90x50mm</span>
                <span>인쇄: 양면칼라(8도) / 단면칼라(4도)</span>
                <span>매수: 100 / 200 / 500 / 1000</span>
-               <span>평량 오차: ±25g 허용</span>
-               <span>가격: 공급가 기준 (부가세 제외, ÷1.1 변환)</span>
+               <span>평량 오차: ±20g 허용</span>
+               <span>가격: 공급가 기준 (부가세 제외)</span>
+               <span class="updated-at" id="updatedAt"></span>`,
+        card_digital: `<span>사이즈: 90x50mm</span>
+               <span>인쇄: 양면칼라 / 단면칼라</span>
+               <span>매수: 자동 검출 (사이트별 단위 다름)</span>
+               <span>평량 오차: ±20g 허용</span>
+               <span>가격: 공급가 기준 (부가세 제외)</span>
                <span class="updated-at" id="updatedAt"></span>`,
         sticker: `<span>형태: 원형 도무송</span>
                   <span>매수: 1000매 고정</span>
@@ -154,7 +163,7 @@
                    <span class="updated-at" id="updatedAt"></span>`,
     };
 
-    const TITLES = { card: '명함', sticker: '스티커', envelope: '봉투' };
+    const TITLES = { card_offset: '명함 (오프셋)', card_digital: '명함 (디지털)', sticker: '스티커', envelope: '봉투' };
 
     function fmt(n) {
         if (n == null) return '';
@@ -197,41 +206,50 @@
         }
         let html = '';
         for (const paper of papers) {
-            const tag = paper.partial_coating ? '<span class="partial-tag">부분코팅</span>' : '';
             html += `<div class="paper-card">
-                <div class="paper-title">${tag}${paper.paper_name} <span style="color:#888;font-weight:400;">${paper.coating}</span></div>
-                <table class="grid"><thead><tr>
-                    <th rowspan="2" colspan="2" style="width: 130px;">면 / 매수</th>`;
+                <div class="paper-title">${paper.paper_name} <span style="color:#888;font-weight:400;">${paper.coating}</span></div>
+                <table class="grid"><thead>`;
+            // 헤더 row 1: 매수 (rowspan 2) + 사이트명 (colspan 2)
+            html += `<tr><th rowspan="2" style="width: 70px;">매수</th>`;
             for (const site of sites) {
                 const sd = paper.sites[site.id];
                 const product = sd ? sd.product : '';
                 const url = sd ? sd.url : site.base_url;
                 const vatTag = site.vat_adjusted ? ' <span style="color:#888;font-size:11px;">(VAT ×1.1 보정)</span>' : '';
                 const rawPaper = sd ? (sd.raw_paper_name || '') : '';
-                html += `<th>
+                const interpNote = sd && sd.interp_note ? sd.interp_note : '';
+                html += `<th colspan="${sides.length}">
                     <div class="site-name">${site.name}${vatTag}</div>
                     <div class="site-source">
                         ${product ? product + '<br>' : ''}
                         ${rawPaper ? `<span style="color:#b45309;font-size:11px;">${rawPaper}</span><br>` : ''}
                         ${renderSiteLink(url, sd ? sd.url_ok : undefined)}
+                        ${interpNote ? `<br><span style="color:#0984e3;font-size:10px;">${interpNote}</span>` : ''}
                     </div>
                 </th>`;
             }
+            html += `</tr>`;
+            // 헤더 row 2: 단면 / 양면 sub-columns per site
+            html += `<tr>`;
+            for (let i = 0; i < sites.length; i++) {
+                for (const side of sides) {
+                    html += `<th class="row-side" style="font-size:12px;">${side}</th>`;
+                }
+            }
             html += `</tr></thead><tbody>`;
-            for (const side of sides) {
-                qtys.forEach((qty, i) => {
-                    html += '<tr>';
-                    if (i === 0) html += `<td class="row-side" rowspan="${qtys.length}">${side}</td>`;
-                    html += `<td class="row-qty">${qty}</td>`;
-                    for (const site of sites) {
-                        const sd = paper.sites[site.id];
+            // 데이터 rows: qty 별
+            for (const qty of qtys) {
+                html += `<tr><td class="row-qty">${qty}</td>`;
+                for (const site of sites) {
+                    const sd = paper.sites[site.id];
+                    const isBase = site.ownership === 'self';
+                    for (const side of sides) {
                         const price = sd ? sd.prices[side]?.[String(qty)] : null;
-                        const isBase = site.ownership === 'self';
                         const cls = price == null ? 'price empty' : (isBase ? 'price base' : 'price');
                         html += `<td class="${cls}">${price == null ? '-' : fmt(price)}</td>`;
                     }
-                    html += '</tr>';
-                });
+                }
+                html += '</tr>';
             }
             html += `</tbody></table></div>`;
         }

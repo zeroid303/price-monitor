@@ -35,11 +35,23 @@ logger = logging.getLogger("scheduler")
 #
 # 카드(card) 는 (a) 로 이관 완료 — card_offset / card_digital 두 sub-category 를
 # 5개 사이트(printcity, dtpia, swadpia, wowpress, adsland) 에 대해 실행.
+_CARD_SITES = ["printcity", "dtpia", "swadpia", "wowpress", "adsland"]
+
 CATEGORIES = {
-    "card": {
+    "card": {  # 전체 카드 (오프셋+디지털) 일괄 실행
         "type": "engine",
-        "sites": ["printcity", "dtpia", "swadpia", "wowpress", "adsland"],
+        "sites": _CARD_SITES,
         "sub_categories": ["card_offset", "card_digital"],
+    },
+    "card_offset": {
+        "type": "engine",
+        "sites": _CARD_SITES,
+        "sub_categories": ["card_offset"],
+    },
+    "card_digital": {
+        "type": "engine",
+        "sites": _CARD_SITES,
+        "sub_categories": ["card_digital"],
     },
     "sticker": {
         "type": "legacy",

@@ -3529,37 +3529,6 @@ swadpia:
   papers:
   - paper_code: ART300W00
     paper_name_out: 아트지 백색 300g
-- category: 디지털박에폭시명함
-  product_name: 디지털박에폭시명함
-  url: https://www.swadpia.co.kr/goods/goods_view/CNC6000/GNC6001
-  page_type: select_radio
-  size_value: N0100
-  qtys: *id002
-  color_modes: *id003
-  coatings: *id004
-  papers:
-  - paper_code: ARM230W00
-    paper_name_out: 아르미 울트라화이트 230g
-  - paper_code: ARM310W00
-    paper_name_out: 아르미 울트라화이트 310g
-  - paper_code: AQS256W00
-    paper_name_out: 아쿠아사틴256g
-  - paper_code: INV350MT0
-    paper_name_out: 인버코트 350g
-  - paper_code: SNW300W00
-    paper_name_out: 스노우지 백색 300g(무광코팅)
-  - paper_code: ETM350W00
-    paper_name_out: 엑스트라매트 백색 350g
-  - paper_code: VNV186W00
-    paper_name_out: 반누보 화이트 204g
-  - paper_code: VNV233W00
-    paper_name_out: 반누보 화이트 250g
-  - paper_code: VNV227SW0
-    paper_name_out: 반누보 스노우화이트 227g
-  - paper_code: VNV320W00
-    paper_name_out: 반누보 화이트 320g
-  - paper_code: RDV310N00
-    paper_name_out: 랑데뷰 내츄럴 310g
 wowpress:
 - category: 일반명함
   product_name: 일반명함
