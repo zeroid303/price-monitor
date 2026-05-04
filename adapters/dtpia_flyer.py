@@ -1,12 +1,14 @@
 """디티피아 합판전단 어댑터.
 
 페이지: https://dtpia.co.kr/Order/Flyer/Happan.aspx
-DOM 구조:
-- mtrl_cd select: 5 paper (아트 90/120/150/180g, 모조 80g)
-- sdiv select: A=국전 / B=4*6전 → sdiv_cd 동적 변경
+DOM:
+- mtrl_cd: 5 paper / sdiv: A=국전 / B=4*6전 / sdiv_cd: paper×sdiv 별 가용 사이즈 동적
 - prn_clr_cn_gb: 4=단면칼라 / 8=양면칼라
-- ream_cn: 0.5R = 2000매 (1R = 4000매)
+- ream_cn: R(원지) 단위 — paper×size 별 1R 매수 다름. ream_cn select grandparent
+  innerText 에 "R (X,000장)" 표기 → 1R 매수 추출.
 - 가격: est_scroll_ord_am (공급가)
+
+수집 정책: 표준 매수(2000)에 가장 가까운 R 옵션 동적 선택. raw 에 실측 매수+가격.
 """
 import re
 from typing import Iterator, Optional
@@ -15,6 +17,9 @@ from playwright.sync_api import sync_playwright, TimeoutError as PwTimeout
 
 from engine.adapter import SiteAdapter
 from engine.context import RawItem, RunContext
+
+
+TARGET_QTY_MAE = 2000  # 표준 매수
 
 
 JS_SET_SELECT = """({sel_id, value}) => {
@@ -30,10 +35,17 @@ JS_SET_SELECT = """({sel_id, value}) => {
     return true;
 }"""
 
-JS_GET_SELECT_TEXT = """(sel_id) => {
+JS_GET_REAM_INFO = r"""(sel_id) => {
     const el = document.getElementById(sel_id);
-    if (!el || el.selectedIndex < 0) return '';
-    return (el.options[el.selectedIndex]?.textContent || '').trim();
+    if (!el) return null;
+    const opts = [...el.options].map(o => parseFloat(o.value)).filter(v => !isNaN(v));
+    const gp = el.parentElement?.parentElement;
+    let per_ream = null;
+    if (gp) {
+        const m = (gp.innerText || '').match(/R\s*\(([0-9,]+)\s*장\)/);
+        if (m) per_ream = parseInt(m[1].replace(/,/g, ''), 10);
+    }
+    return {opts: opts, per_ream: per_ream};
 }"""
 
 JS_GET_PRICE = """(sel_id) => {
@@ -92,12 +104,7 @@ class Adapter(SiteAdapter):
             ctx.log.event("fetch.fail", level="error", product=t["product_name"], error="goto timeout")
             return
 
-        # qty 셋팅 (0.5R 고정)
-        page.evaluate(JS_SET_SELECT, {"sel_id": sel["qty"], "value": t["qty_value"]})
-        page.wait_for_timeout(timeouts.get("after_select_ms", 500))
-
         for paper in t["papers"]:
-            # paper 셋팅
             r = page.evaluate(JS_SET_SELECT, {"sel_id": sel["mtrl_cd"], "value": paper["mtrl_cd"]})
             if r is not True:
                 ctx.log.event("extract.warn", product=t["product_name"],
@@ -106,13 +113,30 @@ class Adapter(SiteAdapter):
             page.wait_for_timeout(timeouts.get("after_select_ms", 500))
 
             for size in t["sizes"]:
-                # sdiv (국전/4*6전) 토글
                 page.evaluate(JS_SET_SELECT, {"sel_id": sel["sdiv"], "value": size["sdiv"]})
                 page.wait_for_timeout(timeouts.get("after_select_ms", 500))
                 r = page.evaluate(JS_SET_SELECT, {"sel_id": sel["sdiv_cd"], "value": size["sdiv_cd"]})
-                if r is not True:
+                if r != True:
                     continue
                 page.wait_for_timeout(timeouts.get("after_select_ms", 500))
+
+                # ream_cn 옵션 + 1R 매수 (페이지표기) 추출
+                info = page.evaluate(JS_GET_REAM_INFO, sel["qty"])
+                if not info or not info.get("opts"):
+                    continue
+                per_ream = info.get("per_ream")
+                opts = info["opts"]
+                # 표준 매수에 가장 가까운 R 선택. per_ream 모르면 첫 옵션.
+                if per_ream:
+                    chosen_R = min(opts, key=lambda o: abs(o * per_ream - TARGET_QTY_MAE))
+                    actual_qty = int(chosen_R * per_ream)
+                else:
+                    chosen_R = opts[0]
+                    actual_qty = None
+
+                # ream_cn 셋팅
+                page.evaluate(JS_SET_SELECT, {"sel_id": sel["qty"], "value": str(chosen_R)})
+                page.wait_for_timeout(timeouts.get("after_qty_ms", 400))
 
                 for cm in t["color_modes"]:
                     page.evaluate(JS_SET_SELECT, {"sel_id": sel["color_mode"], "value": cm["value"]})
@@ -137,12 +161,14 @@ class Adapter(SiteAdapter):
                         coating=None,
                         print_mode=cm["name"],
                         size=size["size_label"],
-                        qty=t["qty_mae"],
+                        qty=actual_qty,
                         price=price,
                         price_vat_included=False,
                         url=t["url"],
                         url_ok=True,
                         options={"mtrl_cd": paper["mtrl_cd"],
                                  "sdiv": size["sdiv"], "sdiv_cd": size["sdiv_cd"],
-                                 "color_value": cm["value"], "qty_R": t["qty_value"]},
+                                 "color_value": cm["value"],
+                                 "ream_R": chosen_R,
+                                 "per_ream_mae": per_ream},
                     )

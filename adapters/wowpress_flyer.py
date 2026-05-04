@@ -2,23 +2,33 @@
 
 페이지: https://wowpress.co.kr/ordr/prod/dets?ProdNo=40026
 DOM:
-- pdata_00_sizeno: A2/A3/A4/B3/B4 등 14 size
-- pdata_00_colorno: 단면 칼라4도(255) / 양면 칼라8도(256)
-- spdata_00_paperno3: 아트지 (1종)
-- spdata_00_paperno4: 100g / 150g
-- spdata_00_ordqty: 0.5/1/2/3/.../4 연 (1연=500매, 4연=2000매)
+- pdata_00_sizeno: 사이즈
+- pdata_00_colorno: 단면(255) / 양면(256)
+- spdata_00_paperno3: 아트지 / spdata_00_paperno4: 100g / 150g
+- spdata_00_ordqty: 연 단위 — paper×size 별 가용 연수 다름
 - 가격: od_00_totalcost - od_00_taxcost (공급가)
+
+수집 정책: paper×size 별 가용 가장 작은 연 옵션 동적 선택. wowpress 페이지에
+매수 표기 없음 → raw 의 qty 는 None (옵션 연 값만 저장). normalize 단계에서
+환산표 적용 가능.
 """
 from typing import Iterator
 
 from playwright.sync_api import sync_playwright
 
 from adapters._wowpress_card_common import (
-    JS_AVAIL_OPTIONS, build_item, goto_with_wait, init_browser,
-    js_set_select, price_with_retry, select_paper, read_dom_state,
+    JS_AVAIL_OPTIONS, goto_with_wait, init_browser,
+    js_set_select, price_with_retry, select_paper,
 )
 from engine.adapter import SiteAdapter
 from engine.context import RawItem, RunContext
+
+
+JS_GET_QTY_OPTS = """(sel_id) => {
+    const el = document.getElementById(sel_id);
+    if (!el) return [];
+    return [...el.options].map(o => parseFloat(o.value)).filter(v => !isNaN(v));
+}"""
 
 
 class Adapter(SiteAdapter):
@@ -48,12 +58,6 @@ class Adapter(SiteAdapter):
                 browser.close()
 
     def _crawl(self, ctx, page, t, sel, timeouts, guard) -> Iterator[RawItem]:
-        # qty 셋팅
-        if not js_set_select(page, sel["qty"], t["qty_value"]):
-            ctx.log.event("extract.warn", product=t["product_name"], error="qty 셋팅 실패")
-            return
-        page.wait_for_timeout(timeouts.get("after_select_ms", 800))
-
         for size in t["sizes"]:
             if not js_set_select(page, sel["size"], size["sizeno"]):
                 continue
@@ -64,43 +68,41 @@ class Adapter(SiteAdapter):
                     continue
                 page.wait_for_timeout(timeouts.get("after_select_ms", 800))
 
-                # qty 가용 체크
-                avail = page.evaluate(JS_AVAIL_OPTIONS, sel["qty"])
-                if str(t["qty_value"]) not in avail:
-                    ctx.log.event("extract.warn", product=t["product_name"],
-                                  size=size["size_label"], color=cm["name"],
-                                  error=f"qty {t['qty_value']} 가용 X")
-                    continue
-                js_set_select(page, sel["qty"], t["qty_value"])
-                page.wait_for_timeout(timeouts.get("after_select_ms", 800))
-
                 for paper in t["papers"]:
                     if not select_paper(page, sel, paper["paper_no"]):
                         ctx.log.event("extract.warn", product=t["product_name"],
                                       paper_no=paper["paper_no"], error="paper 셋팅 실패")
                         continue
-                    # qty 재셋팅 (paper 변경 시)
-                    js_set_select(page, sel["qty"], t["qty_value"])
+                    page.wait_for_timeout(timeouts.get("after_paper_ms", 800))
+
+                    # qty 가용 옵션 확인 후 가장 작은 연 선택
+                    opts = page.evaluate(JS_GET_QTY_OPTS, sel["qty"])
+                    if not opts:
+                        ctx.log.event("extract.warn", product=t["product_name"],
+                                      paper_no=paper["paper_no"], size=size["size_label"],
+                                      color=cm["name"], error="qty 옵션 없음")
+                        continue
+                    chosen_yeon = min(opts)
+                    js_set_select(page, sel["qty"], str(chosen_yeon))
                     page.wait_for_timeout(timeouts.get("after_qty_ms", 1200))
 
-                    price = price_with_retry(page, sel, t["qty_mae"], timeouts, guard)
+                    price = price_with_retry(page, sel, None, timeouts, guard)
                     if price is None:
                         ctx.log.event("extract.warn", product=t["product_name"],
                                       paper_no=paper["paper_no"], size=size["size_label"],
                                       color=cm["name"], error="price read failed")
                         continue
 
-                    # build_item 은 명함용 — 여기서 직접 build
                     yield RawItem(
                         product=t["product_name"], category=t["category"],
                         paper_name=paper["paper_name_out"],
                         coating=None, print_mode=cm["name"],
                         size=size["size_label"],
-                        qty=t["qty_mae"], price=price,
+                        qty=None, price=price,
                         price_vat_included=False,
                         url=t["url"], url_ok=True,
                         options={"paper_no": paper["paper_no"],
                                  "sizeno": size["sizeno"],
                                  "color_value": cm["value"],
-                                 "qty_yeon": t["qty_value"]},
+                                 "qty_yeon": chosen_yeon},
                     )

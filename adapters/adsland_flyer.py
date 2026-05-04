@@ -2,22 +2,34 @@
 
 페이지: https://www.adsland.com/shop/order.php?IC=IC00023
 DOM:
-- size_book: A2/A3/A4/B3/B4 등
-- paper: 9 paper (80모조/90~180아트/80~180스노우)
-- dosu: 4/0(단면4도) / 4/4(양면8도)
-- busu: 2000 (=0.5연), 4000(1연), ...
+- size_book / paper / dosu / busu (paper×size 별 옵션 다름)
+- busu 옵션 텍스트: "2,000장 (0.5연)" — 매수 직접 명시
 - 가격: bill_ttl_sub (공급가)
+
+수집 정책: paper×size 별 busu 옵션 dump → 표준 매수(2000)에 가장 가까운 매수 선택.
+옵션 텍스트에서 매수 정수 추출.
 """
+import re
 from typing import Iterator
 
 from playwright.sync_api import sync_playwright
 
 from adapters._adsland_card_common import (
-    goto_with_wait, init_browser, js_set_select, js_get_select_text,
-    price_with_retry, trigger_smart, JS_GET_SELECT_VALUE,
+    JS_GET_SELECT_OPTIONS, goto_with_wait, init_browser, js_set_select,
+    js_get_select_text, price_with_retry, trigger_smart, JS_GET_SELECT_VALUE,
 )
 from engine.adapter import SiteAdapter
 from engine.context import RawItem, RunContext
+
+
+TARGET_QTY_MAE = 2000
+
+
+def _parse_busu_mae(text: str):
+    """'2,000장 (0.5연)' / '1,000장 (1연)' → 2000 / 1000."""
+    m = re.search(r"([0-9,]+)\s*장", text or "")
+    if not m: return None
+    return int(m.group(1).replace(",", ""))
 
 
 class Adapter(SiteAdapter):
@@ -47,14 +59,8 @@ class Adapter(SiteAdapter):
                 browser.close()
 
     def _crawl(self, ctx, page, t, sel, timeouts, guard) -> Iterator[RawItem]:
-        # kind=1 + busu=2000 고정
         if not js_set_select(page, sel["kind"], "1"):
             ctx.log.event("extract.warn", product=t["product_name"], error="kind=1 셋팅 실패")
-            return
-        page.wait_for_timeout(timeouts.get("after_select_ms", 500))
-        if not js_set_select(page, sel["busu"], t["qty_value"]):
-            ctx.log.event("extract.warn", product=t["product_name"],
-                          error=f"busu {t['qty_value']} 셋팅 실패")
             return
         page.wait_for_timeout(timeouts.get("after_select_ms", 500))
 
@@ -69,9 +75,26 @@ class Adapter(SiteAdapter):
                 if not js_set_select(page, sel["size"], size["value"]):
                     continue
                 page.wait_for_timeout(timeouts.get("after_select_ms", 500))
-                # busu 재셋팅 (size 변경시 reset 가능)
-                js_set_select(page, sel["busu"], t["qty_value"])
-                page.wait_for_timeout(300)
+
+                # busu 옵션 dump → 표준 매수에 가장 가까운 옵션 선택
+                opts = page.evaluate(JS_GET_SELECT_OPTIONS, sel["busu"])
+                opts = [o for o in (opts or []) if o.get("value")]
+                if not opts:
+                    continue
+                # 옵션 텍스트에서 매수 추출
+                cands = []
+                for o in opts:
+                    mae = _parse_busu_mae(o.get("text", ""))
+                    if mae:
+                        cands.append((mae, o["value"], o["text"]))
+                if not cands:
+                    continue
+                # 표준 매수에 가장 가까운 것
+                chosen_mae, chosen_value, chosen_text = min(cands, key=lambda c: abs(c[0] - TARGET_QTY_MAE))
+
+                if not js_set_select(page, sel["busu"], chosen_value):
+                    continue
+                page.wait_for_timeout(timeouts.get("after_select_ms", 500))
 
                 for cm in t["color_modes"]:
                     if not js_set_select(page, sel["dosu"], cm["value"]):
@@ -79,7 +102,7 @@ class Adapter(SiteAdapter):
                     page.wait_for_timeout(timeouts.get("after_select_ms", 500))
                     trigger_smart(page)
 
-                    price = price_with_retry(page, sel, t["qty_mae"], timeouts, guard)
+                    price = price_with_retry(page, sel, chosen_mae, timeouts, guard)
                     if price is None:
                         ctx.log.event("extract.warn", product=t["product_name"],
                                       paper=paper["paper_value"], size=size["size_label"],
@@ -91,11 +114,12 @@ class Adapter(SiteAdapter):
                         paper_name=paper["paper_name_out"],
                         coating=None, print_mode=cm["name"],
                         size=size["size_label"],
-                        qty=t["qty_mae"], price=price,
+                        qty=chosen_mae, price=price,
                         price_vat_included=False,
                         url=t["url"], url_ok=True,
                         options={"paper_value": paper["paper_value"],
                                  "size_value": size["value"],
                                  "dosu_value": cm["value"],
-                                 "busu_raw": t["qty_value"]},
+                                 "busu_value": chosen_value,
+                                 "busu_text": chosen_text},
                     )

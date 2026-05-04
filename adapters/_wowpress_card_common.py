@@ -210,7 +210,7 @@ def goto_with_wait(page, url: str, timeouts: dict, ctx: RunContext, product: str
         return False
 
 
-def price_with_retry(page, sel: dict, qty: int, timeouts: dict, guard: dict) -> Optional[int]:
+def price_with_retry(page, sel: dict, qty: Optional[int], timeouts: dict, guard: dict) -> Optional[int]:
     page.wait_for_timeout(timeouts.get("after_qty_ms", 1200))
     price = read_supply_price(page, sel)
     if price is None:
@@ -218,7 +218,9 @@ def price_with_retry(page, sel: dict, qty: int, timeouts: dict, guard: dict) -> 
         price = read_supply_price(page, sel)
         if price is None:
             return None
-    floor = max(guard.get("floor_abs", 500), qty * guard.get("per_qty_multiplier", 3))
+    floor = guard.get("floor_abs", 500)
+    if qty:
+        floor = max(floor, qty * guard.get("per_qty_multiplier", 3))
     if price < floor:
         page.wait_for_timeout(timeouts.get("retry_price_ms", 1500))
         price = read_supply_price(page, sel)

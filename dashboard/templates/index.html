@@ -150,10 +150,11 @@
                <span>평량 오차: ±20g 허용</span>
                <span>가격: 공급가 기준 (부가세 제외)</span>
                <span class="updated-at" id="updatedAt"></span>`,
-        flyer: `<span>사이즈: A2 / A3 / A4 / B3 / B4 (5종 공통)</span>
-                <span>인쇄: 단면4도 / 양면8도</span>
-                <span>매수: 2000매 고정 (= printcity 4연 / dtpia 0.5R / wowpress 4연)</span>
-                <span>코팅: 비코팅 고정</span>
+        flyer: `<span>사이즈: A2 / A3 / A4 / B3 / B4</span>
+                <span>인쇄: 양면칼라 / 단면칼라</span>
+                <span>매수: 2000매</span>
+                <span>코팅: 비코팅</span>
+                <span>평량 오차: ±20g 허용</span>
                 <span>가격: 공급가 기준 (부가세 제외)</span>
                 <span class="updated-at" id="updatedAt"></span>`,
         sticker: `<span>형태: 원형 도무송</span>
@@ -273,7 +274,7 @@
         let html = '';
         for (const paper of papers) {
             html += `<div class="paper-card">
-                <div class="paper-title">${paper.paper_name} <span style="color:#888;font-weight:400;">(${qty}매)</span></div>
+                <div class="paper-title">${paper.paper_name}</div>
                 <table class="grid"><thead>`;
             // 헤더 row 1
             html += `<tr><th rowspan="2" style="width: 70px;">사이즈</th>`;
