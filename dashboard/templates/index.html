@@ -225,14 +225,12 @@
                 const url = sd ? sd.url : site.base_url;
                 const vatTag = site.vat_adjusted ? ' <span style="color:#888;font-size:11px;">(VAT ×1.1 보정)</span>' : '';
                 const rawPaper = sd ? (sd.raw_paper_name || '') : '';
-                const interpNote = sd && sd.interp_note ? sd.interp_note : '';
                 html += `<th colspan="${sides.length}">
                     <div class="site-name">${site.name}${vatTag}</div>
                     <div class="site-source">
                         ${product ? product + '<br>' : ''}
                         ${rawPaper ? `<span style="color:#b45309;font-size:11px;">${rawPaper}</span><br>` : ''}
                         ${renderSiteLink(url, sd ? sd.url_ok : undefined)}
-                        ${interpNote ? `<br><span style="color:#0984e3;font-size:10px;">${interpNote}</span>` : ''}
                     </div>
                 </th>`;
             }
@@ -253,8 +251,14 @@
                     const isBase = site.ownership === 'self';
                     for (const side of sides) {
                         const price = sd ? sd.prices[side]?.[String(qty)] : null;
+                        const actualQ = sd && sd.actual_qty ? sd.actual_qty[side]?.[String(qty)] : null;
+                        const isMismatch = (actualQ != null && actualQ !== qty);
                         const cls = price == null ? 'price empty' : (isBase ? 'price base' : 'price');
-                        html += `<td class="${cls}">${price == null ? '-' : fmt(price)}</td>`;
+                        let cellHtml = price == null ? '-' : fmt(price);
+                        if (price != null && isMismatch) {
+                            cellHtml += `<div style="color:#d97706;font-size:10px;font-weight:600;margin-top:2px;">${actualQ}매</div>`;
+                        }
+                        html += `<td class="${cls}">${cellHtml}</td>`;
                     }
                 }
                 html += '</tr>';
@@ -300,6 +304,7 @@
             }
             html += `</tr></thead><tbody>`;
             // 데이터 rows: size 별
+            const STD_QTY = 2000;
             for (const sz of sizes) {
                 html += `<tr><td class="row-size">${sz}</td>`;
                 for (const site of sites) {
@@ -307,8 +312,17 @@
                     const isBase = site.ownership === 'self';
                     for (const m of print_modes) {
                         const price = sd ? sd.prices[m]?.[sz] : null;
+                        const actualQ = sd && sd.qtys ? sd.qtys[m]?.[sz] : null;
+                        const isMismatch = (actualQ != null && actualQ !== STD_QTY);
+                        const isUnknown = (price != null && actualQ == null);
                         const cls = price == null ? 'price empty' : (isBase ? 'price base' : 'price');
-                        html += `<td class="${cls}">${price == null ? '-' : fmt(price)}</td>`;
+                        let cellHtml = price == null ? '-' : fmt(price);
+                        if (price != null && isMismatch) {
+                            cellHtml += `<div style="color:#d97706;font-size:10px;font-weight:600;margin-top:2px;">${actualQ.toLocaleString()}매</div>`;
+                        } else if (isUnknown) {
+                            cellHtml += `<div style="color:#9ca3af;font-size:10px;font-weight:500;margin-top:2px;">매수 미상</div>`;
+                        }
+                        html += `<td class="${cls}">${cellHtml}</td>`;
                     }
                 }
                 html += '</tr>';

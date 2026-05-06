@@ -231,15 +231,11 @@ def _build_card_grid(sites, site_ids, items_by_site, raw_items_by_site, latest_c
                             site_has_interpolation = True
                             interp_pairs.add((target_q, cq))
             raw_paper_name = _find_raw_paper_name(matching, items_by_site[sid], raw_items_by_site.get(sid, []))
-            interp_note = None
-            if site_has_interpolation:
-                pairs_sorted = sorted(interp_pairs, key=lambda p: p[0])
-                interp_note = "수량 보간: " + ", ".join(f"{a}→{t}" for t, a in pairs_sorted)
             entry["sites"][sid] = {
                 "product": " + ".join(products_seen),
                 "raw_paper_name": raw_paper_name,
                 "url": url, "url_ok": url_ok, "prices": prices,
-                "interp_note": interp_note,
+                "actual_qty": interp_map,  # side → {target_q: actual_q}
             }
         papers.append(entry)
 
@@ -294,6 +290,7 @@ def _build_flyer_grid(sites, site_ids, items_by_site, raw_items_by_site, latest_
             url = matching[0].get("url") or site["base_url"]
             url_ok = matching[0].get("url_ok", True)
             prices = {m: {s: None for s in sizes} for m in modes}
+            qtys = {m: {s: None for s in sizes} for m in modes}
             products_seen = []
             for it in matching:
                 p = it.get("product", "")
@@ -304,12 +301,14 @@ def _build_flyer_grid(sites, site_ids, items_by_site, raw_items_by_site, latest_
                 sz = it.get("size", "")
                 if sz in sizes:
                     prices[m][sz] = it.get("price")
+                    qtys[m][sz] = it.get("qty")
             raw_paper = _find_raw_paper_name(matching, items_by_site[sid], raw_items_by_site.get(sid, []))
             entry["sites"][sid] = {
                 "product": " + ".join(products_seen),
                 "raw_paper_name": raw_paper,
                 "url": url, "url_ok": url_ok,
                 "prices": prices,
+                "qtys": qtys,
             }
         papers.append(entry)
 

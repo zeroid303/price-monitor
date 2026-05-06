@@ -137,7 +137,10 @@ def _normalize_size(raw: str, rule: dict) -> str:
     return result
 
 
-def _normalize_qty(raw, rule: dict) -> int:
+def _normalize_qty(raw, rule: dict):
+    """raw qty → int. raw 가 None 이면 None 보존 (사이트가 매수 미공개인 경우 default 채우면 잘못된 라벨)."""
+    if raw is None:
+        return None
     try:
         return int(raw)
     except (TypeError, ValueError):
