@@ -39,13 +39,17 @@ JS_GET_REAM_INFO = r"""(sel_id) => {
     const el = document.getElementById(sel_id);
     if (!el) return null;
     const opts = [...el.options].map(o => parseFloat(o.value)).filter(v => !isNaN(v));
+    const selectedR = parseFloat(el.value);
     const gp = el.parentElement?.parentElement;
-    let per_ream = null;
+    let per_text = null;
     if (gp) {
         const m = (gp.innerText || '').match(/R\s*\(([0-9,]+)\s*장\)/);
-        if (m) per_ream = parseInt(m[1].replace(/,/g, ''), 10);
+        if (m) per_text = parseInt(m[1].replace(/,/g, ''), 10);
     }
-    return {opts: opts, per_ream: per_ream};
+    // 페이지표기 매수 = selected R 의 매수 (default R 의 매수, 사이즈 별 다름).
+    // 1R 매수 = per_text / selected_R.
+    const per_1R = (per_text && selectedR) ? per_text / selectedR : null;
+    return {opts: opts, selectedR: selectedR, per_text: per_text, per_1R: per_1R};
 }"""
 
 JS_GET_PRICE = """(sel_id) => {
@@ -120,16 +124,16 @@ class Adapter(SiteAdapter):
                     continue
                 page.wait_for_timeout(timeouts.get("after_select_ms", 500))
 
-                # ream_cn 옵션 + 1R 매수 (페이지표기) 추출
+                # ream_cn 옵션 + per_1R (페이지표기에서 환산) 추출
                 info = page.evaluate(JS_GET_REAM_INFO, sel["qty"])
                 if not info or not info.get("opts"):
                     continue
-                per_ream = info.get("per_ream")
+                per_1R = info.get("per_1R")
                 opts = info["opts"]
-                # 표준 매수에 가장 가까운 R 선택. per_ream 모르면 첫 옵션.
-                if per_ream:
-                    chosen_R = min(opts, key=lambda o: abs(o * per_ream - TARGET_QTY_MAE))
-                    actual_qty = int(chosen_R * per_ream)
+                # 표준 매수에 가장 가까운 R 선택.
+                if per_1R:
+                    chosen_R = min(opts, key=lambda o: abs(o * per_1R - TARGET_QTY_MAE))
+                    actual_qty = int(chosen_R * per_1R)
                 else:
                     chosen_R = opts[0]
                     actual_qty = None
@@ -170,5 +174,5 @@ class Adapter(SiteAdapter):
                                  "sdiv": size["sdiv"], "sdiv_cd": size["sdiv_cd"],
                                  "color_value": cm["value"],
                                  "ream_R": chosen_R,
-                                 "per_ream_mae": per_ream},
+                                 "per_1R_mae": per_1R},
                     )

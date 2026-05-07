@@ -3645,30 +3645,6 @@ wowpress:
     name: 단면 칼라4도
   papers:
   - paper_no: 21127
-- category: 색지명함
-  product_name: 색지명함
-  url: https://wowpress.co.kr/ordr/prod/dets?ProdNo=40069
-  prod_no: '40069'
-  size_value: '5458'
-  qtys:
-  - 100
-  - 200
-  - 500
-  - 1000
-  color_modes:
-  - value: '253'
-    name: 단면 백색
-  - value: '254'
-    name: 양면 백색
-  - value: '1355'
-    name: 단면 칼라+백색
-  - value: '1356'
-    name: 양면 칼라+백색
-  papers:
-  - paper_no: 20480
-  - paper_no: 20483
-  - paper_no: 20486
-  - paper_no: 20489
 - category: 미니명함
   product_name: 미니명함
   url: https://wowpress.co.kr/ordr/prod/dets?ProdNo=40599
@@ -3760,31 +3736,3 @@ adsland:
     name: 양면8도
   - value: 4/0
     name: 단면4도
-- category: 567별색명함
-  product_name: 567별색명함
-  url: https://www.adsland.com/shop/order.php?IC=IC00091
-  page_type: size_paper_spot
-  size_value: 90×50
-  qtys:
-  - 200
-  - 1000
-  papers:
-  - paper_value: 반누보화이트
-  - paper_value: 랑데뷰
-  dosu_outs:
-  - value: '4'
-    name: 4도
-  - value: 4|C002+C001+C004
-    name: 4도+은별색+금별색+형광그린
-  - value: 4|C002+C001
-    name: 4도+은별색+금별색
-  - value: 4|C002+C004
-    name: 4도+은별색+형광그린
-  - value: 4|C001+C004
-    name: 4도+금별색+형광그린
-  - value: 4|C002
-    name: 4도+은별색
-  - value: 4|C001
-    name: 4도+금별색
-  - value: 4|C004
-    name: 4도+형광그린

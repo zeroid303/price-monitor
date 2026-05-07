@@ -290,7 +290,8 @@ def _build_flyer_grid(sites, site_ids, items_by_site, raw_items_by_site, latest_
             url = matching[0].get("url") or site["base_url"]
             url_ok = matching[0].get("url_ok", True)
             prices = {m: {s: None for s in sizes} for m in modes}
-            qtys = {m: {s: None for s in sizes} for m in modes}
+            qtys = {m: {s: None for s in sizes} for m in modes}      # 보간 후 표준 qty
+            raw_qtys = {m: {s: None for s in sizes} for m in modes}  # 실제 사이트 매수 (보간 전)
             products_seen = []
             for it in matching:
                 p = it.get("product", "")
@@ -302,6 +303,7 @@ def _build_flyer_grid(sites, site_ids, items_by_site, raw_items_by_site, latest_
                 if sz in sizes:
                     prices[m][sz] = it.get("price")
                     qtys[m][sz] = it.get("qty")
+                    raw_qtys[m][sz] = (it.get("options") or {}).get("raw_qty") or it.get("qty")
             raw_paper = _find_raw_paper_name(matching, items_by_site[sid], raw_items_by_site.get(sid, []))
             entry["sites"][sid] = {
                 "product": " + ".join(products_seen),
@@ -309,6 +311,7 @@ def _build_flyer_grid(sites, site_ids, items_by_site, raw_items_by_site, latest_
                 "url": url, "url_ok": url_ok,
                 "prices": prices,
                 "qtys": qtys,
+                "raw_qtys": raw_qtys,
             }
         papers.append(entry)
 

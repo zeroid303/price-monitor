@@ -368,12 +368,38 @@ def apply(item: dict, norm_rule: dict) -> dict:
     return out
 
 
-def normalize_items(items: list[dict], norm_rule: dict) -> list[dict]:
-    return [apply(it, norm_rule) for it in items]
+def interpolate_qty_price(item: dict, standard_qty: int) -> dict:
+    """raw qty 가 standard_qty 와 다르면 in-place 비례 환산.
+
+    qty=4000, price=80000, standard=2000  →  qty=2000, price=40000.
+    raw qty 는 options.raw_qty 에 보존 (대시보드가 실제 매수 표시 가능).
+    qty=None 또는 0 이면 변환 X.
+    """
+    qty = item.get("qty")
+    price = item.get("price")
+    if not qty or not isinstance(price, (int, float)):
+        return item
+    if qty == standard_qty:
+        return item
+    options = dict(item.get("options") or {})
+    options["raw_qty"] = qty
+    options["interpolated_from_qty"] = qty
+    item["price"] = round(price * standard_qty / qty)
+    item["qty"] = standard_qty
+    item["options"] = options
+    return item
 
 
-def normalize_output(raw_output: dict, norm_rule: dict) -> dict:
+def normalize_items(items: list[dict], norm_rule: dict, interp: dict | None = None) -> list[dict]:
+    out = [apply(it, norm_rule) for it in items]
+    if interp and interp.get("standard_qty"):
+        std = int(interp["standard_qty"])
+        out = [interpolate_qty_price(it, std) for it in out]
+    return out
+
+
+def normalize_output(raw_output: dict, norm_rule: dict, interp: dict | None = None) -> dict:
     """전체 output 파일 구조 정규화 (company/crawled_at 유지 + items 변환)."""
     out = {k: v for k, v in raw_output.items() if k != "items"}
-    out["items"] = normalize_items(raw_output.get("items", []), norm_rule)
+    out["items"] = normalize_items(raw_output.get("items", []), norm_rule, interp)
     return out

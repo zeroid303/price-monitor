@@ -17,6 +17,7 @@ def main():
     schema_path = os.path.join(ROOT, "config/schemas/flyer.yaml")
     schema = yaml.safe_load(open(schema_path, encoding="utf-8"))
     norm_rule = schema.get("_normalization", {})
+    interp = schema.get("_interpolation", {})
 
     for fn in sorted(os.listdir(output_dir)):
         if not fn.endswith("_flyer_raw_now.json"): continue
@@ -24,7 +25,7 @@ def main():
         norm_path = raw_path.replace("_raw_now.json", "_normalize_now.json")
 
         d = json.load(open(raw_path, encoding="utf-8"))
-        new_items = [normalize.apply(it, norm_rule) for it in d.get("items", [])]
+        new_items = normalize.normalize_items(d.get("items", []), norm_rule, interp)
         payload = {**{k: v for k, v in d.items() if k != "items"}, "items": new_items}
         with open(norm_path, "w", encoding="utf-8") as f:
             json.dump(payload, f, ensure_ascii=False, indent=2)

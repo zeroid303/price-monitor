@@ -9,8 +9,14 @@ _match_axes:
   - qty
   weight_tolerance_g: 20
 _defaults:
-  qty: 2000           # 표준 매수 2000매 (printcity 4연 / dtpia 0.5R / wowpress 4연 / swadpia 2000 / adsland 2000)
+  qty: 2000
   match_method: substring
+# 가격 보간 — raw qty 가 standard_qty 와 다르면 normalize 시 표준 매수로 환산:
+#   normalize.qty = standard_qty
+#   normalize.price = round(raw.price * standard_qty / raw.qty)
+# raw 는 사실 그대로 (사이트의 실제 매수+가격), normalize 만 비교 가능한 표준 단위.
+_interpolation:
+  standard_qty: 2000
 _normalization:
   paper_name:
     _description: 합판전단 용지 정규화. paper-level canonical + weight 별 분기. 사이트 가용 paper 모두 등록.

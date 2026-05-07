@@ -8,10 +8,17 @@ DOM:
 - spdata_00_ordqty: 연 단위 — paper×size 별 가용 연수 다름
 - 가격: od_00_totalcost - od_00_taxcost (공급가)
 
-수집 정책: paper×size 별 가용 가장 작은 연 옵션 동적 선택. wowpress 페이지에
-매수 표기 없음 → raw 의 qty 는 None (옵션 연 값만 저장). normalize 단계에서
-환산표 적용 가능.
+수집 정책: paper×size 별 가용 가장 작은 연 옵션 동적 선택.
+1연당 매수는 wowpress 의 size 별 환산표 (사이트 정책) 기반:
+  A2=1,000 / A3=2,000 / A4=4,000 / B3=2,000 / B4=4,000.
+raw qty = yeon × per_yeon 매수.
 """
+
+# wowpress 사이트 1연당 매수 정책표 (재단사이즈 기준)
+SIZE_TO_PER_YEON = {
+    "A2": 1000, "A3": 2000, "A4": 4000, "A5": 8000,
+    "B3": 2000, "B4": 4000, "B5": 8000,
+}
 from typing import Iterator
 
 from playwright.sync_api import sync_playwright
@@ -93,16 +100,20 @@ class Adapter(SiteAdapter):
                                       color=cm["name"], error="price read failed")
                         continue
 
+                    per_yeon = SIZE_TO_PER_YEON.get(size["size_label"])
+                    qty_mae = int(chosen_yeon * per_yeon) if per_yeon else None
+
                     yield RawItem(
                         product=t["product_name"], category=t["category"],
                         paper_name=paper["paper_name_out"],
                         coating=None, print_mode=cm["name"],
                         size=size["size_label"],
-                        qty=None, price=price,
+                        qty=qty_mae, price=price,
                         price_vat_included=False,
                         url=t["url"], url_ok=True,
                         options={"paper_no": paper["paper_no"],
                                  "sizeno": size["sizeno"],
                                  "color_value": cm["value"],
-                                 "qty_yeon": chosen_yeon},
+                                 "qty_yeon": chosen_yeon,
+                                 "per_yeon_mae": per_yeon},
                     )
