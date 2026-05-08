@@ -23,21 +23,7 @@ from .logger import RunLogger
 ROOT = Path(__file__).resolve().parent.parent
 CONFIG_DIR = ROOT / "config"
 
-# 카테고리 별 schema 파일. card_offset / card_digital 각자 별도 yaml.
-# (이전 _SCHEMA_ALIAS 제거 — 각 카테고리가 독립 schema 사용)
-
-# 이관 과도기용 legacy JSON 경로. 신규 yaml 없으면 여기로 폴백.
-_LEGACY_TARGETS = {
-    "card": CONFIG_DIR / "card_targets.json",
-    "envelope": CONFIG_DIR / "envelope_targets.json",
-    "sticker": CONFIG_DIR / "sticker_targets.json",
-}
-_LEGACY_SCHEMA = {
-    "card": CONFIG_DIR / "card_mapping_rule.json",
-    "envelope": CONFIG_DIR / "envelope_mapping_rule.json",
-    "sticker": CONFIG_DIR / "sticker_mapping_rule.json",
-    "flyer": CONFIG_DIR / "flyer_mapping_rule.json",
-}
+# 카테고리 별 schema 파일. card_offset / card_digital / flyer / envelope 각자 별도 yaml.
 
 
 def _read_structured(path: Path) -> dict:
@@ -56,32 +42,28 @@ def _load_site_config(site: str) -> dict:
 
 
 def _load_schema(category: str) -> dict:
-    """카테고리 스키마 로드."""
-    new_yaml = CONFIG_DIR / "schemas" / f"{category}.yaml"
-    new_json = CONFIG_DIR / "schemas" / f"{category}.json"
-    if new_yaml.exists():
-        return _read_structured(new_yaml)
-    if new_json.exists():
-        return _read_structured(new_json)
-    legacy = _LEGACY_SCHEMA.get(category)
-    if legacy and legacy.exists():
-        return _read_structured(legacy)
+    """카테고리 스키마 로드 (config/schemas/{category}.yaml|json)."""
+    yaml_path = CONFIG_DIR / "schemas" / f"{category}.yaml"
+    json_path = CONFIG_DIR / "schemas" / f"{category}.json"
+    if yaml_path.exists():
+        return _read_structured(yaml_path)
+    if json_path.exists():
+        return _read_structured(json_path)
     raise FileNotFoundError(f"schema not found for category: {category}")
 
 
 def _load_targets(site: str, category: str):
-    """카테고리 targets 로드. 사이트 섹션만 반환.
+    """카테고리 targets 로드 (config/targets/{category}.yaml|json) → 사이트 섹션만 반환.
 
     반환 타입은 사이트마다 다를 수 있음:
     - 타사: list[dict] (기존 구조)
     - 프린트시티: dict (items/filters 포함)
     어댑터가 자기에게 맞는 형태를 기대.
     """
-    new_yaml = CONFIG_DIR / "targets" / f"{category}.yaml"
-    new_json = CONFIG_DIR / "targets" / f"{category}.json"
-    legacy = _LEGACY_TARGETS.get(category)
-    for p in (new_yaml, new_json, legacy):
-        if p and p.exists():
+    yaml_path = CONFIG_DIR / "targets" / f"{category}.yaml"
+    json_path = CONFIG_DIR / "targets" / f"{category}.json"
+    for p in (yaml_path, json_path):
+        if p.exists():
             data = _read_structured(p)
             return data.get(site, [])
     raise FileNotFoundError(f"targets not found for category: {category}")

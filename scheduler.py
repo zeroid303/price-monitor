@@ -63,24 +63,16 @@ CATEGORIES = {
         "rule_path": os.path.join(CONFIG_DIR, "sticker_mapping_rule.json"),
         "crawlers": [
             ("printcity", "crawlers.PrintcityStickerCrawler", "crawl_all", "save"),
-            ("bizhows",   "crawlers.BizhowsStickerCrawler",   "crawl_all", "save"),
             ("swadpia",   "crawlers.SwadpiaStickerCrawler",   "crawl_all", "save"),
             ("dtpia",     "crawlers.DtpiaStickerCrawler",     "crawl_all", "save"),
             ("wowpress",  "crawlers.WowpressStickerCrawler",  "crawl_all", "save"),
         ],
     },
     "envelope": {
-        "type": "legacy",
-        "rule_path": os.path.join(CONFIG_DIR, "envelope_mapping_rule.json"),
-        "crawlers": [
-            ("printcity", "crawlers.PrintcityEnvelopeCrawler", "crawl_all", "save"),
-            ("bizhows",   "crawlers.BizhowsEnvelopeCrawler",   "crawl_all", "save"),
-            ("swadpia",   "crawlers.SwadpiaEnvelopeCrawler",   "crawl_all", "save"),
-            ("dtpia",     "crawlers.DtpiaEnvelopeCrawler",     "crawl_all", "save"),
-            ("wowpress",  "crawlers.WowpressEnvelopeCrawler",  "crawl_all", "save"),
-        ],
+        "type": "engine",
+        "sites": _CARD_SITES,
+        "sub_categories": ["envelope"],
     },
-    # TODO: flyer, postcard — 각 크롤러 신규 스키마로 마이그레이션 후 추가
 }
 
 

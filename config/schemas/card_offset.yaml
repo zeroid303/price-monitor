@@ -298,14 +298,12 @@ _normalization:
             aliases:
               dtpia:
               - 샤이니
-            memo: 비즈하우스(스타라이트화이트)=와우프레스(스타라이트), 나머지는 모두 다른 용지
           250:
             aliases:
               swadpia:
               - 다이니티 골드펄 250g
               dtpia:
               - 샤이니 골드펄
-            memo: 비즈하우스(스타라이트화이트)=와우프레스(스타라이트), 나머지는 모두 다른 용지
         all_weights_g:
         - 200
         - 250

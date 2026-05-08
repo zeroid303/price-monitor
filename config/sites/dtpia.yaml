@@ -101,3 +101,23 @@ flyer:
   low_price_guard:
     floor_abs: 5000
     per_qty_multiplier: 5
+
+# 봉투 — Standard.aspx (칼라봉투) / Master.aspx (기성봉투, 흑백)
+envelope:
+  selectors:
+    sdiv_cd: sdiv_cd            # 사이즈 코드 (A501=대 / A302=9절 / A101=소)
+    jijil_gb: jijil_gb          # Standard 만: 지질 분류 (A=모조, B=레자크페스티발 등)
+    mtrl_cd: mtrl_cd            # Standard 만: 지질 종속 paper
+    en_category: en_category    # Master 만: 봉투 카테고리 (A=서류)
+    en_type: en_type            # Master 만: 종류+paper (A1=크라프트, A4=레자크)
+    color_mode: prn_clr_cn_gb   # 4=단면칼라 / 1=단면흑백
+    qty: prn_sht_cn             # 1000매
+    cap_print: envp_back_cap_prt_yn  # 아래뚜껑 인쇄 N
+    cover_tomson: cover_tomson       # 일반가공
+    price: est_scroll_total_am  # VAT 포함 합계 → vat_included=true 로 처리
+  timeouts:
+    page_goto_ms: 30000
+    after_goto_ms: 2500
+    after_select_ms: 600
+    after_price_trigger_ms: 1500
+    retry_price_ms: 1500

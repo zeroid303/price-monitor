@@ -1,0 +1,141 @@
+_description: 봉투 정규화 룰. canonical key = (paper, weight_g, size). 색상 통합 정책.
+_match_axes:
+  axes:
+  - paper_name
+  - paper_weight_g
+  - coating
+  - print_mode
+  - size
+  - qty
+  weight_tolerance_g: 20
+_defaults:
+  qty: 1000
+  match_method: substring
+_normalization:
+  paper_name:
+    _description: 봉투 용지 정규화. printcity 기준 canonical name (모조지/랑데뷰/레자크 등).
+    canonical:
+      모조지:
+        weights:
+          100:
+            aliases:
+              printcity: [모조-100g]
+          120:
+            aliases:
+              printcity: [모조-120g]
+          150:
+            aliases:
+              printcity: [모조-150g]
+          180:
+            aliases:
+              printcity: [모조-180g]
+      모조창문:
+        weights:
+          100:
+            aliases:
+              printcity: [모조창문-100g]
+      랑데뷰:
+        weights:
+          105:
+            aliases:
+              printcity: [랑데뷰-105g]
+          130:
+            aliases:
+              printcity: [랑데뷰-130g]
+          160:
+            aliases:
+              printcity: [랑데뷰-160g]
+      아르떼:
+        weights:
+          105:
+            aliases:
+              printcity: [아르떼-105g]
+          130:
+            aliases:
+              printcity: [아르떼-130g]
+          160:
+            aliases:
+              printcity: [아르떼-160g]
+      레자크:
+        weights:
+          110:
+            aliases:
+              printcity: [레자크줄무늬백-110g, 레자크체크백-110g]
+          120:
+            aliases:
+              printcity: [레자크-120g]
+          150:
+            aliases:
+              printcity: ['#91체크 레자크백색-150g']
+          200:
+            aliases:
+              printcity: ['#91체크 레자크백색-200g', '#92줄 레자크백색-200g']
+      레이드:
+        weights:
+          120:
+            aliases:
+              printcity: [레이드-120g]
+      밍크:
+        weights:
+          120:
+            aliases:
+              printcity: [밍크-120g]
+      스타펄:
+        weights:
+          120:
+            aliases:
+              printcity: [스타펄-120g]
+      크라프트:
+        weights:
+          98:
+            aliases:
+              printcity: [크라프트-98g]
+          120:
+            aliases:
+              printcity: [크라프트-120g]
+          175:
+            aliases:
+              printcity: [크라프트-175g]
+      탄트:
+        weights:
+          120:
+            aliases:
+              printcity: [탄트-120g]
+      화일지:
+        weights:
+          120:
+            aliases:
+              printcity: [화일지-120g]
+          170:
+            aliases:
+              printcity: [화일지-170g]
+          195:
+            aliases:
+              printcity: [화일지-195g]
+    noise_suffix_regex: (\d+)\s*g.*$
+  coating:
+    _description: 봉투는 모두 비코팅
+    default: 비코팅
+    allowed: [비코팅]
+  print_mode:
+    _description: 도수 — 단면4도 (칼라) / 단면1도 (흑백)
+    default: 단면4도
+    allowed: [단면4도, 단면1도]
+    aliases:
+      단면4도: [단면4도]
+      단면1도: [단면1도]
+  size:
+    _description: 봉투 사이즈 — 대봉투(330x245) / 9절봉투(255x190) / 소봉투(220x105) 등
+    default: 대봉투
+    allowed: [대봉투, 9절봉투, 소봉투, 6절봉투, 8절봉투, A3봉투]
+    aliases:
+      대봉투: [대봉투]
+      9절봉투: [9절봉투]
+      소봉투: [소봉투]
+      6절봉투: [6절봉투]
+      8절봉투: [8절봉투]
+      A3봉투: [A3봉투]
+  qty:
+    _description: 봉투 표준 — 1000매
+    default: 1000
+    common_units: [1000]

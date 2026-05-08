@@ -1,0 +1,672 @@
+printcity:
+  _description: 정적 엑셀 source — data/printcity/envelope_color.xlsx + envelope_bw.xlsx
+  sources:
+  - data/printcity/envelope_color.xlsx
+  - data/printcity/envelope_bw.xlsx
+  filters_applied:
+    qty_mae:
+    - 1000
+    size_codes:
+    - SIZ_EVST:330x245
+    - SIZ_EVST:255x190
+    - SIZ_EVST:220x105
+    - SIZ_EVST:305x215
+    - SIZ_EVST:290x390
+    - SIZ_EVST:330x450
+    envelope_types:
+    - ST
+    processing:
+    - ST
+    - (none)
+  price_vat_included: false
+  generated_at: 2026-05-08 11:05
+  items:
+  - product: 칼라봉투
+    paper: 레자크줄무늬백-110g
+    paper_code: MAT:LEZLW-110
+    size: 대봉투
+    size_label: 330x245
+    size_code: SIZ_EVST:330x245
+    print_mode: 단면4도
+    color_code: COL:40
+    qty: 1000
+    price: 89000
+  - product: 칼라봉투
+    paper: 레자크체크백-110g
+    paper_code: MAT:LEZCW-110
+    size: 대봉투
+    size_label: 330x245
+    size_code: SIZ_EVST:330x245
+    print_mode: 단면4도
+    color_code: COL:40
+    qty: 1000
+    price: 89000
+  - product: 칼라봉투
+    paper: 레자크-120g
+    paper_code: MAT:LEZ-120
+    size: 대봉투
+    size_label: 330x245
+    size_code: SIZ_EVST:330x245
+    print_mode: 단면4도
+    color_code: COL:40
+    qty: 1000
+    price: 202000
+  - product: 칼라봉투
+    paper: '#91체크 레자크백색-150g'
+    paper_code: MAT:91LCW-150
+    size: 대봉투
+    size_label: 330x245
+    size_code: SIZ_EVST:330x245
+    print_mode: 단면4도
+    color_code: COL:40
+    qty: 1000
+    price: 228000
+  - product: 칼라봉투
+    paper: 레이드-120g
+    paper_code: MAT:RD-120
+    size: 대봉투
+    size_label: 330x245
+    size_code: SIZ_EVST:330x245
+    print_mode: 단면4도
+    color_code: COL:40
+    qty: 1000
+    price: 213000
+  - product: 칼라봉투
+    paper: 탄트-120g
+    paper_code: MAT:TT-120
+    size: 대봉투
+    size_label: 330x245
+    size_code: SIZ_EVST:330x245
+    print_mode: 단면4도
+    color_code: COL:40
+    qty: 1000
+    price: 239000
+  - product: 칼라봉투
+    paper: 밍크-120g
+    paper_code: MAT:MK-120
+    size: 대봉투
+    size_label: 330x245
+    size_code: SIZ_EVST:330x245
+    print_mode: 단면4도
+    color_code: COL:40
+    qty: 1000
+    price: 198000
+  - product: 칼라봉투
+    paper: 모조-120g
+    paper_code: MAT:MOJ-120
+    size: 대봉투
+    size_label: 330x245
+    size_code: SIZ_EVST:330x245
+    print_mode: 단면4도
+    color_code: COL:40
+    qty: 1000
+    price: 77000
+  - product: 칼라봉투
+    paper: 모조-150g
+    paper_code: MAT:MOJ-150
+    size: 대봉투
+    size_label: 330x245
+    size_code: SIZ_EVST:330x245
+    print_mode: 단면4도
+    color_code: COL:40
+    qty: 1000
+    price: 147000
+  - product: 칼라봉투
+    paper: 크라프트-98g
+    paper_code: MAT:CRA-98
+    size: 대봉투
+    size_label: 330x245
+    size_code: SIZ_EVST:330x245
+    print_mode: 단면4도
+    color_code: COL:40
+    qty: 1000
+    price: 147000
+  - product: 칼라봉투
+    paper: 크라프트-120g
+    paper_code: MAT:KRA-120
+    size: 대봉투
+    size_label: 330x245
+    size_code: SIZ_EVST:330x245
+    print_mode: 단면4도
+    color_code: COL:40
+    qty: 1000
+    price: 172000
+  - product: 칼라봉투
+    paper: 화일지-120g
+    paper_code: MAT:FIL-120
+    size: 대봉투
+    size_label: 330x245
+    size_code: SIZ_EVST:330x245
+    print_mode: 단면4도
+    color_code: COL:40
+    qty: 1000
+    price: 162000
+  - product: 칼라봉투
+    paper: 레자크줄무늬백-110g
+    paper_code: MAT:LEZLW-110
+    size: 소봉투
+    size_label: 220x105
+    size_code: SIZ_EVST:220x105
+    print_mode: 단면4도
+    color_code: COL:40
+    qty: 1000
+    price: 39000
+  - product: 칼라봉투
+    paper: 레자크체크백-110g
+    paper_code: MAT:LEZCW-110
+    size: 소봉투
+    size_label: 220x105
+    size_code: SIZ_EVST:220x105
+    print_mode: 단면4도
+    color_code: COL:40
+    qty: 1000
+    price: 39000
+  - product: 칼라봉투
+    paper: 레자크-120g
+    paper_code: MAT:LEZ-120
+    size: 소봉투
+    size_label: 220x105
+    size_code: SIZ_EVST:220x105
+    print_mode: 단면4도
+    color_code: COL:40
+    qty: 1000
+    price: 144000
+  - product: 칼라봉투
+    paper: '#91체크 레자크백색-150g'
+    paper_code: MAT:91LCW-150
+    size: 소봉투
+    size_label: 220x105
+    size_code: SIZ_EVST:220x105
+    print_mode: 단면4도
+    color_code: COL:40
+    qty: 1000
+    price: 157000
+  - product: 칼라봉투
+    paper: 레이드-120g
+    paper_code: MAT:RD-120
+    size: 소봉투
+    size_label: 220x105
+    size_code: SIZ_EVST:220x105
+    print_mode: 단면4도
+    color_code: COL:40
+    qty: 1000
+    price: 147000
+  - product: 칼라봉투
+    paper: 탄트-120g
+    paper_code: MAT:TT-120
+    size: 소봉투
+    size_label: 220x105
+    size_code: SIZ_EVST:220x105
+    print_mode: 단면4도
+    color_code: COL:40
+    qty: 1000
+    price: 168000
+  - product: 칼라봉투
+    paper: 밍크-120g
+    paper_code: MAT:MK-120
+    size: 소봉투
+    size_label: 220x105
+    size_code: SIZ_EVST:220x105
+    print_mode: 단면4도
+    color_code: COL:40
+    qty: 1000
+    price: 147000
+  - product: 칼라봉투
+    paper: 모조-100g
+    paper_code: MAT:MOJ-100
+    size: 소봉투
+    size_label: 220x105
+    size_code: SIZ_EVST:220x105
+    print_mode: 단면4도
+    color_code: COL:40
+    qty: 1000
+    price: 26000
+  - product: 칼라봉투
+    paper: 모조-120g
+    paper_code: MAT:MOJ-120
+    size: 소봉투
+    size_label: 220x105
+    size_code: SIZ_EVST:220x105
+    print_mode: 단면4도
+    color_code: COL:40
+    qty: 1000
+    price: 28000
+  - product: 칼라봉투
+    paper: 모조-150g
+    paper_code: MAT:MOJ-150
+    size: 소봉투
+    size_label: 220x105
+    size_code: SIZ_EVST:220x105
+    print_mode: 단면4도
+    color_code: COL:40
+    qty: 1000
+    price: 123000
+  - product: 칼라봉투
+    paper: 화일지-120g
+    paper_code: MAT:FIL-120
+    size: 소봉투
+    size_label: 220x105
+    size_code: SIZ_EVST:220x105
+    print_mode: 단면4도
+    color_code: COL:40
+    qty: 1000
+    price: 122000
+  - product: 칼라봉투
+    paper: 레자크줄무늬백-110g
+    paper_code: MAT:LEZLW-110
+    size: 6절봉투
+    size_label: 305x215
+    size_code: SIZ_EVST:305x215
+    print_mode: 단면4도
+    color_code: COL:40
+    qty: 1000
+    price: 152000
+  - product: 칼라봉투
+    paper: 레자크체크백-110g
+    paper_code: MAT:LEZCW-110
+    size: 6절봉투
+    size_label: 305x215
+    size_code: SIZ_EVST:305x215
+    print_mode: 단면4도
+    color_code: COL:40
+    qty: 1000
+    price: 152000
+  - product: 칼라봉투
+    paper: 레자크-120g
+    paper_code: MAT:LEZ-120
+    size: 6절봉투
+    size_label: 305x215
+    size_code: SIZ_EVST:305x215
+    print_mode: 단면4도
+    color_code: COL:40
+    qty: 1000
+    price: 202000
+  - product: 칼라봉투
+    paper: '#91체크 레자크백색-150g'
+    paper_code: MAT:91LCW-150
+    size: 6절봉투
+    size_label: 305x215
+    size_code: SIZ_EVST:305x215
+    print_mode: 단면4도
+    color_code: COL:40
+    qty: 1000
+    price: 228000
+  - product: 칼라봉투
+    paper: 레이드-120g
+    paper_code: MAT:RD-120
+    size: 6절봉투
+    size_label: 305x215
+    size_code: SIZ_EVST:305x215
+    print_mode: 단면4도
+    color_code: COL:40
+    qty: 1000
+    price: 213000
+  - product: 칼라봉투
+    paper: 탄트-120g
+    paper_code: MAT:TT-120
+    size: 6절봉투
+    size_label: 305x215
+    size_code: SIZ_EVST:305x215
+    print_mode: 단면4도
+    color_code: COL:40
+    qty: 1000
+    price: 239000
+  - product: 칼라봉투
+    paper: 밍크-120g
+    paper_code: MAT:MK-120
+    size: 6절봉투
+    size_label: 305x215
+    size_code: SIZ_EVST:305x215
+    print_mode: 단면4도
+    color_code: COL:40
+    qty: 1000
+    price: 198000
+  - product: 칼라봉투
+    paper: 모조-120g
+    paper_code: MAT:MOJ-120
+    size: 6절봉투
+    size_label: 305x215
+    size_code: SIZ_EVST:305x215
+    print_mode: 단면4도
+    color_code: COL:40
+    qty: 1000
+    price: 143000
+  - product: 칼라봉투
+    paper: 모조-150g
+    paper_code: MAT:MOJ-150
+    size: 6절봉투
+    size_label: 305x215
+    size_code: SIZ_EVST:305x215
+    print_mode: 단면4도
+    color_code: COL:40
+    qty: 1000
+    price: 161700
+  - product: 칼라봉투
+    paper: 크라프트-98g
+    paper_code: MAT:CRA-98
+    size: 6절봉투
+    size_label: 305x215
+    size_code: SIZ_EVST:305x215
+    print_mode: 단면4도
+    color_code: COL:40
+    qty: 1000
+    price: 147000
+  - product: 칼라봉투
+    paper: 크라프트-120g
+    paper_code: MAT:KRA-120
+    size: 6절봉투
+    size_label: 305x215
+    size_code: SIZ_EVST:305x215
+    print_mode: 단면4도
+    color_code: COL:40
+    qty: 1000
+    price: 172000
+  - product: 칼라봉투
+    paper: 화일지-120g
+    paper_code: MAT:FIL-120
+    size: 6절봉투
+    size_label: 305x215
+    size_code: SIZ_EVST:305x215
+    print_mode: 단면4도
+    color_code: COL:40
+    qty: 1000
+    price: 162000
+  - product: 칼라봉투
+    paper: 레자크줄무늬백-110g
+    paper_code: MAT:LEZLW-110
+    size: 9절봉투
+    size_label: 255x190
+    size_code: SIZ_EVST:255x190
+    print_mode: 단면4도
+    color_code: COL:40
+    qty: 1000
+    price: 89000
+  - product: 칼라봉투
+    paper: 레자크체크백-110g
+    paper_code: MAT:LEZCW-110
+    size: 9절봉투
+    size_label: 255x190
+    size_code: SIZ_EVST:255x190
+    print_mode: 단면4도
+    color_code: COL:40
+    qty: 1000
+    price: 89000
+  - product: 칼라봉투
+    paper: 레자크-120g
+    paper_code: MAT:LEZ-120
+    size: 9절봉투
+    size_label: 255x190
+    size_code: SIZ_EVST:255x190
+    print_mode: 단면4도
+    color_code: COL:40
+    qty: 1000
+    price: 202000
+  - product: 칼라봉투
+    paper: '#91체크 레자크백색-150g'
+    paper_code: MAT:91LCW-150
+    size: 9절봉투
+    size_label: 255x190
+    size_code: SIZ_EVST:255x190
+    print_mode: 단면4도
+    color_code: COL:40
+    qty: 1000
+    price: 228000
+  - product: 칼라봉투
+    paper: 레이드-120g
+    paper_code: MAT:RD-120
+    size: 9절봉투
+    size_label: 255x190
+    size_code: SIZ_EVST:255x190
+    print_mode: 단면4도
+    color_code: COL:40
+    qty: 1000
+    price: 213000
+  - product: 칼라봉투
+    paper: 탄트-120g
+    paper_code: MAT:TT-120
+    size: 9절봉투
+    size_label: 255x190
+    size_code: SIZ_EVST:255x190
+    print_mode: 단면4도
+    color_code: COL:40
+    qty: 1000
+    price: 239000
+  - product: 칼라봉투
+    paper: 밍크-120g
+    paper_code: MAT:MK-120
+    size: 9절봉투
+    size_label: 255x190
+    size_code: SIZ_EVST:255x190
+    print_mode: 단면4도
+    color_code: COL:40
+    qty: 1000
+    price: 198000
+  - product: 칼라봉투
+    paper: 모조-120g
+    paper_code: MAT:MOJ-120
+    size: 9절봉투
+    size_label: 255x190
+    size_code: SIZ_EVST:255x190
+    print_mode: 단면4도
+    color_code: COL:40
+    qty: 1000
+    price: 77000
+  - product: 칼라봉투
+    paper: 모조-150g
+    paper_code: MAT:MOJ-150
+    size: 9절봉투
+    size_label: 255x190
+    size_code: SIZ_EVST:255x190
+    print_mode: 단면4도
+    color_code: COL:40
+    qty: 1000
+    price: 147000
+  - product: 칼라봉투
+    paper: 크라프트-98g
+    paper_code: MAT:CRA-98
+    size: 9절봉투
+    size_label: 255x190
+    size_code: SIZ_EVST:255x190
+    print_mode: 단면4도
+    color_code: COL:40
+    qty: 1000
+    price: 147000
+  - product: 칼라봉투
+    paper: 크라프트-120g
+    paper_code: MAT:KRA-120
+    size: 9절봉투
+    size_label: 255x190
+    size_code: SIZ_EVST:255x190
+    print_mode: 단면4도
+    color_code: COL:40
+    qty: 1000
+    price: 172000
+  - product: 칼라봉투
+    paper: 화일지-120g
+    paper_code: MAT:FIL-120
+    size: 9절봉투
+    size_label: 255x190
+    size_code: SIZ_EVST:255x190
+    print_mode: 단면4도
+    color_code: COL:40
+    qty: 1000
+    price: 162000
+  - product: 기성봉투
+    paper: 레자크줄무늬백-110g
+    paper_code: MAT:LEZLW-110
+    size: 대봉투
+    size_label: 330x245
+    size_code: SIZ_EVST:330x245
+    print_mode: 단면1도
+    color_code: COL:10
+    qty: 1000
+    price: 79000
+  - product: 기성봉투
+    paper: 레자크줄무늬백-110g
+    paper_code: MAT:LEZLW-110
+    size: 소봉투
+    size_label: 220x105
+    size_code: SIZ_EVST:220x105
+    print_mode: 단면1도
+    color_code: COL:10
+    qty: 1000
+    price: 44000
+  - product: 기성봉투
+    paper: 레자크줄무늬백-110g
+    paper_code: MAT:LEZLW-110
+    size: 6절봉투
+    size_label: 305x215
+    size_code: SIZ_EVST:305x215
+    print_mode: 단면1도
+    color_code: COL:10
+    qty: 1000
+    price: 77000
+  - product: 기성봉투
+    paper: 레자크줄무늬백-110g
+    paper_code: MAT:LEZLW-110
+    size: 9절봉투
+    size_label: 255x190
+    size_code: SIZ_EVST:255x190
+    print_mode: 단면1도
+    color_code: COL:10
+    qty: 1000
+    price: 69000
+  - product: 기성봉투
+    paper: 레자크체크백-110g
+    paper_code: MAT:LEZCW-110
+    size: 대봉투
+    size_label: 330x245
+    size_code: SIZ_EVST:330x245
+    print_mode: 단면1도
+    color_code: COL:10
+    qty: 1000
+    price: 79000
+  - product: 기성봉투
+    paper: 레자크체크백-110g
+    paper_code: MAT:LEZCW-110
+    size: 소봉투
+    size_label: 220x105
+    size_code: SIZ_EVST:220x105
+    print_mode: 단면1도
+    color_code: COL:10
+    qty: 1000
+    price: 44000
+  - product: 기성봉투
+    paper: 모조-100g
+    paper_code: MAT:MOJ-100
+    size: 대봉투
+    size_label: 330x245
+    size_code: SIZ_EVST:330x245
+    print_mode: 단면1도
+    color_code: COL:10
+    qty: 1000
+    price: 60000
+  - product: 기성봉투
+    paper: 모조-100g
+    paper_code: MAT:MOJ-100
+    size: 소봉투
+    size_label: 220x105
+    size_code: SIZ_EVST:220x105
+    print_mode: 단면1도
+    color_code: COL:10
+    qty: 1000
+    price: 24000
+  - product: 기성봉투
+    paper: 모조-100g
+    paper_code: MAT:MOJ-100
+    size: 6절봉투
+    size_label: 305x215
+    size_code: SIZ_EVST:305x215
+    print_mode: 단면1도
+    color_code: COL:10
+    qty: 1000
+    price: 57800
+  - product: 기성봉투
+    paper: 모조-100g
+    paper_code: MAT:MOJ-100
+    size: 9절봉투
+    size_label: 255x190
+    size_code: SIZ_EVST:255x190
+    print_mode: 단면1도
+    color_code: COL:10
+    qty: 1000
+    price: 50000
+  - product: 기성봉투
+    paper: 모조-120g
+    paper_code: MAT:MOJ-120
+    size: 대봉투
+    size_label: 330x245
+    size_code: SIZ_EVST:330x245
+    print_mode: 단면1도
+    color_code: COL:10
+    qty: 1000
+    price: 62000
+  - product: 기성봉투
+    paper: 크라프트-98g
+    paper_code: MAT:CRA-98
+    size: 대봉투
+    size_label: 330x245
+    size_code: SIZ_EVST:330x245
+    print_mode: 단면1도
+    color_code: COL:10
+    qty: 1000
+    price: 55000
+  - product: 기성봉투
+    paper: 크라프트-98g
+    paper_code: MAT:CRA-98
+    size: 6절봉투
+    size_label: 305x215
+    size_code: SIZ_EVST:305x215
+    print_mode: 단면1도
+    color_code: COL:10
+    qty: 1000
+    price: 52000
+  - product: 기성봉투
+    paper: 크라프트-98g
+    paper_code: MAT:CRA-98
+    size: 9절봉투
+    size_label: 255x190
+    size_code: SIZ_EVST:255x190
+    print_mode: 단면1도
+    color_code: COL:10
+    qty: 1000
+    price: 47000
+  - product: 기성봉투
+    paper: 화일지-120g
+    paper_code: MAT:FIL-120
+    size: 대봉투
+    size_label: 330x245
+    size_code: SIZ_EVST:330x245
+    print_mode: 단면1도
+    color_code: COL:10
+    qty: 1000
+    price: 82000
+
+dtpia:
+- product_name: 칼라봉투
+  category: 봉투
+  url: https://dtpia.co.kr/Order/Envelope/Standard.aspx
+  page_type: dtpia_standard
+  print_mode: 단면4도
+  color_value: '4'
+  qty_value: '1000'
+  qty_mae: 1000
+  sizes:
+  - sdiv_cd: A501
+    size_label: 대봉투
+  - sdiv_cd: A302
+    size_label: 9절봉투
+  - sdiv_cd: A101
+    size_label: 소봉투
+- product_name: 기성봉투
+  category: 봉투
+  url: https://dtpia.co.kr/Order/Envelope/Master.aspx
+  page_type: dtpia_master
+  print_mode: 단면1도
+  color_value: '1'
+  qty_value: '1000'
+  qty_mae: 1000
+  en_category_value: A
+  sizes:
+  - sdiv_cd: AMA2
+    size_label: 대봉투

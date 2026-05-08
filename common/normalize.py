@@ -3,10 +3,12 @@ raw 크롤링 결과 → 정규화된 결과로 변환하는 순수 함수 모�
 
 사용:
     from normalize import load_rule, normalize_items
-    rule = load_rule("config/card_mapping_rule.json")
+    rule = load_rule("config/sticker_mapping_rule.json")
     normalized = normalize_items(raw_items, rule)
 
 파일 I/O 없음. 스케줄러/배치/테스트 어디서든 재사용.
+신규 카테고리(card/flyer/envelope)는 engine.runner 가 schemas/*.yaml 의
+_normalization 섹션을 직접 dict 로 넘긴다 (load_rule 미사용).
 """
 import json
 import re

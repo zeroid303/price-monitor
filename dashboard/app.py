@@ -5,8 +5,8 @@
 - 카테고리별 가격 비교 + 변동 감지.
 
 카테고리:
-  card_offset / card_digital — 신규 schema (config/schemas/*.yaml + config/sites/*.yaml)
-  sticker / envelope        — 레거시 (config/{cat}_mapping_rule.json)
+  card_offset / card_digital / flyer / envelope — 신규 schema (config/schemas/*.yaml + config/sites/*.yaml)
+  sticker                                       — 레거시 (config/sticker_mapping_rule.json)
 """
 import json
 import os
@@ -24,10 +24,9 @@ sys.path.insert(0, BASE_DIR)
 CONFIG_DIR = os.path.join(BASE_DIR, "config")
 OUTPUT_DIR = os.path.join(BASE_DIR, "output")
 
-# 레거시 카테고리 (sticker / envelope) 만 mapping_rule.json 사용. 카드는 schemas/*.yaml.
+# 레거시 카테고리 (sticker) 만 mapping_rule.json 사용. 카드/전단/봉투는 schemas/*.yaml.
 LEGACY_RULE_PATHS = {
     "sticker": os.path.join(CONFIG_DIR, "sticker_mapping_rule.json"),
-    "envelope": os.path.join(CONFIG_DIR, "envelope_mapping_rule.json"),
 }
 
 # 신규 카드 카테고리의 사이트 list (config/sites/*.yaml 에서 읽음)
@@ -37,8 +36,9 @@ CATEGORIES = [
     {"id": "card_offset", "name": "명함 (오프셋)"},
     {"id": "card_digital", "name": "명함 (디지털)"},
     {"id": "flyer", "name": "합판 전단"},
-    {"id": "sticker", "name": "스티커"},
-    {"id": "envelope", "name": "봉투"},
+    # 봉투/스티커 — 신규 어댑터 이관 작업 중. 완료 전까지 대시보드 숨김.
+    # {"id": "sticker", "name": "스티커"},
+    # {"id": "envelope", "name": "봉투"},
 ]
 
 app = Flask(__name__)
@@ -73,10 +73,10 @@ def _load_site_yaml(site_id: str) -> dict:
 def get_active_sites(category: str) -> list[dict]:
     """카테고리별 활성 사이트 list.
 
-    카드(card_offset/card_digital) / 합판전단(flyer): config/sites/*.yaml 5사이트.
-    레거시(sticker/envelope): config/{cat}_mapping_rule.json 의 sites.
+    카드/전단/봉투: config/sites/*.yaml 5사이트.
+    레거시(sticker): config/sticker_mapping_rule.json 의 sites.
     """
-    if category in ("card_offset", "card_digital", "flyer"):
+    if category in ("card_offset", "card_digital", "flyer", "envelope"):
         out = []
         for sid in CARD_SITES:
             site_cfg = _load_site_yaml(sid)

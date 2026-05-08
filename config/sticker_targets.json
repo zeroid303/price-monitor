@@ -41,30 +41,6 @@
       "qtys": [1000]
     }
   ],
-  "bizhows": [
-    {
-      "product_name": "싱글 규격 스티커",
-      "code1": "8000",
-      "code2": "200",
-      "code3": "7101",
-      "mock": "8000_200_7101",
-      "url": "https://www.bizhows.com/ko/v/option?code1=8000&code2=200&code3=7101&mock=8000_200_7101&from=product_list_001",
-      "papers": [
-        {"seq": 67072, "name": "초강접 코팅아트지90g"},
-        {"seq": 67068, "name": "코팅아트지90g"},
-        {"seq": 67069, "name": "무코팅아트지90g"},
-        {"seq": 124713, "name": "프리미엄투명50g"},
-        {"seq": 67071, "name": "유포지80g"},
-        {"seq": 68550, "name": "리무벌아트지90g"}
-      ],
-      "_unavailable_on_page": "모조지80g(67073), 크라프트지57g(67070), 투명데드롱50g(67074), 은광데드롱50g(71102) — API povList에는 있지만 페이지 드롭다운에 없음",
-      "shape_seq": 67039,
-      "shape_name": "원형",
-      "qty_seq": 67060,
-      "target_sizes": ["지름 4.5cm", "지름 5.5cm", "지름 6.5cm"],
-      "_note": "비즈하우스 원형은 4.5/5.5/6.5cm만. VAT 별도."
-    }
-  ],
   "swadpia": [
     {
       "category_code": "CST2000",

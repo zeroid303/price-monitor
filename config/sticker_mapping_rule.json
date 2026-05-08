@@ -1,5 +1,5 @@
 {
-  "_description": "스티커 카테고리 사이트별 매칭 규칙 + 정규화 규칙. card_mapping_rule.json과 동일 구조.",
+  "_description": "스티커 카테고리 사이트별 매칭 규칙 + 정규화 규칙 (legacy 분기 — common/normalize.py 가 직접 로드).",
   "_defaults": {
     "match_method": "substring",
     "qty_default": 1000
@@ -212,14 +212,6 @@
       "vat_included": true,
       "tech": "playwright",
       "_sticker_note": "초강접스티커(아트지 90g). 자유형 도무송 원형. 유광코팅."
-    },
-    "bizhows": {
-      "name": "비즈하우스",
-      "ownership": "competitor",
-      "base_url": "https://www.bizhows.com",
-      "vat_included": true,
-      "tech": "playwright",
-      "_sticker_note": "초강접 코팅아트지90g. 원형 4.5/5.5/6.5cm만. VAT 별도(×1.1 보정). 7.5~9.5cm 프리셋 없음."
     },
     "wowpress": {
       "name": "와우프레스",

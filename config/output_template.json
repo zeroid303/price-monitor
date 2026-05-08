@@ -43,7 +43,7 @@
   ],
 
   "_field_guide": {
-    "company": "회사 식별자: ecard21 / printcity / bizhows / naple / swadpia / wowpress / dtpia",
+    "company": "회사 식별자: printcity / swadpia / wowpress / dtpia / adsland",
     "crawled_at": "크롤링 완료 시각 (YYYY-MM-DD HH:MM)",
     "items": "가격 레코드 배열. (paper_name, coating, print_mode, size, qty) 조합당 한 행.",
 
