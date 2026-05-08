@@ -5,8 +5,11 @@ DOM:
 - paper_type → paper_code 종속
 - paper_size: A2/A3/A4/B3/B4
 - fside_color_amount=4 (고정) + bside_color_amount=0(단면)/4(양면)
-- paper_qty=2000 (직접)
+- paper_qty: paper×size 별 가용 매수 옵션 다름. 옵션값이 매수 직접 (e.g., '2000')
 - 가격: tr.estimate_supply_amt td.price (공급가)
+
+수집 정책: paper×size 셋팅 후 paper_qty 옵션 dump → 표준 2,000매에 가장
+가까운 매수 동적 선택. raw qty = 선택된 옵션 매수.
 """
 from typing import Iterator
 
@@ -18,6 +21,11 @@ from adapters._swadpia_card_common import (
 )
 from engine.adapter import SiteAdapter
 from engine.context import RawItem, RunContext
+
+
+TARGET_QTY_MAE = 2000
+
+JS_GET_QTY_OPTS = "(sel) => { const el=document.querySelector(sel); if(!el) return []; return [...el.options].map(o=>parseInt(o.value, 10)).filter(v=>!isNaN(v) && v>0); }"
 
 
 class Adapter(SiteAdapter):
@@ -46,11 +54,6 @@ class Adapter(SiteAdapter):
                 browser.close()
 
     def _crawl(self, ctx, page, t, sel, timeouts) -> Iterator[RawItem]:
-        # qty 셋팅
-        if not js_set_select(page, sel["paper_qty"], t["qty_value"]):
-            ctx.log.event("extract.warn", product=t["product_name"], error="qty 셋팅 실패")
-            return
-        page.wait_for_timeout(timeouts.get("after_select_ms", 600))
         # fside_color_amount 항상 4 (앞면 칼라 고정)
         js_set_select(page, sel["fside_color_amount"], "4")
         page.wait_for_timeout(timeouts.get("after_select_ms", 600))
@@ -67,17 +70,23 @@ class Adapter(SiteAdapter):
                               paper=combo["paper_code"], error="paper_code 실패")
                 continue
             page.wait_for_timeout(timeouts.get("after_select_ms", 600))
-            # qty 재셋팅 (paper 변경 시 reset 가능)
-            js_set_select(page, sel["paper_qty"], t["qty_value"])
-            page.wait_for_timeout(300)
 
             for size in t["sizes"]:
                 if not js_set_select(page, sel["paper_size"], size["paper_size"]):
                     continue
                 page.wait_for_timeout(timeouts.get("after_select_ms", 600))
-                # qty 재셋팅 (size 변경시도)
-                js_set_select(page, sel["paper_qty"], t["qty_value"])
-                page.wait_for_timeout(300)
+
+                # paper×size 별 qty 옵션 dump → 표준 매수 가까운 매수 선택
+                qty_opts = page.evaluate(JS_GET_QTY_OPTS, sel["paper_qty"])
+                if not qty_opts:
+                    ctx.log.event("extract.warn", product=t["product_name"],
+                                  paper=combo["paper_name_out"], size=size["size_label"],
+                                  error="qty 옵션 없음")
+                    continue
+                chosen_qty = min(qty_opts, key=lambda q: abs(q - TARGET_QTY_MAE))
+                if not js_set_select(page, sel["paper_qty"], str(chosen_qty)):
+                    continue
+                page.wait_for_timeout(timeouts.get("after_select_ms", 600))
 
                 for cm in t["color_modes"]:
                     js_set_select(page, sel["fside_color_amount"], cm["fside_color_amount"])
@@ -100,11 +109,11 @@ class Adapter(SiteAdapter):
                         paper_name=combo["paper_name_out"],
                         coating=None, print_mode=cm["name"],
                         size=size["size_label"],
-                        qty=t["qty_mae"], price=price,
+                        qty=chosen_qty, price=price,
                         price_vat_included=False,
                         url=t["url"], url_ok=True,
                         options={"paper_type": combo["paper_type"],
                                  "paper_code": combo["paper_code"],
                                  "paper_size": size["paper_size"],
-                                 "qty_raw": t["qty_value"]},
+                                 "qty_options_first": qty_opts[:5]},
                     )
