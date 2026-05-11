@@ -19,9 +19,9 @@ price-monitor/
 │   ├── {site}_card_offset.py       # 5사이트 × 오프셋 명함
 │   ├── {site}_card_digital.py      # 5사이트 × 디지털 명함
 │   ├── {site}_flyer.py             # 5사이트 × 합판전단
-│   ├── {site}_envelope.py          # 봉투 (printcity/dtpia 만 — WIP)
+│   ├── {site}_envelope.py          # 5사이트 × 봉투 (단면4도 칼라 전용)
 │   └── _{site}_card_common.py      # 사이트별 카드 공통 헬퍼
-├── crawlers/                       # 레거시 크롤러 (sticker, envelope 일부)
+├── crawlers/                       # 레거시 크롤러 (sticker)
 │   └── {Site}{Category}Crawler.py
 ├── common/
 │   └── normalize.py                # raw → normalize 공통 파서 (legacy 카테고리용)
@@ -45,7 +45,7 @@ price-monitor/
 │   ├── app.py                      # Flask 대시보드
 │   └── templates/index.html
 ├── data/printcity/                 # 프린트시티 정적 source (엑셀)
-│   └── envelope_{color,bw}.xlsx
+│   └── envelope_color.xlsx         # 단면4도 칼라봉투 가격표
 ├── scripts/
 │   ├── build_printcity_envelope_targets.py  # 엑셀 → targets/envelope.yaml printcity 섹션
 │   └── check_urls.py                        # URL 생존 체크
@@ -107,7 +107,7 @@ weight tolerance(±20g 등), coating, print_mode, size, qty 각각 canonical 정
 
 | 사이트 | 방식 | 특징 |
 |--------|------|------|
-| printcity | 카드/스티커: HTTP API · 봉투: **정적 엑셀** | 자사 — 봉투는 `data/printcity/envelope_*.xlsx` |
+| printcity | 카드/스티커: HTTP API · 봉투: **정적 엑셀** | 자사 — 봉투는 `data/printcity/envelope_color.xlsx` |
 | swadpia | Playwright DOM | select 변경 + #print_estimate_tot |
 | dtpia | Playwright DOM | select 변경 + callPrice() + #est_scroll_*_am |
 | wowpress | Playwright DOM | getTemplate/reqMdmDetail + onchange eval |
