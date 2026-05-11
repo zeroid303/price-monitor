@@ -118,12 +118,11 @@ _normalization:
     default: 비코팅
     allowed: [비코팅]
   print_mode:
-    _description: 도수 — 단면4도 (칼라) / 단면1도 (흑백)
+    _description: 도수 — 단면4도 (칼라) 만 수집. 흑백/무지/색지/양면 봉투는 수집 안 함.
     default: 단면4도
-    allowed: [단면4도, 단면1도]
+    allowed: [단면4도]
     aliases:
       단면4도: [단면4도]
-      단면1도: [단면1도]
   size:
     _description: 봉투 사이즈 — 대봉투(330x245) / 9절봉투(255x190) / 소봉투(220x105) 등
     default: 대봉투

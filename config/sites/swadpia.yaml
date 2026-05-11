@@ -65,6 +65,26 @@ card_digital:
     floor_abs: 500
     per_qty_multiplier: 3
 
+# 봉투 — CEV1000 대중소봉투 (단면4도 칼라 전용. 흑백/기성형은 수집 안 함)
+# paper_kind → paper_type → paper_code 3단 cascade. 도수 = cal_line BDC40 고정.
+# 가격: #print_estimate_tot (VAT 포함 → vat_included=true 로 raw 저장)
+envelope:
+  selectors:
+    bongto_kind:   "select[name=bongto_kind]"     # CE1=규격형 고정
+    bongto_type:   "select[name=bongto_type]"     # 사이즈 코드 (CE101=대 / CE103=9절 / CE102=소)
+    paper_kind:    "select[name=paper_kind]"
+    paper_type:    "select[name=paper_type]"
+    paper_code:    "select[name=paper_code]"
+    paper_qty:     "select[name=paper_qty]"
+    cal_line:      "select[name=cal_line]"        # 단면칼라4도 (BDC40)
+    price_total:   "#print_estimate_tot"          # 총 합계 (VAT 포함)
+  timeouts:
+    page_goto_ms: 30000
+    after_goto_ms: 2500
+    after_select_ms: 700
+    after_price_trigger_ms: 800
+    retry_price_ms: 1500
+
 # 합판 전단지
 flyer:
   selectors:

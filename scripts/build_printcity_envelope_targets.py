@@ -2,24 +2,14 @@
 
 입력:
   - data/printcity/envelope_color.xlsx (칼라봉투, 단면4도, 26 paper × 6 규격size)
-  - data/printcity/envelope_bw.xlsx    (기성봉투,  단면1도, 7 paper × 4 규격size)
 
-엑셀 그룹 코드:
-  ENT:ST/JK   = 규격형(다대) / 자켓형
-  ENP:ST/DM   = 일반가공 / 도무송
-  SIZ_EVST:*  = 규격사이즈 (대봉투/9절/소봉투/...)
-  SIZ_EVJK:*  = 자켓형 사이즈 (제외)
-  SIZ_EVCJ:*  = 창봉투 사이즈 (제외)
-  MAT:*       = paper
-  COL:40/10   = 단면4도 / 단면1도
-
-수집 정책:
-  - SIZ_EVST + ENP:ST (또는 ENP 없음) 만 추출 — 다른 사이트 비교 대상
-  - 자켓형/창봉투/도무송 가공 제외
-  - 표준 매수 = 1000매 (다른 사이트와 동일 표준)
+수집 정책 (2026-05-11~ 결정):
+  - 컬러봉투 (단면4도) 만 수집. 흑백/기성봉투(단면1도) 제외.
+  - SIZ_EVST + ENP:ST (또는 ENP 없음) 만 추출 — 자켓/창봉투/도무송 제외
+  - 표준 매수 = 1000매
 
 target item 스키마:
-  - product: '칼라봉투' (color) / '기성봉투' (bw)
+  - product: '칼라봉투'
   - paper, paper_code
   - size, size_code, size_label
   - print_mode, color_code
@@ -35,7 +25,6 @@ from openpyxl import load_workbook
 
 ROOT = Path(__file__).resolve().parent.parent
 SRC_COLOR = ROOT / "data/printcity/envelope_color.xlsx"
-SRC_BW = ROOT / "data/printcity/envelope_bw.xlsx"
 DST = ROOT / "config/targets/envelope.yaml"
 
 # 표준 매수 (다른 사이트 raw 도 모두 1000매)
@@ -69,8 +58,8 @@ def parse_xlsx(path: Path, default_product: str, default_color: str):
     cur_paper = cur_paper_code = None
     cur_size_code = None
     cur_color = cur_color_code = None
-    cur_ent = None    # 봉투타입 (ST/JK), bw 는 None
-    cur_enp = None    # 가공 (ST/DM), bw 는 None
+    cur_ent = None    # 봉투타입 (ST/JK)
+    cur_enp = None    # 가공 (ST/DM)
 
     for r in range(2, ws.max_row + 1):
         title = ws.cell(r, 1).value
@@ -128,9 +117,7 @@ def parse_xlsx(path: Path, default_product: str, default_color: str):
 def main():
     sys.stdout.reconfigure(encoding="utf-8")
 
-    items_color = parse_xlsx(SRC_COLOR, default_product="칼라봉투", default_color="단면4도")
-    items_bw = parse_xlsx(SRC_BW, default_product="기성봉투", default_color="단면1도")
-    items = items_color + items_bw
+    items = parse_xlsx(SRC_COLOR, default_product="칼라봉투", default_color="단면4도")
 
     # 기존 yaml read or new
     if DST.exists():
@@ -139,13 +126,14 @@ def main():
         data = {}
 
     data["printcity"] = {
-        "_description": "정적 엑셀 source — data/printcity/envelope_color.xlsx + envelope_bw.xlsx",
-        "sources": ["data/printcity/envelope_color.xlsx", "data/printcity/envelope_bw.xlsx"],
+        "_description": "정적 엑셀 source — data/printcity/envelope_color.xlsx (단면4도 칼라봉투 전용)",
+        "sources": ["data/printcity/envelope_color.xlsx"],
         "filters_applied": {
             "qty_mae": TARGET_QTY_MAE,
             "size_codes": list(SIZE_CODE_TO_LABEL.keys()),
             "envelope_types": ["ST"],
             "processing": ["ST", "(none)"],
+            "color_codes": ["COL:40"],
         },
         "price_vat_included": False,
         "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M"),

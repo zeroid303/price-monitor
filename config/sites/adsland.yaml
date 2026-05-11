@@ -76,6 +76,32 @@ card_digital:
     floor_abs: 500
     per_qty_multiplier: 3
 
+# 봉투 — IC00053(규격대중소봉투, 단면4도 칼라봉투 전용)
+# size_book × paper_sort × tmp_paper 3단 cascade. type_bt=일반형, dosu=4/0 고정.
+# 흑백/마스타지(IC00058) 는 수집 안 함.
+# 가격: bill_ttl_sub (공급가 직접 추출), smart() 트리거.
+envelope:
+  selectors:
+    type_bt:       "select#type_bt"
+    size_book:     "select#size_book"
+    paper_sort:    "select#paper_sort"
+    tmp_paper:     "select#tmp_paper"
+    dosu:          "select#dosu"
+    busu:          "select#busu"
+    kind:          "select#kind"
+    price_supply:  'input[name="bill_ttl_sub"]'
+    price_tax:     'input[name="bill_tax"]'
+    price_total:   'input[name="bill_ttl_fnl"]'
+  timeouts:
+    page_goto_ms: 30000
+    after_goto_ms: 3000
+    after_select_ms: 700           # paper_sort/goods_type 변경 후 cascade 갱신 대기
+    after_smart_ms: 700
+    retry_price_ms: 1500
+  low_price_guard:
+    floor_abs: 500
+    per_qty_multiplier: 3
+
 # 합판 전단지
 flyer:
   selectors:

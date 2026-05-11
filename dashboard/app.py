@@ -36,9 +36,9 @@ CATEGORIES = [
     {"id": "card_offset", "name": "명함 (오프셋)"},
     {"id": "card_digital", "name": "명함 (디지털)"},
     {"id": "flyer", "name": "합판 전단"},
-    # 봉투/스티커 — 신규 어댑터 이관 작업 중. 완료 전까지 대시보드 숨김.
+    {"id": "envelope", "name": "봉투"},
+    # 스티커 — 레거시 카테고리. 신규 어댑터 이관 후 활성화.
     # {"id": "sticker", "name": "스티커"},
-    # {"id": "envelope", "name": "봉투"},
 ]
 
 app = Flask(__name__)
@@ -378,7 +378,8 @@ def _build_sticker_grid(sites, site_ids, items_by_site, raw_items_by_site, lates
 # ── 봉투 grid ──
 # 사이즈는 canonical 3종 고정(매출 TOP 순). print_mode는 단면칼라/단면흑백 2종.
 ENVELOPE_SIZES = ["대봉투", "9절봉투", "소봉투"]
-ENVELOPE_PRINT_MODES = ["단면칼라", "단면흑백"]
+# 봉투는 단면4도(칼라) 만 수집. 흑백/무지/색지/양면 봉투는 정책상 제외.
+ENVELOPE_PRINT_MODES = ["단면4도"]
 
 # 용지 표시 순서 — 매출 매출 TOP 우선
 ENVELOPE_PAPER_ORDER = [

@@ -1,8 +1,11 @@
 """디티피아 봉투 어댑터.
 
-페이지 2종:
-  1. Standard.aspx (칼라봉투) — sdiv_cd / jijil_gb → mtrl_cd cascade / 단면4도 / 1000매
-  2. Master.aspx (기성봉투 흑백) — en_category → en_type / sdiv_cd / 단면1도 / 1000매
+페이지: Standard.aspx (칼라봉투, 단면4도, 1000매).
+  - sdiv_cd (사이즈) / jijil_gb (지질) → mtrl_cd (paper) cascade
+  - color_mode=4 (단면4도) 고정
+  - 아래뚜껑 인쇄 N, 일반가공
+
+흑백봉투(Master.aspx) 는 수집 안 함 (정책 2026-05-11~).
 
 가격: est_scroll_total_am (VAT 포함 → price_vat_included=True 로 raw 저장,
 normalize 단계에서 ÷1.1 변환).
@@ -80,10 +83,7 @@ class Adapter(SiteAdapter):
             try:
                 for t in ctx.targets:
                     ctx.log.event("fetch.start", product=t["product_name"])
-                    if t.get("page_type") == "dtpia_standard":
-                        yield from self._crawl_standard(ctx, page, t, sel, timeouts)
-                    elif t.get("page_type") == "dtpia_master":
-                        yield from self._crawl_master(ctx, page, t, sel, timeouts)
+                    yield from self._crawl_standard(ctx, page, t, sel, timeouts)
             finally:
                 browser.close()
 
@@ -152,49 +152,3 @@ class Adapter(SiteAdapter):
                                  "jijil_gb": jj["value"], "jijil_text": jj["text"],
                                  "mtrl_cd": mm["value"], "mtrl_text": mm["text"]},
                     )
-
-    def _crawl_master(self, ctx, page, t, sel, timeouts) -> Iterator[RawItem]:
-        if not self._goto(page, t["url"], timeouts, ctx, t["product_name"]):
-            return
-
-        page.evaluate(JS_SET_SELECT, {"sel_id": sel["color_mode"], "value": t.get("color_value", "1")})
-        page.wait_for_timeout(timeouts.get("after_select_ms", 600))
-        page.evaluate(JS_SET_SELECT, {"sel_id": sel["qty"], "value": t.get("qty_value", "1000")})
-        page.wait_for_timeout(timeouts.get("after_select_ms", 600))
-
-        # en_category 셋팅 (e.g., 'A' = 서류봉투)
-        page.evaluate(JS_SET_SELECT, {"sel_id": sel["en_category"], "value": t.get("en_category_value", "A")})
-        page.wait_for_timeout(timeouts.get("after_select_ms", 600))
-
-        # en_type 전수
-        types = page.evaluate(JS_DUMP_SELECT, sel["en_type"])
-        for sz in t["sizes"]:
-            page.evaluate(JS_SET_SELECT, {"sel_id": sel["sdiv_cd"], "value": sz["sdiv_cd"]})
-            page.wait_for_timeout(timeouts.get("after_select_ms", 400))
-
-            for ty in types:
-                if not ty["value"]: continue
-                if page.evaluate(JS_SET_SELECT, {"sel_id": sel["en_type"], "value": ty["value"]}) is not True:
-                    continue
-                page.wait_for_timeout(timeouts.get("after_select_ms", 400))
-                page.evaluate(JS_TRIGGER_PRICE)
-                page.wait_for_timeout(timeouts.get("after_price_trigger_ms", 1500))
-                price = _parse_price(page.evaluate(JS_GET_PRICE))
-                if not price or price <= 0:
-                    continue
-
-                # en_type text 예: "4절 초특대형봉투 (크라프트 98g)" → 괄호 속 paper 추출
-                m = re.search(r"\(([^)]+)\)\s*$", ty["text"])
-                paper_raw = m.group(1).strip() if m else ty["text"]
-
-                yield RawItem(
-                    product=t["product_name"], category=t["category"],
-                    paper_name=paper_raw,
-                    coating=None, print_mode=t["print_mode"],
-                    size=sz["size_label"], qty=int(t.get("qty_value", "1000")),
-                    price=price, price_vat_included=True,
-                    url=t["url"], url_ok=True,
-                    options={"sdiv_cd": sz["sdiv_cd"],
-                             "en_category": t.get("en_category_value", "A"),
-                             "en_type": ty["value"], "en_type_text": ty["text"]},
-                )
