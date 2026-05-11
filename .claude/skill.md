@@ -61,7 +61,7 @@ price-monitor/
 | **명함 디지털(card_digital)** | engine | 위 5사 | 용지×코팅×면×매수 |
 | **합판전단(flyer)** | engine | 위 5사 | 용지×사이즈×매수×도수 |
 | **스티커(sticker)** | legacy | printcity, swadpia, dtpia, wowpress | 용지×코팅×사이즈×1000매 |
-| **봉투(envelope)** | engine (WIP) | printcity ✓, dtpia ✓, swadpia/wowpress/adsland ✗ | 용지×사이즈×도수×1000매 |
+| **봉투(envelope)** | engine | printcity, dtpia, swadpia, wowpress, adsland | 용지×사이즈×1000매 (단면4도 칼라 전용) |
 | 엽서(postcard) | 미구현 | | |
 
 ## 실행
@@ -72,7 +72,7 @@ python scheduler.py card_offset    # 오프셋만
 python scheduler.py card_digital   # 디지털만
 python scheduler.py flyer          # 합판전단
 python scheduler.py sticker        # 스티커 (legacy)
-python scheduler.py envelope       # 봉투 (WIP — scheduler 등록 필요)
+python scheduler.py envelope       # 봉투
 python dashboard/app.py            # 대시보드 (localhost:5001)
 ```
 
