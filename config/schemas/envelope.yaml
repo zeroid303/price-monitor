@@ -15,126 +15,324 @@ _normalization:
   paper_name:
     _description: 봉투 용지 정규화. printcity 기준 canonical name (모조지/랑데뷰/레자크 등).
     canonical:
-      모조지:
+      뉴에코:
         weights:
-          100:
-            aliases:
-              printcity: [모조-100g]
           120:
             aliases:
-              printcity: [모조-120g]
+              swadpia:
+              - 뉴에코 뉴에코블랙 120g
           150:
             aliases:
-              printcity: [모조-150g]
-          180:
-            aliases:
-              printcity: [모조-180g]
-      모조창문:
-        weights:
-          100:
-            aliases:
-              printcity: [모조창문-100g]
+              swadpia:
+              - 뉴에코 뉴에코블랙 150g
       랑데뷰:
         weights:
           105:
             aliases:
-              printcity: [랑데뷰-105g]
+              adsland:
+              - 랑데뷰 네츄럴 105g
+              dtpia:
+              - 랑데뷰 내츄럴 105g
+              swadpia:
+              - 랑데뷰 내츄럴 105g
+              - 랑데뷰 울트라화이트 105g
           130:
             aliases:
-              printcity: [랑데뷰-130g]
+              adsland:
+              - 랑데뷰 네츄럴 130g
+              dtpia:
+              - 랑데뷰 내츄럴 130g
+              swadpia:
+              - 랑데뷰 내츄럴 130g
+              - 랑데뷰 울트라화이트 130g
           160:
             aliases:
-              printcity: [랑데뷰-160g]
-      아르떼:
+              adsland:
+              - 랑데뷰 네츄럴 160g
+              dtpia:
+              - 랑데뷰 내츄럴 160g
+              swadpia:
+              - 랑데뷰 내츄럴 160g
+              - 랑데뷰 울트라화이트 160g
+      레이드:
         weights:
-          105:
+          110:
             aliases:
-              printcity: [아르떼-105g]
-          130:
+              dtpia:
+              - 매직쉐도우 (레이드) 백색 110g
+          120:
             aliases:
-              printcity: [아르떼-130g]
-          160:
-            aliases:
-              printcity: [아르떼-160g]
+              adsland:
+              - 레이드 백색 120g
+              - 레이드 연미색 120g
+              printcity:
+              - 레이드-120g
       레자크:
         weights:
           110:
             aliases:
-              printcity: [레자크줄무늬백-110g, 레자크체크백-110g]
+              adsland:
+              - '레쟈크 #91 체크 백색 (합판) 110g'
+              - '레쟈크 #92 줄무늬 백색 (합판) 110g'
+              dtpia:
+              - '페스티발 (레쟈크) #010 줄무늬 고백색 110g'
+              - '페스티발 (레쟈크) #101 체크 고백색 110g'
+              printcity:
+              - 레자크줄무늬백-110g
+              - 레자크체크백-110g
+              swadpia:
+              - '페스티발 #010 줄무늬 고백색 110g'
+              - '페스티발 #101 체크 고백색 110g'
+              wowpress:
+              - 줄레자크 백색 110g
+              - 체크레자크 백색 110g
           120:
             aliases:
-              printcity: [레자크-120g]
+              adsland:
+              - '레쟈크 #64 백색 120g'
+              - '레쟈크 #88 백색 120g'
+              - '레쟈크 #91 체크 백색 120g'
+              - '레쟈크 #91 체크 연미색 120g'
+              - '레쟈크 #91 체크 은회색 120g'
+              - '레쟈크 #92 줄무늬 백색 120g'
+              - '레쟈크 #94 백색 120g'
+              - '레쟈크 #96 가는줄 아이보리 120g'
+              dtpia:
+              - '레쟈크 #96 아이보리 120g'
+              - '페스티발 (레쟈크) #101 우유색 120g'
+              - '페스티발 (레쟈크) #101 체크 고백색 120g'
+              - '페스티발 (레쟈크) #88 백색 120g'
+              - 페스티발 (레쟈크) 레자크백색(#64) 120g
+              printcity:
+              - 레자크-120g
+              swadpia:
+              - '레쟈크 #96 아이보리 120g'
+              - '페스티발 #002 (#64)백색 120g'
+              - '페스티발 #004(#92) 줄무늬 백색 120g'
+              - '페스티발 #101 우유색 120g'
+              - '페스티발 #101 체크 고백색 120g'
+              - '페스티발 #103 (#94)백색 120g'
+          140:
+            aliases:
+              adsland:
+              - '레쟈크 #92 줄무늬 백색 140g'
+              swadpia:
+              - '페스티발 #004(#92) 줄무늬 백색 140g'
           150:
             aliases:
-              printcity: ['#91체크 레자크백색-150g']
+              adsland:
+              - '레쟈크 #91 체크 백색 150g'
+              printcity:
+              - '#91체크 레자크백색-150g'
+              swadpia:
+              - '페스티발 #101 체크 고백색 150g'
           200:
             aliases:
-              printcity: ['#91체크 레자크백색-200g', '#92줄 레자크백색-200g']
-      레이드:
+              adsland:
+              - '레쟈크 #91 체크 백색 200g'
+              - '레쟈크 #92 줄무늬 백색 200g'
+              swadpia:
+              - '페스티발 #004(#92) 줄무늬 백색 200g'
+              - '페스티발 #101 체크 고백색 200g'
+      모조:
         weights:
+          100:
+            aliases:
+              adsland:
+              - 모조지 백색 100g
+              dtpia:
+              - 모조지 백색 100g
+              printcity:
+              - 모조-100g
+              swadpia:
+              - 모조지 백색 100g
+              wowpress:
+              - 모조지 백색 100g
           120:
             aliases:
-              printcity: [레이드-120g]
+              adsland:
+              - 모조지 백색 120g
+              dtpia:
+              - 모조지 백색 120g
+              printcity:
+              - 모조-120g
+              swadpia:
+              - 모조지 백색 120g
+              wowpress:
+              - 모조지 백색 120g
+          150:
+            aliases:
+              adsland:
+              - 모조지 백색 150g
+              dtpia:
+              - 모조지 백색 150g
+              printcity:
+              - 모조-150g
+              swadpia:
+              - 모조지 백색 150g
+          180:
+            aliases:
+              adsland:
+              - 모조지 백색 180g
+              swadpia:
+              - 모조지 백색 180g
+      미색모조:
+        weights:
+          100:
+            aliases:
+              adsland:
+              - 모조지 미색 100g
+              dtpia:
+              - 미색모조지 미색 100g
+              swadpia:
+              - 미색모조지 미색 100g
       밍크:
         weights:
           120:
             aliases:
-              printcity: [밍크-120g]
-      스타펄:
+              adsland:
+              - 매직칼라(밍크지) 굴색 120g
+              - 매직칼라(밍크지) 노랑색 120g
+              - 매직칼라(밍크지) 뉴계란색 120g
+              - 매직칼라(밍크지) 뉴주홍색 120g
+              - 매직칼라(밍크지) 백색 120g
+              - 매직칼라(밍크지) 백옥색 120g
+              - 매직칼라(밍크지) 벚꽃색 120g
+              - 매직칼라(밍크지) 분홍색 120g
+              - 매직칼라(밍크지) 연미색 120g
+              - 매직칼라(밍크지) 우유색 120g
+              - 매직칼라(밍크지) 주홍색 120g
+              dtpia:
+              - 매직칼라 (밍크지) 굴색 120g
+              - 매직칼라 (밍크지) 노랑색 120g
+              - 매직칼라 (밍크지) 뉴주홍색 120g
+              - 매직칼라 (밍크지) 백색 120g
+              - 매직칼라 (밍크지) 백옥색 120g
+              - 매직칼라 (밍크지) 벚꽃색 120g
+              - 매직칼라 (밍크지) 분홍색 120g
+              - 매직칼라 (밍크지) 우유색 120g
+              - 매직칼라 (밍크지) 주홍색 120g
+              printcity:
+              - 밍크-120g
+              swadpia:
+              - 매직칼라 굴색 120g
+              - 매직칼라 노랑색 120g
+              - 매직칼라 뉴주홍색 120g
+              - 매직칼라 백색 120g
+              - 매직칼라 백옥색 120g
+              - 매직칼라 벚꽃색 120g
+              - 매직칼라 연미색 120g
+              - 매직칼라 우유색 120g
+              - 매직칼라 주홍색 120g
+      스타드림:
         weights:
           120:
             aliases:
-              printcity: [스타펄-120g]
+              adsland:
+              - 스타드림 골드 120g
+              - 스타드림 쿼츠 120g
+              dtpia:
+              - 스타드림 골드 120g
+              - 스타드림 화이트 120g
+              swadpia:
+              - 스타드림 골드 120g
+              - 스타드림 쿼츠 120g
       크라프트:
         weights:
           98:
             aliases:
-              printcity: [크라프트-98g]
+              adsland:
+              - 크라프트 크라프트지 98g
+              printcity:
+              - 크라프트-98g
+          100:
+            aliases:
+              swadpia:
+              - 크라프트 크라프트 100g
           120:
             aliases:
-              printcity: [크라프트-120g]
-          175:
-            aliases:
-              printcity: [크라프트-175g]
+              adsland:
+              - 크라프트 크라프트지 120g
+              printcity:
+              - 크라프트-120g
       탄트:
         weights:
           120:
             aliases:
-              printcity: [탄트-120g]
+              adsland:
+              - 매직매칭(탄트지) 고백색 120g
+              - 매직매칭(탄트지) 연회색 120g
+              - 매직매칭(탄트지) 오렌지색 120g
+              - 매직매칭(탄트지) 참외색 120g
+              dtpia:
+              - 매직매칭 (탄트지) 고백색 120g
+              - 매직매칭 (탄트지) 백색 120g
+              - 매직매칭 (탄트지) 연회색 120g
+              - 매직매칭 (탄트지) 오렌지색 120g
+              - 매직매칭 (탄트지) 참외색 120g
+              printcity:
+              - 탄트-120g
+              swadpia:
+              - 매직매칭 고백색 120g
+              - 매직매칭 백색 120g
+              - 매직매칭 연미색 120g
+              - 매직매칭 연분홍색 120g
+              - 매직매칭 오렌지색 120g
+              - 매직매칭 참외색 120g
       화일지:
         weights:
           120:
             aliases:
-              printcity: [화일지-120g]
-          170:
-            aliases:
-              printcity: [화일지-170g]
-          195:
-            aliases:
-              printcity: [화일지-195g]
+              adsland:
+              - 화일지 황색 120g
+              dtpia:
+              - 화일지 120g
+              printcity:
+              - 화일지-120g
+              swadpia:
+              - 화일지 120g
     noise_suffix_regex: (\d+)\s*g.*$
   coating:
     _description: 봉투는 모두 비코팅
     default: 비코팅
-    allowed: [비코팅]
+    allowed:
+    - 비코팅
   print_mode:
     _description: 도수 — 단면4도 (칼라) 만 수집. 흑백/무지/색지/양면 봉투는 수집 안 함.
     default: 단면4도
-    allowed: [단면4도]
+    allowed:
+    - 단면4도
     aliases:
-      단면4도: [단면4도]
+      단면4도:
+      - 단면4도
+      - 단면 칼라4도
+      - 단면칼라
+      - 단면 칼라
   size:
     _description: 봉투 사이즈 — 대봉투(330x245) / 9절봉투(255x190) / 소봉투(220x105) 등
     default: 대봉투
-    allowed: [대봉투, 9절봉투, 소봉투, 6절봉투, 8절봉투, A3봉투]
+    allowed:
+    - 대봉투
+    - 9절봉투
+    - 소봉투
+    - 6절봉투
+    - 8절봉투
+    - A3봉투
     aliases:
-      대봉투: [대봉투]
-      9절봉투: [9절봉투]
-      소봉투: [소봉투]
-      6절봉투: [6절봉투]
-      8절봉투: [8절봉투]
-      A3봉투: [A3봉투]
+      대봉투:
+      - 대봉투
+      9절봉투:
+      - 9절봉투
+      소봉투:
+      - 소봉투
+      6절봉투:
+      - 6절봉투
+      8절봉투:
+      - 8절봉투
+      A3봉투:
+      - A3봉투
   qty:
     _description: 봉투 표준 — 1000매
     default: 1000
-    common_units: [1000]
+    common_units:
+    - 1000
