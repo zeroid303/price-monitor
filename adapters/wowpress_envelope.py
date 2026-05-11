@@ -80,14 +80,11 @@ def _select_paper_5(page, sel: dict, paper_no: int, after_paper_ms: int) -> bool
 
     p5_id = sel["paper_no5"]
     p5_opts = set(page.evaluate(JS_AVAIL_OPTIONS, p5_id) or [])
-    if str(paper_no) in p5_opts:
-        p5_value = str(paper_no)
-    elif p5_opts:
-        # leaf 가 dropdown 에 없으면 chain 다른 후보 또는 첫 옵션
-        p5_value = next((str(n) for n in chain if str(n) in p5_opts), next(iter(p5_opts)))
-    else:
+    # leaf paper_no 가 paperno5 dropdown 에 없으면 해당 사이즈 미공급 — fallback X.
+    # (예: wowpress 봉투의 모조 100g 은 대봉투/9절봉투에 미공급)
+    if str(paper_no) not in p5_opts:
         return False
-    if not js_set_select(page, p5_id, p5_value):
+    if not js_set_select(page, p5_id, str(paper_no)):
         return False
     page.wait_for_timeout(int(after_paper_ms * 0.7))
     return True

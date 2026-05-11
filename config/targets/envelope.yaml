@@ -559,7 +559,28 @@ wowpress:
     name: 레자크체크백 110g
   - paper_no: 21013
     name: 레자크줄백 110g
-  _note: 40034 paperno3>paperno4>paperno5 cascade. 1000매 가격 0원이면 미공급으로 skip.
+  # 구름무늬레자크 5색 (대/9절 공급, 소봉투 미공급)
+  - paper_no: 21002
+    name: 구름무늬레자크 백색 120g
+  - paper_no: 21004
+    name: 구름무늬레자크 베이지 120g
+  - paper_no: 21006
+    name: 구름무늬레자크 크림 120g
+  - paper_no: 21008
+    name: 구름무늬레자크 하늘 120g
+  - paper_no: 21010
+    name: 구름무늬레자크 회색 120g
+  # 밍크 4색 (대봉투만 공급)
+  - paper_no: 20271
+    name: 밍크 백회 120g
+  - paper_no: 20297
+    name: 밍크 오렌지 120g
+  - paper_no: 20299
+    name: 밍크 옥색 120g
+  - paper_no: 20329
+    name: 밍크 크림 120g
+  _note: 40034 paperno3>paperno4>paperno5 cascade. paperno5 dropdown 에 leaf 없으면 미공급으로 skip (fallback X).
+    랑데뷰 130g/탄트지 120g/크라프트지 98g 는 paperList 에 있으나 1000매 0원으로 미공급 (등록 X).
 adsland:
 - product_name: 칼라봉투
   category: 봉투
