@@ -20,7 +20,8 @@ price-monitor/
 │   ├── {site}_card_digital.py      # 5사이트 × 디지털 명함
 │   ├── {site}_flyer.py             # 5사이트 × 합판전단
 │   ├── {site}_envelope.py          # 5사이트 × 봉투 (단면4도 칼라 전용)
-│   ├── {site}_sticker.py           # 5사이트 × 사각형 스티커 (8 표준 사이즈, ±5mm 매칭)
+│   ├── {site}_sticker_offset.py    # 5사이트 × 사각형 스티커 합판 (8 표준 사이즈 ±5mm, 1000매)
+│   ├── {site}_sticker_digital.py   # 4사이트 × 사각형 스티커 디지털 (dtpia 제외, 100매 — adsland 105매)
 │   └── _{site}_card_common.py      # 사이트별 카드 공통 헬퍼
 ├── common/
 │   └── normalize.py                # raw → normalize 공통 파서
@@ -30,13 +31,15 @@ price-monitor/
 │   │   ├── card_digital.yaml
 │   │   ├── flyer.yaml
 │   │   ├── envelope.yaml
-│   │   └── sticker.yaml
+│   │   ├── sticker_offset.yaml
+│   │   └── sticker_digital.yaml
 │   ├── targets/                    # 타겟 정의 (engine 용)
 │   │   ├── card_offset.yaml
 │   │   ├── card_digital.yaml
 │   │   ├── flyer.yaml
 │   │   ├── envelope.yaml
-│   │   └── sticker.yaml
+│   │   ├── sticker_offset.yaml
+│   │   └── sticker_digital.yaml
 │   ├── sites/                      # 사이트별 기술 상수 (selectors, timeouts)
 │   │   └── {site}.yaml             # 카테고리별 섹션 분리
 │   └── output_template.json
@@ -59,7 +62,8 @@ price-monitor/
 | **명함 오프셋(card_offset)** | engine | printcity, dtpia, swadpia, wowpress, adsland | 용지×코팅×면×매수 |
 | **명함 디지털(card_digital)** | engine | 위 5사 | 용지×코팅×면×매수 |
 | **합판전단(flyer)** | engine | 위 5사 | 용지×사이즈×매수×도수 |
-| **스티커(sticker)** | engine | printcity, dtpia, swadpia, wowpress, adsland | 사각형 8 사이즈 (60x40~90x120 ±5mm) × 용지 × 1000매 |
+| **스티커 합판(sticker_offset)** | engine | printcity, dtpia, swadpia, wowpress, adsland | 사각형 8 사이즈 (60x40~90x120 ±5mm) × 용지 × **1000매** |
+| **스티커 디지털(sticker_digital)** | engine | printcity, swadpia, wowpress, adsland (dtpia 제외) | 사각형 8 사이즈 × 용지 × **100매** (adsland 105매) |
 | **봉투(envelope)** | engine | printcity, dtpia, swadpia, wowpress, adsland | 용지×사이즈×1000매 (단면4도 칼라 전용) |
 | 엽서(postcard) | 미구현 | | |
 
@@ -70,8 +74,10 @@ python scheduler.py card           # 오프셋+디지털 명함 일괄
 python scheduler.py card_offset    # 오프셋만
 python scheduler.py card_digital   # 디지털만
 python scheduler.py flyer          # 합판전단
-python scheduler.py sticker        # 스티커
-python scheduler.py envelope       # 봉투
+python scheduler.py sticker          # 스티커 합판+디지털 일괄
+python scheduler.py sticker_offset   # 스티커 합판만
+python scheduler.py sticker_digital  # 스티커 디지털만
+python scheduler.py envelope         # 봉투
 python dashboard/app.py            # 대시보드 (localhost:5001)
 ```
 

@@ -91,10 +91,10 @@ def _js_set(page, selector, value) -> bool:
 
 class Adapter(SiteAdapter):
     site = "printcity"
-    category = "sticker"
+    category = "sticker_offset"
 
     def fetch_and_extract(self, ctx: RunContext) -> Iterator[RawItem]:
-        cat_cfg = ctx.site_config.get("sticker", {})
+        cat_cfg = ctx.site_config.get("sticker_offset", {})
         sel = cat_cfg.get("selectors", {})
         timeouts = cat_cfg.get("timeouts", {})
 

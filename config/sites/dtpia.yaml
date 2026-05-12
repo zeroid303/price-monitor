@@ -102,9 +102,9 @@ flyer:
     floor_abs: 5000
     per_qty_multiplier: 5
 
-# 사각형 스티커 — Sticker/Jaedan.aspx (재단/사각형)
+# 사각형 스티커 (오프셋/합판) — Sticker/Jaedan.aspx (재단/사각형)
 # 디스커버리 결과 기반 정확한 selectors.
-sticker:
+sticker_offset:
   selectors:
     sticker_type: sticker_type        # jd=사각재단 (1옵션 고정)
     mtrl_cd: mtrl_cd                  # paper (8옵션: 강접/초강접 아트지/유포지/투명데드롱/은데드롱)

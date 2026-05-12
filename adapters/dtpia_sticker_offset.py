@@ -105,10 +105,10 @@ def _near_canonical(w: int, h: int, tol: int = SIZE_TOL_MM):
 
 class Adapter(SiteAdapter):
     site = "dtpia"
-    category = "sticker"
+    category = "sticker_offset"
 
     def fetch_and_extract(self, ctx: RunContext) -> Iterator[RawItem]:
-        cat_cfg = ctx.site_config.get("sticker", {})
+        cat_cfg = ctx.site_config.get("sticker_offset", {})
         sel = cat_cfg.get("selectors", {})
         timeouts = cat_cfg.get("timeouts", {})
 

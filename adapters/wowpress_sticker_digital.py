@@ -34,7 +34,7 @@ CANONICAL_SIZES = [
 ]
 SIZE_TOL_MM = 5
 
-DEFAULT_QTY = "1000"
+DEFAULT_QTY = "100"
 
 
 JS_DUMP_OPTS = """(sel_id) => {
@@ -156,10 +156,10 @@ def _set_size_req(page, size_select_id: str, size_value: str):
 
 class Adapter(SiteAdapter):
     site = "wowpress"
-    category = "sticker"
+    category = "sticker_digital"
 
     def fetch_and_extract(self, ctx: RunContext) -> Iterator[RawItem]:
-        cat_cfg = ctx.site_config.get("sticker", {})
+        cat_cfg = ctx.site_config.get("sticker_digital", {})
         sel = cat_cfg.get("selectors", {})
         timeouts = cat_cfg.get("timeouts", {})
 

@@ -34,7 +34,8 @@ CATEGORIES = [
     {"id": "card_digital", "name": "명함 (디지털)"},
     {"id": "flyer", "name": "합판 전단"},
     {"id": "envelope", "name": "봉투"},
-    {"id": "sticker", "name": "스티커"},
+    {"id": "sticker_offset", "name": "스티커 (합판)"},
+    {"id": "sticker_digital", "name": "스티커 (디지털)"},
 ]
 
 app = Flask(__name__)
@@ -68,7 +69,7 @@ def _load_site_yaml(site_id: str) -> dict:
 
 def get_active_sites(category: str) -> list[dict]:
     """카테고리별 활성 사이트 list — 모두 config/sites/*.yaml 의 5사이트."""
-    if category in ("card_offset", "card_digital", "flyer", "envelope", "sticker"):
+    if category in ("card_offset", "card_digital", "flyer", "envelope", "sticker_offset", "sticker_digital"):
         out = []
         for sid in CARD_SITES:
             site_cfg = _load_site_yaml(sid)
@@ -438,7 +439,7 @@ def api_grid():
     site_ids = [s["id"] for s in sites]
     items_by_site, raw_items_by_site, latest_crawled = _load_site_data(category, site_ids)
 
-    if category == "sticker":
+    if category in ("sticker_offset", "sticker_digital"):
         return jsonify(_build_sticker_grid(sites, site_ids, items_by_site, raw_items_by_site, latest_crawled))
     if category == "envelope":
         return jsonify(_build_envelope_grid(sites, site_ids, items_by_site, raw_items_by_site, latest_crawled))

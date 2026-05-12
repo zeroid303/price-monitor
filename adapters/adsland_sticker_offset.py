@@ -78,10 +78,10 @@ def _price_with_retry(page, sel, qty, timeouts, guard):
 
 class Adapter(SiteAdapter):
     site = "adsland"
-    category = "sticker"
+    category = "sticker_offset"
 
     def fetch_and_extract(self, ctx: RunContext) -> Iterator[RawItem]:
-        cat_cfg = ctx.site_config.get("sticker", {})
+        cat_cfg = ctx.site_config.get("sticker_offset", {})
         sel = cat_cfg.get("selectors", {})
         timeouts = cat_cfg.get("timeouts", {})
         guard = cat_cfg.get("low_price_guard", {})

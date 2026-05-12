@@ -1,0 +1,54 @@
+_description: 디지털/인디고 스티커 4사이트 크롤 타겟. dtpia 는 PanSticker 사이즈
+  셋(60x100~) 이 사용자 표준 8 (60x40~90x120) 과 불일치 → 수집 제외.
+  표준 매수 = 100매, adsland 만 35배수 정책으로 105매 사용.
+_filters_common:
+  qty: [100]
+  qty_adsland: 105
+  shape: 사각형
+  canonical_sizes: [60x40, 80x50, 90x55, 90x60, 90x70, 90x80, 90x100, 90x120]
+  size_tolerance_mm: 5
+
+printcity:
+- product_name: 디지털 스티커
+  category: 스티커
+  url: https://www.printcity.co.kr/product/DigitalSticker
+  qty_target: '100'
+  qty_mae: 100
+  _note: customSize 입력만 — 표준 8 사이즈 W/H 직접 입력. paper 4종(아트/모조/크라프트/그문드 화이트우드) × coating 5종. 양면5도 고정.
+
+swadpia:
+- product_name: 디지털 스티커
+  category: 스티커
+  category_code: CDP1200
+  product_code: GDP1201
+  url: https://www.swadpia.co.kr/goods/goods_view/CDP1200/GDP1201
+  qty_target: '100'
+  qty_mae: 100
+  _note: 인디고인쇄(PTM40). paper 6종(75아트/한지75g/리커버 90g/유포지/PET 50 은무 등). size_type=SZT20(직접입력) + cut_x/y_size input.
+
+wowpress:
+# 사각형 스티커 카테고리(linkProdNo=40133) 중 소량 시리즈 (디지털 인쇄). qty 옵션 100매 지원.
+- {product_name: 소량스티커(사각), category: 스티커, prod_no: '40009',
+   url: 'https://wowpress.co.kr/ordr/prod/dets?ProdNo=40009', qty_target: '100', qty_mae: 100}
+- {product_name: 탈부착스티커(사각), category: 스티커, prod_no: '40011',
+   url: 'https://wowpress.co.kr/ordr/prod/dets?ProdNo=40011', qty_target: '100', qty_mae: 100}
+- {product_name: 소량레인보우스티커(사각), category: 스티커, prod_no: '40475',
+   url: 'https://wowpress.co.kr/ordr/prod/dets?ProdNo=40475', qty_target: '100', qty_mae: 100}
+- {product_name: 소량스파클스티커(사각), category: 스티커, prod_no: '40467',
+   url: 'https://wowpress.co.kr/ordr/prod/dets?ProdNo=40467', qty_target: '100', qty_mae: 100}
+- {product_name: 투명엠보싱스티커(사각), category: 스티커, prod_no: '40515',
+   url: 'https://wowpress.co.kr/ordr/prod/dets?ProdNo=40515', qty_target: '100', qty_mae: 100}
+- {product_name: 엠보싱금박스티커(사각), category: 스티커, prod_no: '40516',
+   url: 'https://wowpress.co.kr/ordr/prod/dets?ProdNo=40516', qty_target: '100', qty_mae: 100}
+- {product_name: 엠보싱은박스티커(사각), category: 스티커, prod_no: '40517',
+   url: 'https://wowpress.co.kr/ordr/prod/dets?ProdNo=40517', qty_target: '100', qty_mae: 100}
+- {product_name: 엠보싱홀로그램박스티커(사각), category: 스티커, prod_no: '40518',
+   url: 'https://wowpress.co.kr/ordr/prod/dets?ProdNo=40518', qty_target: '100', qty_mae: 100}
+
+adsland:
+- product_name: 디지털 스티커
+  category: 스티커
+  url: https://www.adsland.com/shop/order.php?IC=IC00119
+  qty_target: '105'   # 35배수 정책 — 100매 가장 근접
+  qty_mae: 105
+  _note: 35배수 (35/70/105/140/...). 100매 표준에 105매가 가장 근접. paper 5종 + 그문드.

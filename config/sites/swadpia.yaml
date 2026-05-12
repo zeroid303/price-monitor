@@ -85,10 +85,10 @@ envelope:
     after_price_trigger_ms: 800
     retry_price_ms: 1500
 
-# 사각형 스티커 — CST1000/GST1001 페이지
+# 사각형 스티커 (오프셋/합판) — CST1000/GST1001 페이지
 # 사이즈 input W/H (cut_x_size/cut_y_size), paper_code select 11옵션, paper_qty select
 # 가격: tr.estimate_print 또는 #print_estimate_tot (VAT 포함)
-sticker:
+sticker_offset:
   selectors:
     paper_code:       "select[name=paper_code]"        # 11옵션 (75아트/아트지 90g 초강접/유포지/모조지/크라프트/투명/은데드롱 등)
     print_color_type: "select[name=print_color_type]"  # SPD10 단면칼라(4도) / +금별 / +은별
@@ -98,6 +98,27 @@ sticker:
     cut_x_size:       "input[name=cut_x_size]"         # 사이즈 가로 mm 입력
     cut_y_size:       "input[name=cut_y_size]"         # 사이즈 세로 mm 입력
     price_total:      "#print_estimate_tot"            # VAT 포함 합계 텍스트
+  timeouts:
+    page_goto_ms: 30000
+    after_goto_ms: 2500
+    after_select_ms: 700
+    after_size_input_ms: 1000
+    after_price_trigger_ms: 800
+    retry_price_ms: 1500
+
+# 디지털/인디고 스티커 — CDP1200/GDP1201 페이지
+# paper_code 6옵션 (75아트/한지/리커버/유포지/PET 등). 사이즈는 size_type=SZT20(직접입력)
+# 후 cut_x_size/cut_y_size input. paper_qty 100매 가능.
+sticker_digital:
+  selectors:
+    paper_code:       "select[name=paper_code]"
+    print_color_type: "select[name=print_color_type]"  # DPD20 단면칼라4도
+    coating_type:     "select[name=coating_type]"
+    paper_qty:        "select[name=paper_qty]"
+    size_type:        "select[name=size_type]"          # SZT10 규격 / SZT20 직접입력
+    cut_x_size:       "input[name=cut_x_size]"
+    cut_y_size:       "input[name=cut_y_size]"
+    price_total:      "#print_estimate_tot"
   timeouts:
     page_goto_ms: 30000
     after_goto_ms: 2500

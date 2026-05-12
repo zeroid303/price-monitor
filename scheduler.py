@@ -58,10 +58,20 @@ CATEGORIES = {
         "sites": _CARD_SITES,   # 5 사이트 모두 활성
         "sub_categories": ["flyer"],
     },
-    "sticker": {
+    "sticker": {  # 전체 스티커 (오프셋+디지털) 일괄 실행
         "type": "engine",
         "sites": _CARD_SITES,
-        "sub_categories": ["sticker"],
+        "sub_categories": ["sticker_offset", "sticker_digital"],
+    },
+    "sticker_offset": {
+        "type": "engine",
+        "sites": _CARD_SITES,
+        "sub_categories": ["sticker_offset"],
+    },
+    "sticker_digital": {
+        "type": "engine",
+        "sites": _CARD_SITES,   # dtpia 는 어댑터 없음 — engine 이 import 실패 시 자동 skip
+        "sub_categories": ["sticker_digital"],
     },
     "envelope": {
         "type": "engine",

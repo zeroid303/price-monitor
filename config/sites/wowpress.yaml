@@ -72,11 +72,11 @@ card_digital:
     floor_abs: 500
     per_qty_multiplier: 3
 
-# 사각형 스티커 — linkProdNo=40133 카테고리의 13 하위 제품 (paper 종류별 분리)
+# 사각형 스티커 (오프셋/합판) — linkProdNo=40133 카테고리의 13 하위 제품 (paper 종류별 분리)
 # config/targets/sticker.yaml wowpress 섹션의 13 ProdNo 별 dets 페이지 진입.
 # 각 제품 페이지는 봉투(40034) 와 유사: paperno3/4/5 cascade + sizeno or width/height input.
 # 일부 제품은 사이즈가 select(sizeno), 일부는 사용자 정의 input (paperwidth/paperheight).
-sticker:
+sticker_offset:
   selectors:
     size:        "pdata_00_sizeno"
     color_mode:  "pdata_00_colorno"
@@ -87,6 +87,32 @@ sticker:
     ord_cnt:     "pdata_00_ordcnt"
     width_input: "spdata_00_paperwidth"   # 사용자 정의 폭 mm
     height_input: "spdata_00_paperheight" # 사용자 정의 높이 mm
+    paper_list:  "paperList"
+    price_total: "od_00_totalcost"
+    price_tax:   "od_00_taxcost"
+    price_supply: "od_00_prscost"
+  timeouts:
+    page_goto_ms: 30000
+    after_goto_ms: 6000
+    after_size_ms: 6000
+    after_select_ms: 800
+    after_paper_ms: 2200
+    after_qty_ms: 500
+    after_summary_ms: 2000
+    retry_price_ms: 1500
+
+# 디지털 스티커 — 소량스티커 시리즈 (40009/40011/40475 등) 8 제품
+# 봉투 paperno3/4/5 cascade 와 유사. paperno5 없는 2단 cascade 동적 처리.
+# qty=100 매 표준 (offset 의 1000 과 다름).
+sticker_digital:
+  selectors:
+    size:        "pdata_00_sizeno"
+    color_mode:  "pdata_00_colorno"
+    paper_no3:   "spdata_00_paperno3"
+    paper_no4:   "spdata_00_paperno4"
+    paper_no5:   "spdata_00_paperno5"
+    qty:         "spdata_00_ordqty"
+    ord_cnt:     "pdata_00_ordcnt"
     paper_list:  "paperList"
     price_total: "od_00_totalcost"
     price_tax:   "od_00_taxcost"

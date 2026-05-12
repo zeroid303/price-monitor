@@ -1,0 +1,125 @@
+_description: 디지털/인디고 스티커 정규화 룰. 표준 사이즈 8종 (60x40~90x120) 동일,
+  표준 매수 = 100매 (adsland 만 105매 — 35배수 정책). 사이트별 디지털 페이지 paper
+  옵션이 합판과 다름 (예 swadpia 한지/리커버/PET, adsland 그문드 등).
+  dtpia 는 PanSticker 사이즈 셋이 표준과 달라 수집 제외.
+_match_axes:
+  axes:
+  - paper_name
+  - paper_weight_g
+  - coating
+  - print_mode
+  - size
+  - qty
+  weight_tolerance_g: 25
+  size_tolerance_mm: 5
+  qty_tolerance_pct: 5
+_defaults:
+  qty: 100
+  match_method: substring
+_normalization:
+  paper_name:
+    _description: 디지털 스티커 paper. offset canonical + 디지털 전용 paper (한지/리커버/PET/그문드 등).
+    canonical:
+      초강접아트지:
+        weights:
+          90:
+            aliases:
+              printcity: [초강접아트스티커-90g]
+              swadpia: [아트지 90g 초강접]
+              adsland: [아트지 초강접 스티커]
+              wowpress: [초강접아트지(유광코팅) 100g, 초강접아트지(유광코팅)]
+      강접아트지:
+        weights:
+          80:
+            aliases:
+              wowpress: ['아트지(유광코팅) 80g', '아트지(무광코팅) 80g', '아트지(무코팅) 80g']
+          90:
+            aliases:
+              printcity: [아트스티커(일반강접)-90g, 아트스티커-90g]
+              adsland: [아트지 강접 스티커]
+      리무버블아트지:
+        weights:
+          90:
+            aliases:
+              adsland: [리무버블 아트지 스티커]
+      유포지:
+        weights:
+          80:
+            aliases:
+              printcity: [유포지스티커-80g]
+              swadpia: [유포지 80μ, 유포지 80g]
+              wowpress: [유포지]
+      모조지:
+        weights:
+          80:
+            aliases:
+              printcity: [모조스티커-80g]
+              swadpia: [모조지 80g]
+              adsland: [모조지 스티커]
+              wowpress: [모조지]
+      크라프트:
+        weights:
+          57:
+            aliases:
+              printcity: [크라프트스티커-57g]
+              swadpia: [크라프트 57g]
+              adsland: [크라프트지 스티커]
+              wowpress: [크라프트지]
+      그문드:
+        weights:
+          0:
+            aliases:
+              printcity: [그문드 화이트우드 스티커]
+              adsland: [그문드스티커]
+      한지:
+        weights:
+          75:
+            aliases:
+              swadpia: [한지75g]
+      리커버:
+        weights:
+          90:
+            aliases:
+              swadpia: [리커버 90g]
+      PET은무:
+        weights:
+          50:
+            aliases:
+              swadpia: [pet 50 은무]
+    noise_suffix_regex: (\d+)\s*g.*$
+  coating:
+    _description: 디지털 스티커 코팅. 사이트별 다양 — 유광/무광/홀로그램 등.
+    default: 유광코팅
+    allowed: [비코팅, 무광코팅, 유광코팅, 홀로그램]
+    aliases:
+      비코팅: ['', 없음, 안함, 코팅없음, 코팅안함, 무코팅]
+      무광코팅: [무광, 단면무광코팅, 무광써멀라미네팅]
+      유광코팅: [유광, 코팅, 단면유광코팅, 유광써멀라미네팅]
+      홀로그램: [홀로그램코팅 도트, 홀로그램코팅 심플, 홀로그램코팅 스타]
+  print_mode:
+    _description: printcity 양면5도(CMYK+W), swadpia 단면칼라4도 인디고, 그 외 단면칼라.
+    default: 단면칼라
+    allowed: [양면5도, 단면4도, 단면칼라]
+    aliases:
+      양면5도: [5도, 양면5도, CMYK+W]
+      단면4도: [4도, 단면4도, '단면칼라(4도)', 단면칼라4도]
+      단면칼라: [단면, '단면 칼라', 단면칼라]
+  size:
+    _description: 사각형 스티커 표준 8 사이즈 (offset 과 동일). ±5mm 매칭.
+    default: 90x60
+    format: '{W}x{H}'
+    regex: (\d+)\s*[x×*X]\s*(\d+)\s*(cm)?
+    canonical:
+    - 60x40
+    - 80x50
+    - 90x55
+    - 90x60
+    - 90x70
+    - 90x80
+    - 90x100
+    - 90x120
+    tolerance_mm: 5
+  qty:
+    _description: 디지털 스티커 표준 — 100매 (소량). adsland 105매 (35배수 정책).
+    default: 100
+    common_units: [50, 100, 105, 200, 300]
