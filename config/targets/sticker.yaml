@@ -1,0 +1,53 @@
+_description: 사각형 스티커 5사이트 크롤 타겟. 표준 8 사이즈 (60x40 / 80x50 / 90x55 /
+  90x60 / 90x70 / 90x80 / 90x100 / 90x120 mm) × 1000매. 사이트별 실제 사이즈 옵션이
+  표준과 정확 일치 안 하면 어댑터가 ±5mm 내 매칭 (config/schemas/sticker.yaml 의
+  size_tolerance_mm 참조).
+_filters_common:
+  qty: [1000]
+  shape: 사각형
+  canonical_sizes: [60x40, 80x50, 90x55, 90x60, 90x70, 90x80, 90x100, 90x120]
+  size_tolerance_mm: 5
+
+printcity:
+- product_name: 사각형 스티커
+  category: 스티커
+  url: https://www.printcity.co.kr/product/StickerRectangleNew
+  qty_target: '1000'
+  qty_mae: 1000
+  _note: 표준 사각형 8 사이즈 모두 수집. 양면5도(CMYK+W) 고정.
+
+swadpia:
+- product_name: 사각형 스티커
+  category: 스티커
+  category_code: CST1000
+  product_code: GST1001
+  url: https://www.swadpia.co.kr/goods/goods_view/CST1000/GST1001
+  qty_target: '1000'
+  qty_mae: 1000
+  _note: paper/사이즈 dropdown 어댑터가 dump 해 표준 사이즈 ±5mm 매칭.
+
+dtpia:
+- product_name: 사각형 스티커
+  category: 스티커
+  url: https://dtpia.co.kr/Order/Sticker/Jaedan.aspx
+  qty_target: '1000'
+  qty_mae: 1000
+  _note: 재단(사각) 스티커 페이지. paper/사이즈 dropdown 어댑터가 dump.
+
+wowpress:
+- product_name: 사각형 스티커
+  category: 스티커
+  prod_no: '30002'
+  link_prod_no: '40133'
+  url: https://wowpress.co.kr/ordr/prod/list?ProdNo=30002&linkProdNo=40133&ldtype=pd
+  qty_target: '1000'
+  qty_mae: 1000
+  _note: list 페이지 → linkProdNo=40133 상세. paperList JSON + 사이즈 dropdown 동적 갱신 (wowpress 특성).
+
+adsland:
+- product_name: 사각형 스티커
+  category: 스티커
+  url: https://www.adsland.com/shop/order.php?IC=IC00030
+  qty_target: '1000'
+  qty_mae: 1000
+  _note: IC00030 사각형 스티커 페이지. paper_sort/tmp_paper/size_book × 사이즈 cascade.

@@ -1,0 +1,117 @@
+_description: 스티커 정규화 룰. 사각형 스티커 전용. canonical key = (paper, weight_g, coating, size, qty).
+  표준 사이즈 8종 (60x40 / 80x50 / 90x55 / 90x60 / 90x70 / 90x80 / 90x100 / 90x120). 타 사이트가
+  표준과 정확히 일치 안 하면 각 변 ±5mm 내 매칭 허용 (size_tolerance_mm).
+  프린트시티만 양면5도(CMYK+W), 경쟁사는 단면4도/단면칼라 — 도수 정책 차이 있으나
+  '동일 조건' 으로 비교 (사용자 합의).
+_match_axes:
+  axes:
+  - paper_name
+  - paper_weight_g
+  - coating
+  - print_mode
+  - size
+  - qty
+  weight_tolerance_g: 25
+  size_tolerance_mm: 5
+_defaults:
+  qty: 1000
+  match_method: substring
+_normalization:
+  paper_name:
+    _description: 스티커 용지 정규화. canonical = (paper_name, weight). 사이트별 표기를 평량별 alias 로 등록.
+    canonical:
+      초강접아트지:
+        weights:
+          90:
+            aliases:
+              printcity: [초강접아트스티커-90g]
+              dtpia: ['초강접스티커 (아트지 90g)', 초강접스티커(아트지 90g)]
+              swadpia: [아트지 90g 초강접]
+              wowpress: [초강접 코팅아트지90g, 초강접아트지(유광코팅), 초강접아트지(유광코팅) 90g,
+                초강접아트지(유광코팅) 100g, 초강접아트지]
+      강접아트지:
+        weights:
+          80:
+            aliases:
+              wowpress: ['강접아트지(유광) 80g', '강접아트지(유광코팅) 80g', '강접아트지(무코팅) 80g']
+          90:
+            aliases:
+              dtpia: ['강접스티커 (아트지 90g)', 강접스티커(아트지 90g)]
+              printcity: [아트스티커(일반강접)-90g]
+              wowpress: [아트지90g]
+      유포지:
+        weights:
+          80:
+            aliases:
+              printcity: [유포지스티커-80g]
+              swadpia: [유포지 80g, 유포지 80μ]
+              dtpia: [유포지 80g]
+              wowpress: [유포지, 유포지80g]
+      모조지:
+        weights:
+          80:
+            aliases:
+              printcity: [모조스티커-80g, 모조지스티커-80g]
+              swadpia: [모조지 80g, 모조지80g]
+              dtpia: [모조지 80g]
+              wowpress: [모조지]
+      크라프트:
+        weights:
+          57:
+            aliases:
+              printcity: [크라프트스티커-57g]
+              swadpia: [크라프트 57g, 크라프트지 57g]
+              dtpia: [크라프트지 57g]
+              wowpress: ['크라프트지57g (빈티지)', 크라프트지]
+      투명데드롱:
+        weights:
+          25:
+            aliases:
+              printcity: [투명데드롱스티커-25g]
+              swadpia: [투명데드롱 25, 투명데드롱 25g]
+              dtpia: ['투명데드롱 25g (유광코팅)']
+              wowpress: [투명 스티커(투명데드롱25g), 투명데드롱, 투명데드롱50g]
+      은데드롱:
+        weights:
+          25:
+            aliases:
+              printcity: [은데드롱스티커-25g]
+              swadpia: [은무데드롱 25, 은무데드롱 25g]
+              dtpia: ['은데드롱 25g (무광코팅)']
+              wowpress: [은데드롱 스티커(은데드롱25g), 은광데드롱, 은광데드롱50g]
+    noise_suffix_regex: (\d+)\s*g.*$
+  coating:
+    _description: 스티커 코팅. 유광코팅이 기본 비교 조건.
+    default: 유광코팅
+    allowed: [비코팅, 무광코팅, 유광코팅]
+    aliases:
+      비코팅: ['', 없음, 안함, 코팅없음, 코팅안함, 무코팅]
+      무광코팅: [무광, 무광써멀라미네팅, 무광라미네이팅]
+      유광코팅: [유광, 코팅, 유광써멀라미네팅, 유광라미네이팅, 심플레인보우 코팅]
+  print_mode:
+    _description: 스티커 인쇄 도수. 프린트시티 양면5도(CMYK+W), 경쟁사 단면4도/단면칼라. 사이트별 1:1 매칭은 불가하나 '동일 조건' 으로 비교 (합의).
+    default: 단면칼라
+    allowed: [양면5도, 단면4도, 단면칼라]
+    aliases:
+      양면5도: [5도, CMYK+W, CMYK+백판, 양면5도]
+      단면4도: [4도, 단면칼라(4도), CMYK, 단면4도]
+      단면칼라: [단면, '단면 칼라', 자유형 도무송, 단면칼라]
+  size:
+    _description: 사각형 스티커 표준 사이즈 8종. canonical 'WxH' mm. 타 사이트 raw 가 각 변 ±5mm 이내 일치하면 매칭 (예 95x65 → 90x60 매칭).
+    default: 90x60
+    format: '{W}x{H}'
+    regex: (\d+)\s*[x×*X]\s*(\d+)\s*(cm)?
+    canonical:
+    - 60x40
+    - 80x50
+    - 90x55
+    - 90x60
+    - 90x70
+    - 90x80
+    - 90x100
+    - 90x120
+    tolerance_mm: 5
+  qty:
+    _description: 스티커 표준 — 1000매.
+    default: 1000
+    common_units: [500, 1000, 2000, 3000]

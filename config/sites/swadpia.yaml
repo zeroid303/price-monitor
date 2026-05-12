@@ -85,6 +85,25 @@ envelope:
     after_price_trigger_ms: 800
     retry_price_ms: 1500
 
+# 사각형 스티커 — CST1000/GST1001 페이지
+# paper/사이즈/매수 선택 후 #print_estimate_tot 가격 (VAT 포함)
+sticker:
+  selectors:
+    paper_kind:    "select[name=paper_kind]"
+    paper_type:    "select[name=paper_type]"
+    paper_code:    "select[name=paper_code]"
+    paper_size:    "select[name=paper_size]"          # 사이즈 선택 (옵션에 사각형 사이즈)
+    paper_qty:     "select[name=paper_qty]"
+    print_color_type: "select[name=print_color_type]"  # 단면칼라(4도)
+    domusong_type: "select[name=domusong_type]"        # 도무송 타입 (필요시)
+    price_total:   "#print_estimate_tot"               # VAT 포함 총 합계
+  timeouts:
+    page_goto_ms: 30000
+    after_goto_ms: 2500
+    after_select_ms: 700
+    after_price_trigger_ms: 800
+    retry_price_ms: 1500
+
 # 합판 전단지
 flyer:
   selectors:

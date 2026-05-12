@@ -76,6 +76,31 @@ card_digital:
     floor_abs: 500
     per_qty_multiplier: 3
 
+# 사각형 스티커 — IC00030
+# paper_sort/tmp_paper cascade + 사이즈 (재단 폭/높이 입력 또는 size_book select)
+sticker:
+  selectors:
+    size_book:     "select#size_book"
+    paper_sort:    "select#paper_sort"
+    tmp_paper:     "select#tmp_paper"
+    busu:          "select#busu"
+    kind:          "select#kind"
+    width_input:   "input[name=size_width]"
+    height_input:  "input[name=size_height]"
+    coat:          "select#coat"
+    price_supply:  'input[name="bill_ttl_sub"]'
+    price_tax:     'input[name="bill_tax"]'
+    price_total:   'input[name="bill_ttl_fnl"]'
+  timeouts:
+    page_goto_ms: 30000
+    after_goto_ms: 3000
+    after_select_ms: 700
+    after_smart_ms: 700
+    retry_price_ms: 1500
+  low_price_guard:
+    floor_abs: 500
+    per_qty_multiplier: 3
+
 # 봉투 — IC00053(규격대중소봉투, 단면4도 칼라봉투 전용)
 # size_book × paper_sort × tmp_paper 3단 cascade. type_bt=일반형, dosu=4/0 고정.
 # 흑백/마스타지(IC00058) 는 수집 안 함.

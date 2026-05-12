@@ -1,8 +1,36 @@
-# 프린트시티 사이트 메타. 웹 크롤링 없이 data/printcity/*.xlsx 를 직접 소스로 사용.
-# 엑셀 갱신 시 scripts/build_printcity_card_targets.py 재실행 → config/targets/card_{offset,digital}.yaml 의 printcity 섹션 교체.
+# 프린트시티 사이트 메타.
+# 카드/봉투/전단: data/printcity/*.xlsx 정적 source.
+# 스티커: 사각형 스티커는 가격 정책 복잡 → StickerRectangleNew 페이지 Playwright 크롤.
 
 name: "프린트시티"
 base_url: "https://www.printcity.co.kr"
-tech: "xlsx"             # 엑셀 직접 파싱. Playwright/browser 사용 안 함.
+tech: "xlsx"             # 카드/봉투/전단 — 엑셀 직접 파싱.
 ownership: "self"        # 자사 — 가격 기준(reference)
 vat_included: false      # 엑셀 value 컬럼은 공급가(VAT 제외)
+locale: "ko-KR"
+
+browser:
+  headless: true
+  viewport:
+    width: 1280
+    height: 900
+
+block_patterns:
+  - "**/google-analytics.com/**"
+  - "**/googletagmanager.com/**"
+  - "**/facebook.net/**"
+  - "**/facebook.com/tr/**"
+  - "**/doubleclick.net/**"
+
+# 사각형 스티커 — StickerRectangleNew 페이지 Playwright 크롤링.
+# 옛 도무송 스티커 (StickerDomusongNew2) 와 다른 새 페이지.
+sticker:
+  tech: "playwright"
+  vat_included: true       # 페이지 표시 가격이 VAT 포함이면 normalize 단계에서 ÷1.1
+  _note: 어댑터 작성 시 페이지 조사 후 selectors 명시. paper/사이즈/매수 옵션 dropdown 또는 사이즈 직접 입력 가능성.
+  timeouts:
+    page_goto_ms: 30000
+    after_goto_ms: 3000
+    after_select_ms: 700
+    after_price_trigger_ms: 1500
+    retry_price_ms: 1500
