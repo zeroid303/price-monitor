@@ -35,14 +35,35 @@ dtpia:
   _note: 재단(사각) 스티커 페이지. paper/사이즈 dropdown 어댑터가 dump.
 
 wowpress:
-- product_name: 사각형 스티커
-  category: 스티커
-  prod_no: '30002'
-  link_prod_no: '40133'
-  url: https://wowpress.co.kr/ordr/prod/list?ProdNo=30002&linkProdNo=40133&ldtype=pd
-  qty_target: '1000'
-  qty_mae: 1000
-  _note: list 페이지 → linkProdNo=40133 상세. paperList JSON + 사이즈 dropdown 동적 갱신 (wowpress 특성).
+# 사각형 스티커 카테고리 (linkProdNo=40133) 의 13 하위 제품. 각 제품마다 paper 종류
+# 별도 분리 (가성비/소량/탈부착/강접/특수초강접/방수/종이/소량레인보우/스파클/엠보싱 4종)
+# 사이즈 1000매 미공급/특수 가공 제품은 어댑터가 자동 skip.
+- {product_name: 가성비스티커(사각), category: 스티커, prod_no: '40007',
+   url: 'https://wowpress.co.kr/ordr/prod/dets?ProdNo=40007', qty_target: '1000', qty_mae: 1000}
+- {product_name: 소량스티커(사각), category: 스티커, prod_no: '40009',
+   url: 'https://wowpress.co.kr/ordr/prod/dets?ProdNo=40009', qty_target: '1000', qty_mae: 1000}
+- {product_name: 탈부착스티커(사각), category: 스티커, prod_no: '40011',
+   url: 'https://wowpress.co.kr/ordr/prod/dets?ProdNo=40011', qty_target: '1000', qty_mae: 1000}
+- {product_name: 강접스티커(사각), category: 스티커, prod_no: '40013',
+   url: 'https://wowpress.co.kr/ordr/prod/dets?ProdNo=40013', qty_target: '1000', qty_mae: 1000}
+- {product_name: 특수초강접스티커(사각), category: 스티커, prod_no: '40618',
+   url: 'https://wowpress.co.kr/ordr/prod/dets?ProdNo=40618', qty_target: '1000', qty_mae: 1000}
+- {product_name: 방수스티커(사각), category: 스티커, prod_no: '40015',
+   url: 'https://wowpress.co.kr/ordr/prod/dets?ProdNo=40015', qty_target: '1000', qty_mae: 1000}
+- {product_name: 종이스티커(사각), category: 스티커, prod_no: '40018',
+   url: 'https://wowpress.co.kr/ordr/prod/dets?ProdNo=40018', qty_target: '1000', qty_mae: 1000}
+- {product_name: 소량레인보우스티커(사각), category: 스티커, prod_no: '40475',
+   url: 'https://wowpress.co.kr/ordr/prod/dets?ProdNo=40475', qty_target: '1000', qty_mae: 1000}
+- {product_name: 소량스파클스티커(사각), category: 스티커, prod_no: '40467',
+   url: 'https://wowpress.co.kr/ordr/prod/dets?ProdNo=40467', qty_target: '1000', qty_mae: 1000}
+- {product_name: 투명엠보싱스티커(사각), category: 스티커, prod_no: '40515',
+   url: 'https://wowpress.co.kr/ordr/prod/dets?ProdNo=40515', qty_target: '1000', qty_mae: 1000}
+- {product_name: 엠보싱금박스티커(사각), category: 스티커, prod_no: '40516',
+   url: 'https://wowpress.co.kr/ordr/prod/dets?ProdNo=40516', qty_target: '1000', qty_mae: 1000}
+- {product_name: 엠보싱은박스티커(사각), category: 스티커, prod_no: '40517',
+   url: 'https://wowpress.co.kr/ordr/prod/dets?ProdNo=40517', qty_target: '1000', qty_mae: 1000}
+- {product_name: 엠보싱홀로그램박스티커(사각), category: 스티커, prod_no: '40518',
+   url: 'https://wowpress.co.kr/ordr/prod/dets?ProdNo=40518', qty_target: '1000', qty_mae: 1000}
 
 adsland:
 - product_name: 사각형 스티커
