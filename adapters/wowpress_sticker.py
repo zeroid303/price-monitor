@@ -210,15 +210,27 @@ class Adapter(SiteAdapter):
             ctx.log.event("extract.skip", product=t["product_name"], reason="paperList leaf 없음")
             return
 
+        # qty=1000 옵션 존재 검증 — 없으면 제품 전체 skip (소량/탈부착 등)
+        qty_opts = set(page.evaluate(JS_AVAIL_OPTIONS, sel["qty"]) or [])
+        if DEFAULT_QTY not in qty_opts:
+            ctx.log.event("extract.skip", product=t["product_name"],
+                          reason=f"qty={DEFAULT_QTY} 미공급 (옵션={sorted(qty_opts)[:8]})")
+            return
+
         # 각 사이즈 × 각 paper leaf cascade
         for canonical, sz_value, sz_text in size_matches:
             ctx.log.event("size.start", product=t["product_name"], size=canonical)
             _set_size_req(page, sel["size"], sz_value)
             page.wait_for_timeout(timeouts.get("after_size_ms", 6000))
 
-            # qty/ord_cnt 셋팅
+            # qty/ord_cnt 셋팅 + 실측 검증
             js_set_select(page, sel["qty"], DEFAULT_QTY)
             page.wait_for_timeout(timeouts.get("after_qty_ms", 500))
+            actual_qty = page.evaluate(JS_GET_SELECT_VALUE, sel["qty"])
+            if str(actual_qty) != DEFAULT_QTY:
+                ctx.log.event("extract.skip", product=t["product_name"], size=canonical,
+                              reason=f"qty 셋팅 실패: 요청={DEFAULT_QTY} 실제={actual_qty}")
+                continue
             if sel.get("ord_cnt"):
                 js_set_select(page, sel["ord_cnt"], "1")
                 page.wait_for_timeout(timeouts.get("after_qty_ms", 500))

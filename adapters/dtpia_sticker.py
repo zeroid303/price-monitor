@@ -24,8 +24,30 @@ CANONICAL_SIZES = [
 ]
 SIZE_TOL_MM = 5
 
-DEFAULT_COATING = "1"     # 유광코팅
+# coating value 코드: 1=유광 / 3=무광 / N=코팅안함
+DEFAULT_COATING = "1"     # 유광 (paper 이름에 hint 없을 때)
 DEFAULT_QTY = "1000"
+
+
+def _coating_from_paper_name(name: str) -> str:
+    """paper 이름 괄호 hint 에서 coating value 추출.
+
+    예: '모조지 80g (코팅안함)' → 'N' / '은데드롱 25g (무광코팅)' → '3'
+        '강접스티커 (아트지 90g)' → DEFAULT_COATING (유광 hint 없음)
+    """
+    n = (name or "").lower()
+    if "코팅안함" in name or "코팅없음" in name or "무코팅" in name:
+        return "N"
+    if "무광" in name:
+        return "3"
+    if "유광" in name:
+        return "1"
+    return DEFAULT_COATING
+
+
+def _skip_paper(name: str) -> bool:
+    """비규격 전용/특수 paper skip — 예 PVC 120g 비규격."""
+    return "비규격" in (name or "")
 
 
 JS_SET_SELECT = """({sel_id, value}) => {
@@ -121,37 +143,48 @@ class Adapter(SiteAdapter):
             ctx.log.event("fetch.fail", level="error", product=t["product_name"], error="goto timeout")
             return
 
-        # 1. 공통 옵션 셋팅 (1회)
+        # 1. 공통 옵션 셋팅 (coating 은 paper 별 동적이라 여기서 안 함)
         page.evaluate(JS_SET_SELECT, {"sel_id": sel["sticker_type"], "value": "jd"})
-        page.wait_for_timeout(timeouts.get("after_select_ms", 600))
-        page.evaluate(JS_SET_SELECT, {"sel_id": sel["coating_type"], "value": DEFAULT_COATING})
         page.wait_for_timeout(timeouts.get("after_select_ms", 600))
         page.evaluate(JS_SET_SELECT, {"sel_id": sel["non_nrm_yn"], "value": "N"})  # 규격
         page.wait_for_timeout(timeouts.get("after_select_ms", 600))
         page.evaluate(JS_SET_SELECT, {"sel_id": sel["qty"], "value": DEFAULT_QTY})
         page.wait_for_timeout(timeouts.get("after_select_ms", 600))
 
-        # 2. size_gb 옵션 dump → 표준 8 사이즈에 매칭되는 옵션 추출
-        size_opts = page.evaluate(JS_DUMP_SELECT, sel["size_gb"])
-        size_matches = []  # [(canonical_size_str, gb_value, gb_text)]
-        for o in size_opts:
-            if not o["value"]: continue
-            wh = _parse_size(o["text"])
-            if not wh: continue
-            near = _near_canonical(*wh)
-            if near:
-                canonical = f"{near[0]}x{near[1]}"
-                size_matches.append((canonical, o["value"], o["text"]))
-        ctx.log.event("size.matched", n=len(size_matches),
-                      matches=[m[0] for m in size_matches])
-
-        # 3. mtrl_cd (paper) 8옵션 × 매칭 사이즈 cascade
+        # 2. mtrl_cd (paper) 8옵션 cascade — paper 마다 size_gb / coating 옵션 동적
         paper_opts = page.evaluate(JS_DUMP_SELECT, sel["mtrl_cd"])
         for paper in paper_opts:
             if not paper["value"]: continue
+            paper_name = paper["text"]
+            if _skip_paper(paper_name):
+                ctx.log.event("extract.skip", product=t["product_name"],
+                              paper=paper_name, reason="비규격 전용 (PVC 등)")
+                continue
             if page.evaluate(JS_SET_SELECT, {"sel_id": sel["mtrl_cd"], "value": paper["value"]}) is not True:
                 continue
             page.wait_for_timeout(timeouts.get("after_select_ms", 600))
+
+            # paper 별 coating 동적 셋팅 — 이름 hint 사용
+            coating_value = _coating_from_paper_name(paper_name)
+            page.evaluate(JS_SET_SELECT, {"sel_id": sel["coating_type"], "value": coating_value})
+            page.wait_for_timeout(timeouts.get("after_select_ms", 600))
+            coating_label = {"1": "유광코팅", "3": "무광코팅", "N": "비코팅"}.get(coating_value, "")
+
+            # qty 재셋팅 (paper 변경으로 reset 가능성)
+            page.evaluate(JS_SET_SELECT, {"sel_id": sel["qty"], "value": DEFAULT_QTY})
+            page.wait_for_timeout(300)
+
+            # size_gb 옵션 paper 마다 재dump — 갱신됨 (14 → 13 등)
+            size_opts = page.evaluate(JS_DUMP_SELECT, sel["size_gb"])
+            size_matches = []
+            for o in size_opts:
+                if not o["value"]: continue
+                wh = _parse_size(o["text"])
+                if not wh: continue
+                near = _near_canonical(*wh)
+                if near:
+                    size_matches.append((f"{near[0]}x{near[1]}", o["value"], o["text"]))
+            ctx.log.event("size.matched.paper", paper=paper_name, n=len(size_matches))
 
             for canonical, gb_value, gb_text in size_matches:
                 if page.evaluate(JS_SET_SELECT, {"sel_id": sel["size_gb"], "value": gb_value}) is not True:
@@ -176,8 +209,8 @@ class Adapter(SiteAdapter):
                 yield RawItem(
                     product=t["product_name"],
                     category=t.get("category", "스티커"),
-                    paper_name=paper["text"],
-                    coating="유광코팅",
+                    paper_name=paper_name,
+                    coating=coating_label,
                     print_mode=None,  # dtpia 사각재단 페이지는 도수 select 없음 (default 칼라)
                     size=canonical,
                     qty=int(DEFAULT_QTY),
@@ -186,6 +219,7 @@ class Adapter(SiteAdapter):
                     url=t["url"], url_ok=True,
                     options={
                         "mtrl_cd": paper["value"],
+                        "coating_value": coating_value,
                         "size_gb": gb_value,
                         "size_gb_text": gb_text,
                         "shape": "사각형",
