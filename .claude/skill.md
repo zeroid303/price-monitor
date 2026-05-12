@@ -15,31 +15,30 @@ price-monitor/
 │   ├── context.py                  # RunContext / RawItem 데이터클래스
 │   ├── store.py                    # raw/normalize JSON 입출력
 │   └── logger.py                   # 구조화 로깅
-├── adapters/                       # 신규 어댑터 (sub_category 단위)
+├── adapters/                       # 어댑터 (sub_category 단위, engine 기반)
 │   ├── {site}_card_offset.py       # 5사이트 × 오프셋 명함
 │   ├── {site}_card_digital.py      # 5사이트 × 디지털 명함
 │   ├── {site}_flyer.py             # 5사이트 × 합판전단
 │   ├── {site}_envelope.py          # 5사이트 × 봉투 (단면4도 칼라 전용)
+│   ├── {site}_sticker.py           # 5사이트 × 사각형 스티커 (8 표준 사이즈, ±5mm 매칭)
 │   └── _{site}_card_common.py      # 사이트별 카드 공통 헬퍼
-├── crawlers/                       # 레거시 크롤러 (sticker)
-│   └── {Site}{Category}Crawler.py
 ├── common/
-│   └── normalize.py                # raw → normalize 공통 파서 (legacy 카테고리용)
+│   └── normalize.py                # raw → normalize 공통 파서
 ├── config/
-│   ├── schemas/                    # 신규 정규화 룰 (engine 용)
+│   ├── schemas/                    # 정규화 룰 (engine 용)
 │   │   ├── card_offset.yaml
 │   │   ├── card_digital.yaml
 │   │   ├── flyer.yaml
-│   │   └── envelope.yaml
-│   ├── targets/                    # 신규 타겟 정의 (engine 용)
+│   │   ├── envelope.yaml
+│   │   └── sticker.yaml
+│   ├── targets/                    # 타겟 정의 (engine 용)
 │   │   ├── card_offset.yaml
 │   │   ├── card_digital.yaml
 │   │   ├── flyer.yaml
-│   │   └── envelope.yaml
+│   │   ├── envelope.yaml
+│   │   └── sticker.yaml
 │   ├── sites/                      # 사이트별 기술 상수 (selectors, timeouts)
 │   │   └── {site}.yaml             # 카테고리별 섹션 분리
-│   ├── sticker_mapping_rule.json   # (legacy) 스티커 정규화
-│   ├── sticker_targets.json        # (legacy) 스티커 타겟
 │   └── output_template.json
 ├── dashboard/
 │   ├── app.py                      # Flask 대시보드
@@ -60,7 +59,7 @@ price-monitor/
 | **명함 오프셋(card_offset)** | engine | printcity, dtpia, swadpia, wowpress, adsland | 용지×코팅×면×매수 |
 | **명함 디지털(card_digital)** | engine | 위 5사 | 용지×코팅×면×매수 |
 | **합판전단(flyer)** | engine | 위 5사 | 용지×사이즈×매수×도수 |
-| **스티커(sticker)** | legacy | printcity, swadpia, dtpia, wowpress | 용지×코팅×사이즈×1000매 |
+| **스티커(sticker)** | engine | printcity, dtpia, swadpia, wowpress, adsland | 사각형 8 사이즈 (60x40~90x120 ±5mm) × 용지 × 1000매 |
 | **봉투(envelope)** | engine | printcity, dtpia, swadpia, wowpress, adsland | 용지×사이즈×1000매 (단면4도 칼라 전용) |
 | 엽서(postcard) | 미구현 | | |
 
@@ -71,37 +70,25 @@ python scheduler.py card           # 오프셋+디지털 명함 일괄
 python scheduler.py card_offset    # 오프셋만
 python scheduler.py card_digital   # 디지털만
 python scheduler.py flyer          # 합판전단
-python scheduler.py sticker        # 스티커 (legacy)
+python scheduler.py sticker        # 스티커
 python scheduler.py envelope       # 봉투
 python dashboard/app.py            # 대시보드 (localhost:5001)
 ```
 
 ## 파이프라인 흐름
 
-### engine 타입 (card/flyer/envelope)
 ```
 engine.runner.run(site, sub_cat):
   1. rotate: *_now.json → *_past.json
   2. SiteAdapter.fetch_and_extract() → RawItem 스트림
   3. store: raw_now.json 저장
   4. normalize (config/schemas/{cat}.yaml 룰 기반) → normalize_now.json
+  5. scripts.check_urls 로 url_ok 갱신
 ```
 
-### legacy 타입 (sticker)
-```
-1. rotate: *_now.json → *_past.json
-2. crawlers.{Site}{Cat}Crawler.crawl_all() → save()
-3. common.normalize 으로 *_normalize_now.json 생성
-```
-
-## 정규화
-
-### 신규 (engine, schemas/*.yaml)
+## 정규화 (engine, schemas/*.yaml)
 canonical paper_name + weights + 사이트별 aliases. `_match_axes` 로 매칭축 정의.
-weight tolerance(±20g 등), coating, print_mode, size, qty 각각 canonical 정의.
-
-### legacy (common/normalize.py)
-용지명 공통 파서 — 전체문자열 alias → prefix 코팅 → 괄호 코팅 → weight 분리 → base alias.
+weight tolerance(±20g 등), size tolerance(±5mm — sticker), coating, print_mode, size, qty 각각 canonical 정의.
 
 ## 사이트 기술 스택
 

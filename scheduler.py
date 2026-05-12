@@ -59,14 +59,9 @@ CATEGORIES = {
         "sub_categories": ["flyer"],
     },
     "sticker": {
-        "type": "legacy",
-        "rule_path": os.path.join(CONFIG_DIR, "sticker_mapping_rule.json"),
-        "crawlers": [
-            ("printcity", "crawlers.PrintcityStickerCrawler", "crawl_all", "save"),
-            ("swadpia",   "crawlers.SwadpiaStickerCrawler",   "crawl_all", "save"),
-            ("dtpia",     "crawlers.DtpiaStickerCrawler",     "crawl_all", "save"),
-            ("wowpress",  "crawlers.WowpressStickerCrawler",  "crawl_all", "save"),
-        ],
+        "type": "engine",
+        "sites": _CARD_SITES,
+        "sub_categories": ["sticker"],
     },
     "envelope": {
         "type": "engine",

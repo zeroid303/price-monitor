@@ -27,17 +27,16 @@ sticker:
   tech: "playwright"
   vat_included: true
   selectors:
-    paper_code:               "#paperCode"           # paper (추가 dump 필요 — 디스커버리 시 못 본 셀렉터)
-    coating_code:             "#coatingCode"         # COT:NO/MS/GS/SRB
-    color_code:               "#colorCode"           # COL:40 단면4도 고정
-    size_kind_code:           "#sizeKind_code"       # standardSize / customSize
-    size_code:                "#sizeCode"            # 14옵션 (SIZ:ST-60x40 ~ 90X120)
-    sticker_touch_margin:     "#stickerTouchMarginCode"  # 배경있음/없음
-    paper_qty:                "#paperQty"            # 매수 (확인 필요)
-    width:                    'input[name="width"]'      # custom 폭
-    height:                   'input[name="height"]'     # custom 높이
-    price_total:              "div.SumTotalPrice"    # '5,500' 표시
-    price_view:               "div.price_view"        # 부가세/제품금액 포함 텍스트
+    material_code:            "#materialCode"           # paper (7옵션: 아트스티커/유포지/모조지/크라프트/투명데드롱/은데드롱)
+    coating_code:             "#coatingCode"            # COT:NO/MS/GS/SRB
+    color_code:               "#colorCode"              # COL:40 단면4도 (1옵션 고정)
+    size_kind_code:           "#sizeKind_code"          # standardSize / customSize
+    size_code:                "#sizeCode"               # 14옵션 (SIZ:ST-60x40 ~ 90X120)
+    sticker_touch_margin:     "#stickerTouchMarginCode" # STM:TWO 배경있음 / STM:ONE 배경없음
+    quantity:                 "#quantities"             # 매수 select (1000)
+    case_count:               "#case_counts"            # 건수 (1)
+    price_total:              "#SumTotalPrice"          # 5,500 표시 (React-controlled)
+    price_view:               "div.price_view"           # 부가세/제품금액 포함 텍스트
   timeouts:
     page_goto_ms: 30000
     after_goto_ms: 3000

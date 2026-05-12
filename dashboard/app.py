@@ -5,8 +5,7 @@
 - 카테고리별 가격 비교 + 변동 감지.
 
 카테고리:
-  card_offset / card_digital / flyer / envelope — 신규 schema (config/schemas/*.yaml + config/sites/*.yaml)
-  sticker                                       — 레거시 (config/sticker_mapping_rule.json)
+  card_offset / card_digital / flyer / envelope / sticker — 신규 schema (config/schemas/*.yaml + config/sites/*.yaml)
 """
 import json
 import os
@@ -24,10 +23,8 @@ sys.path.insert(0, BASE_DIR)
 CONFIG_DIR = os.path.join(BASE_DIR, "config")
 OUTPUT_DIR = os.path.join(BASE_DIR, "output")
 
-# 레거시 카테고리 (sticker) 만 mapping_rule.json 사용. 카드/전단/봉투는 schemas/*.yaml.
-LEGACY_RULE_PATHS = {
-    "sticker": os.path.join(CONFIG_DIR, "sticker_mapping_rule.json"),
-}
+# 모든 카테고리가 신규 schema (config/schemas/*.yaml) 사용. legacy 분기 더 이상 없음.
+LEGACY_RULE_PATHS = {}
 
 # 신규 카드 카테고리의 사이트 list (config/sites/*.yaml 에서 읽음)
 CARD_SITES = ["printcity", "dtpia", "swadpia", "wowpress", "adsland"]
@@ -37,8 +34,7 @@ CATEGORIES = [
     {"id": "card_digital", "name": "명함 (디지털)"},
     {"id": "flyer", "name": "합판 전단"},
     {"id": "envelope", "name": "봉투"},
-    # 스티커 — 레거시 카테고리. 신규 어댑터 이관 후 활성화.
-    # {"id": "sticker", "name": "스티커"},
+    {"id": "sticker", "name": "스티커"},
 ]
 
 app = Flask(__name__)
@@ -71,12 +67,8 @@ def _load_site_yaml(site_id: str) -> dict:
 
 
 def get_active_sites(category: str) -> list[dict]:
-    """카테고리별 활성 사이트 list.
-
-    카드/전단/봉투: config/sites/*.yaml 5사이트.
-    레거시(sticker): config/sticker_mapping_rule.json 의 sites.
-    """
-    if category in ("card_offset", "card_digital", "flyer", "envelope"):
+    """카테고리별 활성 사이트 list — 모두 config/sites/*.yaml 의 5사이트."""
+    if category in ("card_offset", "card_digital", "flyer", "envelope", "sticker"):
         out = []
         for sid in CARD_SITES:
             site_cfg = _load_site_yaml(sid)
@@ -89,23 +81,7 @@ def get_active_sites(category: str) -> list[dict]:
                 "vat_adjusted": False,
             })
         return out
-
-    # 레거시
-    rule_path = LEGACY_RULE_PATHS.get(category)
-    if not rule_path: return []
-    rule = load_json(rule_path) or {}
-    out = []
-    for sid, conf in rule.get("sites", {}).items():
-        if conf.get("dashboard_excluded"):
-            continue
-        out.append({
-            "id": sid,
-            "name": conf.get("name", sid),
-            "base_url": conf.get("base_url", ""),
-            "ownership": conf.get("ownership", "competitor"),
-            "vat_adjusted": False,
-        })
-    return out
+    return []
 
 
 def _side(print_mode: str) -> str | None:
@@ -323,7 +299,8 @@ def _build_flyer_grid(sites, site_ids, items_by_site, raw_items_by_site, latest_
 
 
 # ── 스티커 grid ──
-STICKER_SIZES = ["45x45", "55x55", "65x65", "75x75", "85x85", "95x95"]
+# 사각형 스티커 표준 8 사이즈 (2026-05~ 정책. 옛 원형 6 사이즈 정책 폐기)
+STICKER_SIZES = ["60x40", "80x50", "90x55", "90x60", "90x70", "90x80", "90x100", "90x120"]
 
 def _build_sticker_grid(sites, site_ids, items_by_site, raw_items_by_site, latest_crawled):
     # 용지별 그룹: (paper_name, coating) 키 수집
