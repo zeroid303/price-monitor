@@ -76,18 +76,18 @@ card_digital:
     floor_abs: 500
     per_qty_multiplier: 3
 
-# 사각형 스티커 — IC00030
-# paper_sort/tmp_paper cascade + 사이즈 (재단 폭/높이 입력 또는 size_book select)
+# 사각형 스티커 — IC00030 (사각재단 스티커)
+# paper_sort/tmp_paper cascade 아님 — paper select 1개 (19옵션, 코팅이 paper 이름에 포함)
+# 사이즈: size_book select (14옵션) 또는 csize1/csize2 input (custom)
 sticker:
   selectors:
-    size_book:     "select#size_book"
-    paper_sort:    "select#paper_sort"
-    tmp_paper:     "select#tmp_paper"
-    busu:          "select#busu"
-    kind:          "select#kind"
-    width_input:   "input[name=size_width]"
-    height_input:  "input[name=size_height]"
-    coat:          "select#coat"
+    size_book:     "select#size_book"          # 14옵션 (50×50, 80×50, 90×55, 90×60 등)
+    paper:         "select#paper"              # 19옵션 — 아트지 90g (코팅/강력접착 별 paper)
+    dosu:          "select#dosu"               # 4/0=단면4도 / 0/0=인쇄없음
+    busu:          "select#busu"               # 61옵션 (500~)
+    kind:          "select#kind"               # 건수 (1 고정)
+    csize1:        'input[name="csize1"]'      # custom 가로 mm
+    csize2:        'input[name="csize2"]'      # custom 세로 mm
     price_supply:  'input[name="bill_ttl_sub"]'
     price_tax:     'input[name="bill_tax"]'
     price_total:   'input[name="bill_ttl_fnl"]'

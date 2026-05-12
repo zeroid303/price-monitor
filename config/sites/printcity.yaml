@@ -22,12 +22,22 @@ block_patterns:
   - "**/facebook.com/tr/**"
   - "**/doubleclick.net/**"
 
-# 사각형 스티커 — StickerRectangleNew 페이지 Playwright 크롤링.
-# 옛 도무송 스티커 (StickerDomusongNew2) 와 다른 새 페이지.
+# 사각형 스티커 — StickerRectangleNew 페이지 Playwright 크롤링 (xlsx 없음).
 sticker:
   tech: "playwright"
-  vat_included: true       # 페이지 표시 가격이 VAT 포함이면 normalize 단계에서 ÷1.1
-  _note: 어댑터 작성 시 페이지 조사 후 selectors 명시. paper/사이즈/매수 옵션 dropdown 또는 사이즈 직접 입력 가능성.
+  vat_included: true
+  selectors:
+    paper_code:               "#paperCode"           # paper (추가 dump 필요 — 디스커버리 시 못 본 셀렉터)
+    coating_code:             "#coatingCode"         # COT:NO/MS/GS/SRB
+    color_code:               "#colorCode"           # COL:40 단면4도 고정
+    size_kind_code:           "#sizeKind_code"       # standardSize / customSize
+    size_code:                "#sizeCode"            # 14옵션 (SIZ:ST-60x40 ~ 90X120)
+    sticker_touch_margin:     "#stickerTouchMarginCode"  # 배경있음/없음
+    paper_qty:                "#paperQty"            # 매수 (확인 필요)
+    width:                    'input[name="width"]'      # custom 폭
+    height:                   'input[name="height"]'     # custom 높이
+    price_total:              "div.SumTotalPrice"    # '5,500' 표시
+    price_view:               "div.price_view"        # 부가세/제품금액 포함 텍스트
   timeouts:
     page_goto_ms: 30000
     after_goto_ms: 3000

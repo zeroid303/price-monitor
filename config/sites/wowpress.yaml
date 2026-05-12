@@ -72,8 +72,10 @@ card_digital:
     floor_abs: 500
     per_qty_multiplier: 3
 
-# 사각형 스티커 — 30002 (list) → linkProdNo=40133 상세
-# paperno3/4/5 cascade + 사이즈 입력 (사용자 정의 W×H mm)
+# 사각형 스티커 — linkProdNo=40133 카테고리의 13 하위 제품 (paper 종류별 분리)
+# config/targets/sticker.yaml wowpress 섹션의 13 ProdNo 별 dets 페이지 진입.
+# 각 제품 페이지는 봉투(40034) 와 유사: paperno3/4/5 cascade + sizeno or width/height input.
+# 일부 제품은 사이즈가 select(sizeno), 일부는 사용자 정의 input (paperwidth/paperheight).
 sticker:
   selectors:
     size:        "pdata_00_sizeno"

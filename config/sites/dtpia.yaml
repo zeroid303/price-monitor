@@ -102,18 +102,21 @@ flyer:
     floor_abs: 5000
     per_qty_multiplier: 5
 
-# 사각형 스티커 — Sticker/Jaedan.aspx
-# paper(mtrl_cd) × 사이즈 입력(hor/ver) × 매수 → callPrice → est_scroll_total_am
+# 사각형 스티커 — Sticker/Jaedan.aspx (재단/사각형)
+# 디스커버리 결과 기반 정확한 selectors.
 sticker:
   selectors:
-    mtrl_cd: mtrl_cd                  # paper 선택
-    sticker_type: sticker_type        # 자유형/도무송/재단 등
-    kal_type: kal_type                # 칼선 타입
-    coat_yn: coat_yn                  # 코팅 여부
-    hor: hor                          # 가로 mm 입력 input
-    ver: ver                          # 세로 mm 입력 input
-    qty: prn_sht_cn                   # 매수 (1000)
-    price: est_scroll_total_am        # VAT 포함 합계
+    sticker_type: sticker_type        # jd=사각재단 (1옵션 고정)
+    mtrl_cd: mtrl_cd                  # paper (8옵션: 강접/초강접 아트지/유포지/투명데드롱/은데드롱)
+    coating_type: coating_type        # 1=유광 / 3=무광 / N=코팅없음
+    sticker_back_knf_yn: sticker_back_knf_yn   # 후지반칼 N/Y
+    non_nrm_yn: non_nrm_yn            # N=규격(size_gb select) / Y=비규격(ppr_cut_hz/vt 입력)
+    beda_yn: bedaYN                   # 베다 있/없음
+    size_gb: size_gb                  # 규격 사이즈 14옵션 (S101=60x40 ~ S111=90x120 등)
+    qty: prn_sht_cn                   # 32옵션 (1000~)
+    ppr_cut_hz: ppr_cut_hz            # 비규격 시 가로 mm 입력
+    ppr_cut_vt: ppr_cut_vt            # 비규격 시 세로 mm 입력
+    price: est_scroll_total_am        # VAT 포함 합계 — text '6,820'
   timeouts:
     page_goto_ms: 30000
     after_goto_ms: 2500
