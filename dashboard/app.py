@@ -304,15 +304,18 @@ def _build_flyer_grid(sites, site_ids, items_by_site, raw_items_by_site, latest_
 STICKER_SIZES = ["60x40", "80x50", "90x55", "90x60", "90x70", "90x80", "90x100", "90x120"]
 
 def _build_sticker_grid(sites, site_ids, items_by_site, raw_items_by_site, latest_crawled):
-    # 용지별 그룹: (paper_name, coating) 키 수집
-    seen_keys = []
-    seen_set = set()
+    # 용지별 그룹: (paper_name, coating) 키. 카드/전단과 동일 정렬:
+    # 다사이트 매칭 paper 우선 + record 많은 순.
+    key_sites = {}    # (paper, coating) → set(sid)
+    key_records = {}  # (paper, coating) → 총 record 수
     for sid in site_ids:
         for it in items_by_site[sid]:
             key = (it.get("paper_name", ""), it.get("coating", ""))
-            if key not in seen_set:
-                seen_set.add(key)
-                seen_keys.append(key)
+            key_sites.setdefault(key, set()).add(sid)
+            key_records[key] = key_records.get(key, 0) + 1
+    def _sort_key(k):
+        return (-len(key_sites[k]), -key_records[k], k[0], k[1])
+    seen_keys = sorted(key_sites.keys(), key=_sort_key)
 
     papers = []
     for paper_name, coating in seen_keys:
@@ -372,29 +375,18 @@ ENVELOPE_PAPER_ORDER = [
 
 
 def _build_envelope_grid(sites, site_ids, items_by_site, raw_items_by_site, latest_crawled):
-    # 키 = (paper_name, print_mode) — print_mode가 coating 자리를 대신. 비코팅 고정.
-    seen_keys = []
-    seen_set = set()
-    # 발견된 모든 (paper_name, print_mode) 조합 수집
+    # 키 = (paper_name, print_mode). 카드/전단/스티커와 동일 정렬:
+    # 다사이트 매칭 paper 우선 + record 많은 순.
+    key_sites = {}    # (paper, pm) → set(sid)
+    key_records = {}  # (paper, pm) → 총 record 수
     for sid in site_ids:
         for it in items_by_site[sid]:
             key = (it.get("paper_name", ""), it.get("print_mode", ""))
-            if key not in seen_set:
-                seen_set.add(key)
-                seen_keys.append(key)
-
-    # ENVELOPE_PAPER_ORDER의 용지만 우선 필터, 그 순서로 정렬. print_mode는 칼라 먼저.
-    def sort_key(k):
-        paper, pm = k
-        paper_idx = ENVELOPE_PAPER_ORDER.index(paper) if paper in ENVELOPE_PAPER_ORDER else 999
-        pm_idx = ENVELOPE_PRINT_MODES.index(pm) if pm in ENVELOPE_PRINT_MODES else 999
-        return (paper_idx, pm_idx, paper, pm)
-
-    seen_keys.sort(key=sort_key)
-    # ENVELOPE_PAPER_ORDER 외 용지는 하단
-    canonical_keys = [k for k in seen_keys if k[0] in ENVELOPE_PAPER_ORDER]
-    other_keys = [k for k in seen_keys if k[0] not in ENVELOPE_PAPER_ORDER]
-    seen_keys = canonical_keys + other_keys
+            key_sites.setdefault(key, set()).add(sid)
+            key_records[key] = key_records.get(key, 0) + 1
+    def _sort_key(k):
+        return (-len(key_sites[k]), -key_records[k], k[0], k[1])
+    seen_keys = sorted(key_sites.keys(), key=_sort_key)
 
     papers = []
     for paper_name, print_mode in seen_keys:
