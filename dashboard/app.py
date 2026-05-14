@@ -34,7 +34,7 @@ CATEGORIES = [
     {"id": "card_digital", "name": "명함 (디지털)"},
     {"id": "flyer", "name": "합판 전단"},
     {"id": "envelope", "name": "봉투"},
-    {"id": "sticker_offset", "name": "스티커 (합판)"},
+    {"id": "sticker_offset", "name": "스티커 (오프셋)"},
     {"id": "sticker_digital", "name": "스티커 (디지털)"},
 ]
 

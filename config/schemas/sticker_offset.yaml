@@ -71,6 +71,9 @@ _normalization:
               swadpia: [투명데드롱 25, 투명데드롱 25g]
               dtpia: ['투명데드롱 25g (유광코팅)']
               wowpress: [투명 스티커(투명데드롱25g), 투명데드롱, 투명데드롱50g]
+          50:
+            aliases:
+              adsland: ['투명 데드롱 50µ (UV인쇄 비코팅)', '투명 데드롱 50μ (UV인쇄 비코팅)']
       은데드롱:
         weights:
           25:
@@ -79,6 +82,29 @@ _normalization:
               swadpia: [은무데드롱 25, 은무데드롱 25g]
               dtpia: ['은데드롱 25g (무광코팅)']
               wowpress: [은데드롱 스티커(은데드롱25g), 은광데드롱, 은광데드롱50g]
+          50:
+            aliases:
+              adsland: ['은무 데드롱 50µ (UV인쇄 비코팅)', '은무 데드롱 50μ (UV인쇄 비코팅)']
+      리무버블아트지:
+        weights:
+          80:
+            aliases:
+              swadpia: [리무벌 아트지 80g]
+          90:
+            aliases:
+              adsland: ['리무버블 아트지 90g (유광코팅)']
+      리무버블유포지:
+        weights:
+          80:
+            aliases:
+              adsland: ['리무버블 유포지 80μ (무광코팅)', '리무버블 유포지 80µ (무광코팅)']
+      PVC:
+        weights:
+          120:
+            aliases:
+              swadpia: [pvc 120g]
+              adsland: ['PVC 120µ (UV인쇄 비코팅)', 'PVC 120µ (UV인쇄 유광코팅)',
+                        'PVC 120μ (UV인쇄 비코팅)', 'PVC 120μ (UV인쇄 유광코팅)']
     noise_suffix_regex: (\d+)\s*g.*$
   coating:
     _description: 스티커 코팅. 유광코팅이 기본 비교 조건.

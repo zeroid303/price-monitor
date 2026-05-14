@@ -195,6 +195,25 @@ def _normalize_paper_name_new(raw: str, paper_weight_text: str | None,
     base = re.sub(r"\s*\d{2,4}\s*g\s*/\s*㎡\s*$", "", base).strip()
     if base and base != raw:
         cands.append(base)
+    # 괄호 안 내용 strip (코팅/접착력 hint 일반화) — sticker 페이지에서
+    # '아트지 90g (유광코팅)', '모조지 80g (코팅안함)', '아트지 90g (유광코팅 초강력 접착)' 등
+    cand_paren = re.sub(r"\s*\([^)]*\)\s*", " ", raw).strip()
+    cand_paren = re.sub(r"\s+", " ", cand_paren)
+    if cand_paren and cand_paren != raw:
+        cands.append(cand_paren)
+    # µ (U+00B5 micro sign) ↔ μ (U+03BC Greek mu) 단위 문자 정규화
+    if "µ" in raw or "μ" in raw:
+        cands.append(raw.replace("µ", "μ"))
+        cands.append(raw.replace("μ", "µ"))
+
+    # 변형들을 다시 base/괄호 strip 조합으로 시도 (예 '아트지 90g (유광코팅)' → 괄호 strip '아트지 90g')
+    # 이미 추가됨 (cand_paren). 추가로 cand_paren 의 평량 strip 변형도.
+    extra = []
+    for c in list(cands):
+        cb = re.sub(r"\s*\d{2,4}\s*[gμuµ]\S*\s*$", "", c).strip()
+        if cb and cb != c and cb not in cands:
+            extra.append(cb)
+    cands.extend(extra)
 
     # 매칭
     matched = None
@@ -207,7 +226,7 @@ def _normalize_paper_name_new(raw: str, paper_weight_text: str | None,
         canonical_name, weight = matched
         # weight 0 (평량 추출 실패) 이면 raw 또는 paper_weight_text 에서 보강
         if weight == 0:
-            mw = re.search(r"(\d{2,4})\s*g", raw)
+            mw = re.search(r"(\d{2,4})\s*[gμµ]", raw)
             if mw:
                 weight = int(mw.group(1))
             elif paper_weight_text:
