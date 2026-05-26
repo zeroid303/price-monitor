@@ -6,8 +6,9 @@ DOM:
 - busu 옵션 텍스트: "2,000장 (0.5연)" — 매수 직접 명시
 - 가격: bill_ttl_sub (공급가)
 
-수집 정책: paper×size 별 busu 옵션 dump → 표준 매수(2000)에 가장 가까운 매수 선택.
-옵션 텍스트에서 매수 정수 추출.
+수집 정책 (2026-05-21~):
+  target 의 qty_targets_by_size[size] 매수 리스트마다 busu 옵션 텍스트의 '장' 매수
+  파싱 후 가장 가까운 옵션 선택. A4 만 2회, 나머지 사이즈는 1회.
 """
 import re
 from typing import Iterator
@@ -20,9 +21,6 @@ from adapters._adsland_card_common import (
 )
 from engine.adapter import SiteAdapter
 from engine.context import RawItem, RunContext
-
-
-TARGET_QTY_MAE = 2000
 
 
 def _parse_busu_mae(text: str):
@@ -71,17 +69,20 @@ class Adapter(SiteAdapter):
                 continue
             page.wait_for_timeout(timeouts.get("after_select_ms", 500))
 
+            qty_targets_by_size = t.get("qty_targets_by_size", {})
             for size in t["sizes"]:
                 if not js_set_select(page, sel["size"], size["value"]):
+                    ctx.log.event("extract.warn", product=t["product_name"],
+                                  paper=paper["paper_value"], size=size["size_label"],
+                                  error=f"size {size['value']} 셋팅 실패 — 사이트 미제공 가능")
                     continue
                 page.wait_for_timeout(timeouts.get("after_select_ms", 500))
 
-                # busu 옵션 dump → 표준 매수에 가장 가까운 옵션 선택
+                # busu 옵션 dump → 매수 파싱
                 opts = page.evaluate(JS_GET_SELECT_OPTIONS, sel["busu"])
                 opts = [o for o in (opts or []) if o.get("value")]
                 if not opts:
                     continue
-                # 옵션 텍스트에서 매수 추출
                 cands = []
                 for o in opts:
                     mae = _parse_busu_mae(o.get("text", ""))
@@ -89,37 +90,46 @@ class Adapter(SiteAdapter):
                         cands.append((mae, o["value"], o["text"]))
                 if not cands:
                     continue
-                # 표준 매수에 가장 가까운 것
-                chosen_mae, chosen_value, chosen_text = min(cands, key=lambda c: abs(c[0] - TARGET_QTY_MAE))
 
-                if not js_set_select(page, sel["busu"], chosen_value):
+                targets_mae = qty_targets_by_size.get(size["size_label"], [])
+                if not targets_mae:
+                    ctx.log.event("extract.warn", product=t["product_name"],
+                                  size=size["size_label"], error="qty_targets_by_size 미정의")
                     continue
-                page.wait_for_timeout(timeouts.get("after_select_ms", 500))
 
-                for cm in t["color_modes"]:
-                    if not js_set_select(page, sel["dosu"], cm["value"]):
+                for target_mae in targets_mae:
+                    chosen_mae, chosen_value, chosen_text = min(
+                        cands, key=lambda c: abs(c[0] - target_mae))
+                    if not js_set_select(page, sel["busu"], chosen_value):
                         continue
                     page.wait_for_timeout(timeouts.get("after_select_ms", 500))
-                    trigger_smart(page)
 
-                    price = price_with_retry(page, sel, chosen_mae, timeouts, guard)
-                    if price is None:
-                        ctx.log.event("extract.warn", product=t["product_name"],
-                                      paper=paper["paper_value"], size=size["size_label"],
-                                      color=cm["name"], error="price read failed")
-                        continue
+                    for cm in t["color_modes"]:
+                        if not js_set_select(page, sel["dosu"], cm["value"]):
+                            continue
+                        page.wait_for_timeout(timeouts.get("after_select_ms", 500))
+                        trigger_smart(page)
 
-                    yield RawItem(
-                        product=t["product_name"], category=t["category"],
-                        paper_name=paper["paper_name_out"],
-                        coating=None, print_mode=cm["name"],
-                        size=size["size_label"],
-                        qty=chosen_mae, price=price,
-                        price_vat_included=False,
-                        url=t["url"], url_ok=True,
-                        options={"paper_value": paper["paper_value"],
-                                 "size_value": size["value"],
-                                 "dosu_value": cm["value"],
-                                 "busu_value": chosen_value,
-                                 "busu_text": chosen_text},
-                    )
+                        price = price_with_retry(page, sel, chosen_mae, timeouts, guard)
+                        if price is None:
+                            ctx.log.event("extract.warn", product=t["product_name"],
+                                          paper=paper["paper_value"], size=size["size_label"],
+                                          target_mae=target_mae,
+                                          color=cm["name"], error="price read failed")
+                            continue
+
+                        yield RawItem(
+                            product=t["product_name"], category=t["category"],
+                            paper_name=paper["paper_name_out"],
+                            coating=None, print_mode=cm["name"],
+                            size=size["size_label"],
+                            qty=chosen_mae, price=price,
+                            price_vat_included=False,
+                            url=t["url"], url_ok=True,
+                            options={"paper_value": paper["paper_value"],
+                                     "size_value": size["value"],
+                                     "dosu_value": cm["value"],
+                                     "target_mae": target_mae,
+                                     "busu_value": chosen_value,
+                                     "busu_text": chosen_text},
+                        )

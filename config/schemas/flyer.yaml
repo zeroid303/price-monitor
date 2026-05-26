@@ -1,4 +1,4 @@
-_description: 합판 전단 카테고리 정규화 룰. canonical key = (paper, weight_g, size, qty).
+_description: 합판 전단 카테고리 정규화 룰. canonical key = (paper, weight_g, size, qty). qty 는 사이즈마다 표준 매수가 다름.
 _match_axes:
   axes:
   - paper_name
@@ -9,14 +9,22 @@ _match_axes:
   - qty
   weight_tolerance_g: 20
 _defaults:
-  qty: 2000
   match_method: substring
-# 가격 보간 — raw qty 가 standard_qty 와 다르면 normalize 시 표준 매수로 환산:
-#   normalize.qty = standard_qty
-#   normalize.price = round(raw.price * standard_qty / raw.qty)
+# 사이즈별 표준 매수 — 1연 = 500매 전지 × 전지당 페이지수.
+# A4 만 2개(0.5연·1연), 나머지는 단일.
+qty_targets_by_size: &qty_by_size
+  A4: [2000, 4000]   # 0.5연, 1연
+  A3: [2000]         # 1연
+  A2: [4000]         # 4연
+  B5: [8000]         # 1연
+  B4: [4000]         # 1연
+  B3: [8000]         # 4연
+# 가격 보간 — 사이트 dropdown 이 표준 매수와 다른 매수만 잡을 때 사이즈별 비례 환산:
+#   normalize.qty = closest_target(by_size[size], raw_qty)
+#   normalize.price = round(raw.price * target / raw.qty)
 # raw 는 사실 그대로 (사이트의 실제 매수+가격), normalize 만 비교 가능한 표준 단위.
 _interpolation:
-  standard_qty: 2000
+  by_size: *qty_by_size
 _normalization:
   paper_name:
     _description: 합판전단 용지 정규화. paper-level canonical + weight 별 분기. 사이트 가용 paper 모두 등록.
@@ -91,17 +99,17 @@ _normalization:
       단면4도: [단면4도, 단면 4도, '4/0', 단면칼라, 단면 칼라4도]
       양면8도: [양면8도, 양면 8도, '4/4', 양면칼라, 양면 칼라8도]
   size:
-    _description: 합판전단 표준 — A2/A3/A4/B3/B4 (5사이트 공통).
+    _description: 합판전단 표준 — A2/A3/A4/B3/B4/B5 (5사이트 공통, B5는 사이트별 가용여부 차이).
     default: A4
     format: 표준 사이즈 라벨
-    allowed: [A2, A3, A4, B3, B4]
+    allowed: [A2, A3, A4, B3, B4, B5]
     aliases:
       A2: [A2 국2절(420x597), A2(국2절), A2 (국2절)]
       A3: [A3 국4절(297x420), A3(국4절), 'A3 (국4절)']
       A4: [A4 국8절(210x297), A4(국8절), 'A4 (국8절)']
       B3: [B3 4절(367x517), B3(4절), '4절']
       B4: [B4 8절(257x367), B4(8절), '8절', 'B4 (8절)']
+      B5: [B5 16절(182x257), B5(16절), '16절']
   qty:
-    _description: 합판전단 표준 — 2000매 단일 (= printcity 4연 / dtpia 0.5R / wowpress 4연).
-    default: 2000
-    common_units: [2000]
+    _description: 합판전단 — 사이즈별 표준 매수. qty_targets_by_size 참조.
+    common_units_by_size: *qty_by_size

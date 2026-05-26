@@ -223,10 +223,13 @@ def _build_card_grid(sites, site_ids, items_by_site, raw_items_by_site, latest_c
 
 
 # ── 합판전단 grid ──
-# qty=2000 고정. rows=size (A2/A3/A4/B3/B4), site cell sub-cols=print_mode (단면/양면).
+# rows = (size, qty) — A4 만 2 row (0.5연·1연), 나머지 사이즈는 1 row.
+# qty_targets_by_size 는 config/schemas/flyer.yaml 에서 로드. site cell sub-cols = print_mode.
 
-FLYER_SIZES = ["A2", "A3", "A4", "B3", "B4"]
 FLYER_PRINT_MODES = ["단면4도", "양면8도"]
+FLYER_SIZE_ORDER = ["A4", "A3", "A2", "B5", "B4", "B3"]
+# 1연 매수 환산 (라벨용) — 500매 전지 × 전지당 페이지수.
+FLYER_PAGES_PER_SHEET = {"A4": 8, "A3": 4, "A2": 2, "B5": 16, "B4": 8, "B3": 4}
 
 
 def _flyer_print_mode(raw: str) -> str | None:
@@ -237,9 +240,38 @@ def _flyer_print_mode(raw: str) -> str | None:
     return None
 
 
+def _load_flyer_qty_targets() -> dict:
+    """schemas/flyer.yaml 의 qty_targets_by_size 로드 (단일 출처)."""
+    path = os.path.join(CONFIG_DIR, "schemas", "flyer.yaml")
+    if not os.path.exists(path): return {}
+    with open(path, "r", encoding="utf-8") as f:
+        data = yaml.safe_load(f) or {}
+    return data.get("qty_targets_by_size", {})
+
+
+def _flyer_rows() -> list[dict]:
+    """rows = [{key, size, qty, reams, label}, ...]. A4 만 2개, 나머지 1개."""
+    targets = _load_flyer_qty_targets()
+    rows = []
+    for size in FLYER_SIZE_ORDER:
+        for qty in targets.get(size, []):
+            pps = FLYER_PAGES_PER_SHEET.get(size)
+            reams = qty / (500 * pps) if pps else 0
+            reams_label = f"{reams:g}연" if reams else ""
+            rows.append({
+                "key": f"{size}_{qty}",
+                "size": size,
+                "qty": qty,
+                "reams": reams,
+                "label": f"{size} · {qty:,}매 ({reams_label})" if reams_label else f"{size} · {qty:,}매",
+            })
+    return rows
+
+
 def _build_flyer_grid(sites, site_ids, items_by_site, raw_items_by_site, latest_crawled):
-    """합판전단 그리드. paper 별 카드, 각 카드 안에서 size × print_mode × site 매트릭스."""
-    sizes = FLYER_SIZES
+    """합판전단 그리드. paper 별 카드, 각 카드 안에서 (size, qty) × print_mode × site 매트릭스."""
+    rows = _flyer_rows()
+    row_keys = [r["key"] for r in rows]
     modes = FLYER_PRINT_MODES
 
     # paper canonical 수집 + 사이트 수 정렬
@@ -266,9 +298,9 @@ def _build_flyer_grid(sites, site_ids, items_by_site, raw_items_by_site, latest_
                 continue
             url = matching[0].get("url") or site["base_url"]
             url_ok = matching[0].get("url_ok", True)
-            prices = {m: {s: None for s in sizes} for m in modes}
-            qtys = {m: {s: None for s in sizes} for m in modes}      # 보간 후 표준 qty
-            raw_qtys = {m: {s: None for s in sizes} for m in modes}  # 실제 사이트 매수 (보간 전)
+            prices = {m: {k: None for k in row_keys} for m in modes}
+            qtys = {m: {k: None for k in row_keys} for m in modes}      # 보간 후 표준 qty
+            raw_qtys = {m: {k: None for k in row_keys} for m in modes}  # 실제 사이트 매수 (보간 전)
             products_seen = []
             for it in matching:
                 p = it.get("product", "")
@@ -277,10 +309,12 @@ def _build_flyer_grid(sites, site_ids, items_by_site, raw_items_by_site, latest_
                 m = _flyer_print_mode(it.get("print_mode", ""))
                 if m not in prices: continue
                 sz = it.get("size", "")
-                if sz in sizes:
-                    prices[m][sz] = it.get("price")
-                    qtys[m][sz] = it.get("qty")
-                    raw_qtys[m][sz] = (it.get("options") or {}).get("raw_qty") or it.get("qty")
+                q = it.get("qty")
+                rk = f"{sz}_{q}"
+                if rk in prices[m]:
+                    prices[m][rk] = it.get("price")
+                    qtys[m][rk] = q
+                    raw_qtys[m][rk] = (it.get("options") or {}).get("raw_qty") or q
             raw_paper = _find_raw_paper_name(matching, items_by_site[sid], raw_items_by_site.get(sid, []))
             entry["sites"][sid] = {
                 "product": " + ".join(products_seen),
@@ -294,7 +328,7 @@ def _build_flyer_grid(sites, site_ids, items_by_site, raw_items_by_site, latest_
 
     return {
         "type": "flyer", "sites": sites,
-        "sizes": sizes, "print_modes": modes, "qty": 2000,
+        "rows": rows, "print_modes": modes,
         "papers": papers, "updated_at": latest_crawled,
     }
 

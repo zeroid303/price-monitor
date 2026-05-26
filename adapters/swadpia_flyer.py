@@ -3,13 +3,14 @@
 페이지: https://www.swadpia.co.kr/goods/goods_view/CLF1000/GLF1001
 DOM:
 - paper_type → paper_code 종속
-- paper_size: A2/A3/A4/B3/B4
+- paper_size: A2/A3/A4/B3/B4/B5
 - fside_color_amount=4 (고정) + bside_color_amount=0(단면)/4(양면)
 - paper_qty: paper×size 별 가용 매수 옵션 다름. 옵션값이 매수 직접 (e.g., '2000')
 - 가격: tr.estimate_supply_amt td.price (공급가)
 
-수집 정책: paper×size 셋팅 후 paper_qty 옵션 dump → 표준 2,000매에 가장
-가까운 매수 동적 선택. raw qty = 선택된 옵션 매수.
+수집 정책 (2026-05-21~):
+  target 의 qty_targets_by_size[size] 매수 리스트마다 paper_qty dropdown 에서
+  가장 가까운 옵션 선택. A4 만 2회, 나머지 사이즈는 1회. raw qty = 선택된 옵션 매수.
 """
 from typing import Iterator
 
@@ -22,8 +23,6 @@ from adapters._swadpia_card_common import (
 from engine.adapter import SiteAdapter
 from engine.context import RawItem, RunContext
 
-
-TARGET_QTY_MAE = 2000
 
 JS_GET_QTY_OPTS = "(sel) => { const el=document.querySelector(sel); if(!el) return []; return [...el.options].map(o=>parseInt(o.value, 10)).filter(v=>!isNaN(v) && v>0); }"
 
@@ -71,49 +70,63 @@ class Adapter(SiteAdapter):
                 continue
             page.wait_for_timeout(timeouts.get("after_select_ms", 600))
 
+            qty_targets_by_size = t.get("qty_targets_by_size", {})
             for size in t["sizes"]:
                 if not js_set_select(page, sel["paper_size"], size["paper_size"]):
+                    ctx.log.event("extract.warn", product=t["product_name"],
+                                  paper=combo["paper_name_out"], size=size["size_label"],
+                                  error=f"paper_size {size['paper_size']} 셋팅 실패 — 사이트 미제공 가능")
                     continue
                 page.wait_for_timeout(timeouts.get("after_select_ms", 600))
 
-                # paper×size 별 qty 옵션 dump → 표준 매수 가까운 매수 선택
+                # paper×size 별 qty 옵션 dump
                 qty_opts = page.evaluate(JS_GET_QTY_OPTS, sel["paper_qty"])
                 if not qty_opts:
                     ctx.log.event("extract.warn", product=t["product_name"],
                                   paper=combo["paper_name_out"], size=size["size_label"],
                                   error="qty 옵션 없음")
                     continue
-                chosen_qty = min(qty_opts, key=lambda q: abs(q - TARGET_QTY_MAE))
-                if not js_set_select(page, sel["paper_qty"], str(chosen_qty)):
+
+                targets_mae = qty_targets_by_size.get(size["size_label"], [])
+                if not targets_mae:
+                    ctx.log.event("extract.warn", product=t["product_name"],
+                                  size=size["size_label"], error="qty_targets_by_size 미정의")
                     continue
-                page.wait_for_timeout(timeouts.get("after_select_ms", 600))
 
-                for cm in t["color_modes"]:
-                    js_set_select(page, sel["fside_color_amount"], cm["fside_color_amount"])
-                    page.wait_for_timeout(timeouts.get("after_select_ms", 600))
-                    js_set_select(page, sel["bside_color_amount"], cm["bside_color_amount"])
-                    page.wait_for_timeout(timeouts.get("after_price_trigger_ms", 700))
-
-                    price = read_supply_price(page, sel["price_supply"], 0)
-                    if price is None:
-                        page.wait_for_timeout(timeouts.get("retry_price_ms", 1500))
-                        price = read_supply_price(page, sel["price_supply"], 0)
-                    if price is None:
-                        ctx.log.event("extract.warn", product=t["product_name"],
-                                      paper=combo["paper_name_out"], size=size["size_label"],
-                                      color=cm["name"], error="price read failed")
+                for target_mae in targets_mae:
+                    chosen_qty = min(qty_opts, key=lambda q: abs(q - target_mae))
+                    if not js_set_select(page, sel["paper_qty"], str(chosen_qty)):
                         continue
+                    page.wait_for_timeout(timeouts.get("after_select_ms", 600))
 
-                    yield RawItem(
-                        product=t["product_name"], category=t["category"],
-                        paper_name=combo["paper_name_out"],
-                        coating=None, print_mode=cm["name"],
-                        size=size["size_label"],
-                        qty=chosen_qty, price=price,
-                        price_vat_included=False,
-                        url=t["url"], url_ok=True,
-                        options={"paper_type": combo["paper_type"],
-                                 "paper_code": combo["paper_code"],
-                                 "paper_size": size["paper_size"],
-                                 "qty_options_first": qty_opts[:5]},
-                    )
+                    for cm in t["color_modes"]:
+                        js_set_select(page, sel["fside_color_amount"], cm["fside_color_amount"])
+                        page.wait_for_timeout(timeouts.get("after_select_ms", 600))
+                        js_set_select(page, sel["bside_color_amount"], cm["bside_color_amount"])
+                        page.wait_for_timeout(timeouts.get("after_price_trigger_ms", 700))
+
+                        price = read_supply_price(page, sel["price_supply"], 0)
+                        if price is None:
+                            page.wait_for_timeout(timeouts.get("retry_price_ms", 1500))
+                            price = read_supply_price(page, sel["price_supply"], 0)
+                        if price is None:
+                            ctx.log.event("extract.warn", product=t["product_name"],
+                                          paper=combo["paper_name_out"], size=size["size_label"],
+                                          target_mae=target_mae,
+                                          color=cm["name"], error="price read failed")
+                            continue
+
+                        yield RawItem(
+                            product=t["product_name"], category=t["category"],
+                            paper_name=combo["paper_name_out"],
+                            coating=None, print_mode=cm["name"],
+                            size=size["size_label"],
+                            qty=chosen_qty, price=price,
+                            price_vat_included=False,
+                            url=t["url"], url_ok=True,
+                            options={"paper_type": combo["paper_type"],
+                                     "paper_code": combo["paper_code"],
+                                     "paper_size": size["paper_size"],
+                                     "target_mae": target_mae,
+                                     "qty_options_first": qty_opts[:5]},
+                        )

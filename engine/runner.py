@@ -76,13 +76,15 @@ def _load_adapter(site: str, category: str) -> SiteAdapter:
     return mod.Adapter()
 
 
-def make_item_id(site: str, category: str, raw: RawItem) -> str:
-    key = "|".join(
-        str(x) for x in (
-            site, category, raw.product, raw.paper_name,
-            raw.coating, raw.print_mode, raw.size, raw.qty,
-        )
-    )
+def make_item_id(site: str, category: str, ref) -> str:
+    """ref: RawItem 또는 dict. id 는 정규화 후 qty 기준이라 dict 사용 권장."""
+    if isinstance(ref, RawItem):
+        fields = (ref.product, ref.paper_name, ref.coating,
+                  ref.print_mode, ref.size, ref.qty)
+    else:
+        fields = (ref.get("product"), ref.get("paper_name"), ref.get("coating"),
+                  ref.get("print_mode"), ref.get("size"), ref.get("qty"))
+    key = "|".join(str(x) for x in (site, category, *fields))
     return hashlib.sha1(key.encode("utf-8")).hexdigest()[:12]
 
 
@@ -104,27 +106,40 @@ def run(site: str, category: str) -> dict:
         adapter = _load_adapter(site, category)
 
         norm_rule = schema.get("_normalization", {})
+        interp = schema.get("_interpolation", {})
         raw_dicts: list[dict] = []
         norm_dicts: list[dict] = []
 
         for raw in adapter.fetch_and_extract(ctx):
-            raw.item_id = make_item_id(site, category, raw)
+            raw_d = raw.to_dict()
+            norm_d = normalize.apply(raw_d, norm_rule)
+            # 사이즈별 표준 매수로 비례 환산 (flyer 등)
+            if interp:
+                if interp.get("by_size"):
+                    norm_d = normalize.interpolate_qty_price(norm_d, interp["by_size"])
+                elif interp.get("standard_qty"):
+                    norm_d = normalize.interpolate_qty_price(norm_d, int(interp["standard_qty"]))
+            # item_id 는 정규화·보간 후 qty 기준 (같은 raw_qty 가 다른 target 으로 갈라지는 케이스 분리)
+            item_id = make_item_id(site, category, norm_d)
+            raw.item_id = item_id
+            raw_d["item_id"] = item_id
+            norm_d["item_id"] = item_id
+
             logger.event(
                 "extract.item",
-                item_id=raw.item_id,
+                item_id=item_id,
                 product=raw.product,
                 paper_name=raw.paper_name,
                 coating=raw.coating,
                 print_mode=raw.print_mode,
                 size=raw.size,
-                qty=raw.qty,
-                price=raw.price,
+                qty=norm_d.get("qty"),
+                raw_qty=raw.qty,
+                price=norm_d.get("price"),
             )
-            raw_d = raw.to_dict()
             raw_dicts.append(raw_d)
-            norm_d = normalize.apply(raw_d, norm_rule)
             norm_dicts.append(norm_d)
-            logger.event("normalize.ok", item_id=raw.item_id)
+            logger.event("normalize.ok", item_id=item_id)
 
         crawled_at = datetime.now().strftime("%Y-%m-%d %H:%M")
         store.write(ctx, raw_dicts, norm_dicts, crawled_at)

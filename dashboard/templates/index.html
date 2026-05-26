@@ -151,9 +151,9 @@
                <span>평량 오차: ±20g 허용</span>
                <span>가격: 공급가 기준 (부가세 제외)</span>
                <span class="updated-at" id="updatedAt"></span>`,
-        flyer: `<span>사이즈: A2 / A3 / A4 / B3 / B4</span>
+        flyer: `<span>사이즈: A2 / A3 / A4 / B3 / B4 / B5</span>
                 <span>인쇄: 양면칼라 / 단면칼라</span>
-                <span>매수: 2000매</span>
+                <span>매수: 사이즈별 연(連) 단위 — A4 2,000·4,000매 / A3 2,000매 / A2·B3 4·8천매 / B5 8,000매 / B4 4,000매</span>
                 <span>코팅: 비코팅</span>
                 <span>평량 오차: ±20g 허용</span>
                 <span>가격: 공급가 기준 (부가세 제외)</span>
@@ -277,7 +277,7 @@
 
     // ── 합판전단 그리드 렌더링 — paper 별 카드, rows=size, site cell sub-cols=print_mode ──
     function renderFlyerGrids(data) {
-        const { sites, sizes, print_modes, qty, papers } = data;
+        const { sites, rows, print_modes, papers } = data;
         if (!papers.length) {
             document.getElementById('grids').innerHTML = '<div class="empty">데이터 없음</div>';
             return;
@@ -288,7 +288,7 @@
                 <div class="paper-title">${paper.paper_name}</div>
                 <table class="grid"><thead>`;
             // 헤더 row 1
-            html += `<tr><th rowspan="2" style="width: 70px;">사이즈</th>`;
+            html += `<tr><th rowspan="2" style="width: 130px;">사이즈 · 매수</th>`;
             for (const site of sites) {
                 const sd = paper.sites[site.id];
                 const product = sd ? sd.product : '';
@@ -310,21 +310,20 @@
                 }
             }
             html += `</tr></thead><tbody>`;
-            // 데이터 rows: size 별
-            const STD_QTY = 2000;
-            for (const sz of sizes) {
-                html += `<tr><td class="row-size">${sz}</td>`;
+            // 데이터 rows: (size, qty) 별
+            for (const row of rows) {
+                html += `<tr><td class="row-size" style="font-size:12px;">${row.label}</td>`;
                 for (const site of sites) {
                     const sd = paper.sites[site.id];
                     const isBase = site.ownership === 'self';
                     for (const m of print_modes) {
-                        const price = sd ? sd.prices[m]?.[sz] : null;
-                        const rawQ = sd && sd.raw_qtys ? sd.raw_qtys[m]?.[sz] : null;
-                        const isInterpolated = (rawQ != null && rawQ !== STD_QTY);
+                        const price = sd ? sd.prices[m]?.[row.key] : null;
+                        const rawQ = sd && sd.raw_qtys ? sd.raw_qtys[m]?.[row.key] : null;
+                        const isInterpolated = (rawQ != null && rawQ !== row.qty);
                         const cls = price == null ? 'price empty' : (isBase ? 'price base' : 'price');
                         let cellHtml = price == null ? '-' : fmt(price);
                         if (price != null && isInterpolated) {
-                            cellHtml += `<div style="color:#d97706;font-size:10px;font-weight:600;margin-top:2px;" title="raw ${rawQ.toLocaleString()}매 가격을 ${STD_QTY.toLocaleString()}매로 비례 환산">${rawQ.toLocaleString()}→${STD_QTY.toLocaleString()} 보간</div>`;
+                            cellHtml += `<div style="color:#d97706;font-size:10px;font-weight:600;margin-top:2px;" title="raw ${rawQ.toLocaleString()}매 가격을 ${row.qty.toLocaleString()}매로 비례 환산">${rawQ.toLocaleString()}→${row.qty.toLocaleString()} 보간</div>`;
                         }
                         html += `<td class="${cls}">${cellHtml}</td>`;
                     }

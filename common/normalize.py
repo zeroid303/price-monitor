@@ -389,33 +389,61 @@ def apply(item: dict, norm_rule: dict) -> dict:
     return out
 
 
-def interpolate_qty_price(item: dict, standard_qty: int) -> dict:
-    """raw qty 가 standard_qty 와 다르면 in-place 비례 환산.
+def interpolate_qty_price(item: dict, standard) -> dict:
+    """raw qty 가 표준 매수와 다르면 in-place 비례 환산.
+
+    standard 형식:
+      - int : 단일 표준 (legacy. e.g. 2000).
+      - dict[size_label, int|list[int]] : 사이즈별 표준 (flyer 신규).
+        list 면 raw qty 와 가장 가까운 target 선택.
+
+    어댑터가 raw.options.target_mae 를 명시했으면 그 값을 표준으로 강제 사용
+    (사이트 dropdown 한계로 동일 raw qty 가 여러 target 에 대응될 때 분리 보장).
 
     qty=4000, price=80000, standard=2000  →  qty=2000, price=40000.
     raw qty 는 options.raw_qty 에 보존 (대시보드가 실제 매수 표시 가능).
-    qty=None 또는 0 이면 변환 X.
+    qty=None 또는 0 이면 변환 X. size 가 by_size dict 에 없으면 변환 X.
     """
     qty = item.get("qty")
     price = item.get("price")
     if not qty or not isinstance(price, (int, float)):
         return item
-    if qty == standard_qty:
-        return item
+
     options = dict(item.get("options") or {})
+    target_explicit = options.get("target_mae")
+    if target_explicit is not None:
+        target = int(target_explicit)
+    elif isinstance(standard, dict):
+        size = item.get("size")
+        targets = standard.get(size)
+        if not targets:
+            return item
+        if isinstance(targets, int):
+            target = targets
+        else:
+            target = min(targets, key=lambda t: abs(t - qty))
+    else:
+        target = int(standard)
+
+    if qty == target:
+        return item
     options["raw_qty"] = qty
     options["interpolated_from_qty"] = qty
-    item["price"] = round(price * standard_qty / qty)
-    item["qty"] = standard_qty
+    item["price"] = round(price * target / qty)
+    item["qty"] = target
     item["options"] = options
     return item
 
 
 def normalize_items(items: list[dict], norm_rule: dict, interp: dict | None = None) -> list[dict]:
     out = [apply(it, norm_rule) for it in items]
-    if interp and interp.get("standard_qty"):
-        std = int(interp["standard_qty"])
-        out = [interpolate_qty_price(it, std) for it in out]
+    if interp:
+        if interp.get("by_size"):
+            by_size = interp["by_size"]
+            out = [interpolate_qty_price(it, by_size) for it in out]
+        elif interp.get("standard_qty"):
+            std = int(interp["standard_qty"])
+            out = [interpolate_qty_price(it, std) for it in out]
     return out
 
 

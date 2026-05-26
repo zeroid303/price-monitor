@@ -10,7 +10,7 @@ from engine.context import RawItem, RunContext
 
 
 PRODUCT_URL_SLUGS = {
-    "합판전단": "Flyer",
+    "합판전단": "LeafletJoin",
 }
 
 

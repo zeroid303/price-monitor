@@ -1,27 +1,30 @@
 printcity:
-  _description: 정적 엑셀 source — data/printcity/flyer.xlsx 기반
+  _description: 정적 엑셀 source — data/printcity/flyer2.xlsx (사이즈별 연 단위 가격표)
   sources:
-  - data/printcity/flyer.xlsx
+  - data/printcity/flyer2.xlsx
   filters_applied:
-    qty_mae:
-    - 500
-    - 1000
-    - 2000
-    size:
-    - A4
-    - A3
-    - A2
-    - B5
-    - B4
-    - B3
+    qty_targets_by_size:
+      A4:
+      - 2000
+      - 4000
+      A3:
+      - 2000
+      A2:
+      - 4000
+      B5:
+      - 8000
+      B4:
+      - 4000
+      B3:
+      - 8000
     paper:
-    - 아트지 90g
-    - 모조지 80g
+    - 아트-90g
+    - 모조-80g
     color:
     - 단면4도
     - 양면8도
   price_vat_included: false
-  generated_at: 2026-05-04 10:50
+  generated_at: 2026-05-21 11:14
   items:
   - product: 합판전단
     paper: 아트-90g
@@ -31,31 +34,31 @@ printcity:
     size: A4
     size_code: SIZ:LEJ-A4
     size_label: A4 국8절(210x297)
-    qty: 500
-    qty_yeon: 1
+    qty: 2000
+    qty_yeon: 0.5
+    price: 27000
+  - product: 합판전단
+    paper: 아트-90g
+    paper_code: MAT:ART-90
+    color_mode: 단면4도
+    color_code: COL:40
+    size: A4
+    size_code: SIZ:LEJ-A4
+    size_label: A4 국8절(210x297)
+    qty: 4000
+    qty_yeon: 1.0
     price: 42000
   - product: 합판전단
     paper: 아트-90g
     paper_code: MAT:ART-90
-    color_mode: 단면4도
-    color_code: COL:40
-    size: A4
-    size_code: SIZ:LEJ-A4
-    size_label: A4 국8절(210x297)
-    qty: 1000
-    qty_yeon: 2
-    price: 84000
-  - product: 합판전단
-    paper: 아트-90g
-    paper_code: MAT:ART-90
-    color_mode: 단면4도
-    color_code: COL:40
+    color_mode: 양면8도
+    color_code: COL:44
     size: A4
     size_code: SIZ:LEJ-A4
     size_label: A4 국8절(210x297)
     qty: 2000
-    qty_yeon: 4
-    price: 168000
+    qty_yeon: 0.5
+    price: 37000
   - product: 합판전단
     paper: 아트-90g
     paper_code: MAT:ART-90
@@ -64,361 +67,9 @@ printcity:
     size: A4
     size_code: SIZ:LEJ-A4
     size_label: A4 국8절(210x297)
-    qty: 500
-    qty_yeon: 1
+    qty: 4000
+    qty_yeon: 1.0
     price: 52000
-  - product: 합판전단
-    paper: 아트-90g
-    paper_code: MAT:ART-90
-    color_mode: 양면8도
-    color_code: COL:44
-    size: A4
-    size_code: SIZ:LEJ-A4
-    size_label: A4 국8절(210x297)
-    qty: 1000
-    qty_yeon: 2
-    price: 104000
-  - product: 합판전단
-    paper: 아트-90g
-    paper_code: MAT:ART-90
-    color_mode: 양면8도
-    color_code: COL:44
-    size: A4
-    size_code: SIZ:LEJ-A4
-    size_label: A4 국8절(210x297)
-    qty: 2000
-    qty_yeon: 4
-    price: 208000
-  - product: 합판전단
-    paper: 아트-90g
-    paper_code: MAT:ART-90
-    color_mode: 단면4도
-    color_code: COL:40
-    size: A3
-    size_code: SIZ:LEJ-A3
-    size_label: A3 국4절(297x420)
-    qty: 500
-    qty_yeon: 1
-    price: 53000
-  - product: 합판전단
-    paper: 아트-90g
-    paper_code: MAT:ART-90
-    color_mode: 단면4도
-    color_code: COL:40
-    size: A3
-    size_code: SIZ:LEJ-A3
-    size_label: A3 국4절(297x420)
-    qty: 1000
-    qty_yeon: 2
-    price: 84000
-  - product: 합판전단
-    paper: 아트-90g
-    paper_code: MAT:ART-90
-    color_mode: 단면4도
-    color_code: COL:40
-    size: A3
-    size_code: SIZ:LEJ-A3
-    size_label: A3 국4절(297x420)
-    qty: 2000
-    qty_yeon: 4
-    price: 168000
-  - product: 합판전단
-    paper: 아트-90g
-    paper_code: MAT:ART-90
-    color_mode: 양면8도
-    color_code: COL:44
-    size: A3
-    size_code: SIZ:LEJ-A3
-    size_label: A3 국4절(297x420)
-    qty: 500
-    qty_yeon: 1
-    price: 76000
-  - product: 합판전단
-    paper: 아트-90g
-    paper_code: MAT:ART-90
-    color_mode: 양면8도
-    color_code: COL:44
-    size: A3
-    size_code: SIZ:LEJ-A3
-    size_label: A3 국4절(297x420)
-    qty: 1000
-    qty_yeon: 2
-    price: 104000
-  - product: 합판전단
-    paper: 아트-90g
-    paper_code: MAT:ART-90
-    color_mode: 양면8도
-    color_code: COL:44
-    size: A3
-    size_code: SIZ:LEJ-A3
-    size_label: A3 국4절(297x420)
-    qty: 2000
-    qty_yeon: 4
-    price: 208000
-  - product: 합판전단
-    paper: 아트-90g
-    paper_code: MAT:ART-90
-    color_mode: 단면4도
-    color_code: COL:40
-    size: A2
-    size_code: SIZ:LEJ-A2
-    size_label: A2 국2절(420x597)
-    qty: 500
-    qty_yeon: 1
-    price: null
-  - product: 합판전단
-    paper: 아트-90g
-    paper_code: MAT:ART-90
-    color_mode: 단면4도
-    color_code: COL:40
-    size: A2
-    size_code: SIZ:LEJ-A2
-    size_label: A2 국2절(420x597)
-    qty: 1000
-    qty_yeon: 2
-    price: null
-  - product: 합판전단
-    paper: 아트-90g
-    paper_code: MAT:ART-90
-    color_mode: 단면4도
-    color_code: COL:40
-    size: A2
-    size_code: SIZ:LEJ-A2
-    size_label: A2 국2절(420x597)
-    qty: 2000
-    qty_yeon: 4
-    price: 168000
-  - product: 합판전단
-    paper: 아트-90g
-    paper_code: MAT:ART-90
-    color_mode: 양면8도
-    color_code: COL:44
-    size: A2
-    size_code: SIZ:LEJ-A2
-    size_label: A2 국2절(420x597)
-    qty: 500
-    qty_yeon: 1
-    price: null
-  - product: 합판전단
-    paper: 아트-90g
-    paper_code: MAT:ART-90
-    color_mode: 양면8도
-    color_code: COL:44
-    size: A2
-    size_code: SIZ:LEJ-A2
-    size_label: A2 국2절(420x597)
-    qty: 1000
-    qty_yeon: 2
-    price: null
-  - product: 합판전단
-    paper: 아트-90g
-    paper_code: MAT:ART-90
-    color_mode: 양면8도
-    color_code: COL:44
-    size: A2
-    size_code: SIZ:LEJ-A2
-    size_label: A2 국2절(420x597)
-    qty: 2000
-    qty_yeon: 4
-    price: 208000
-  - product: 합판전단
-    paper: 아트-90g
-    paper_code: MAT:ART-90
-    color_mode: 단면4도
-    color_code: COL:40
-    size: B5
-    size_code: SIZ:LEJ-B5
-    size_label: B5 16절(182x257)
-    qty: 500
-    qty_yeon: 1
-    price: 62000
-  - product: 합판전단
-    paper: 아트-90g
-    paper_code: MAT:ART-90
-    color_mode: 단면4도
-    color_code: COL:40
-    size: B5
-    size_code: SIZ:LEJ-B5
-    size_label: B5 16절(182x257)
-    qty: 1000
-    qty_yeon: 2
-    price: 124000
-  - product: 합판전단
-    paper: 아트-90g
-    paper_code: MAT:ART-90
-    color_mode: 단면4도
-    color_code: COL:40
-    size: B5
-    size_code: SIZ:LEJ-B5
-    size_label: B5 16절(182x257)
-    qty: 2000
-    qty_yeon: 4
-    price: 248000
-  - product: 합판전단
-    paper: 아트-90g
-    paper_code: MAT:ART-90
-    color_mode: 양면8도
-    color_code: COL:44
-    size: B5
-    size_code: SIZ:LEJ-B5
-    size_label: B5 16절(182x257)
-    qty: 500
-    qty_yeon: 1
-    price: 71000
-  - product: 합판전단
-    paper: 아트-90g
-    paper_code: MAT:ART-90
-    color_mode: 양면8도
-    color_code: COL:44
-    size: B5
-    size_code: SIZ:LEJ-B5
-    size_label: B5 16절(182x257)
-    qty: 1000
-    qty_yeon: 2
-    price: 142000
-  - product: 합판전단
-    paper: 아트-90g
-    paper_code: MAT:ART-90
-    color_mode: 양면8도
-    color_code: COL:44
-    size: B5
-    size_code: SIZ:LEJ-B5
-    size_label: B5 16절(182x257)
-    qty: 2000
-    qty_yeon: 4
-    price: 284000
-  - product: 합판전단
-    paper: 아트-90g
-    paper_code: MAT:ART-90
-    color_mode: 단면4도
-    color_code: COL:40
-    size: B4
-    size_code: SIZ:LEJ-B4
-    size_label: B4 8절(257x367)
-    qty: 500
-    qty_yeon: 1
-    price: 78000
-  - product: 합판전단
-    paper: 아트-90g
-    paper_code: MAT:ART-90
-    color_mode: 단면4도
-    color_code: COL:40
-    size: B4
-    size_code: SIZ:LEJ-B4
-    size_label: B4 8절(257x367)
-    qty: 1000
-    qty_yeon: 2
-    price: 124000
-  - product: 합판전단
-    paper: 아트-90g
-    paper_code: MAT:ART-90
-    color_mode: 단면4도
-    color_code: COL:40
-    size: B4
-    size_code: SIZ:LEJ-B4
-    size_label: B4 8절(257x367)
-    qty: 2000
-    qty_yeon: 4
-    price: 248000
-  - product: 합판전단
-    paper: 아트-90g
-    paper_code: MAT:ART-90
-    color_mode: 양면8도
-    color_code: COL:44
-    size: B4
-    size_code: SIZ:LEJ-B4
-    size_label: B4 8절(257x367)
-    qty: 500
-    qty_yeon: 1
-    price: 100000
-  - product: 합판전단
-    paper: 아트-90g
-    paper_code: MAT:ART-90
-    color_mode: 양면8도
-    color_code: COL:44
-    size: B4
-    size_code: SIZ:LEJ-B4
-    size_label: B4 8절(257x367)
-    qty: 1000
-    qty_yeon: 2
-    price: 142000
-  - product: 합판전단
-    paper: 아트-90g
-    paper_code: MAT:ART-90
-    color_mode: 양면8도
-    color_code: COL:44
-    size: B4
-    size_code: SIZ:LEJ-B4
-    size_label: B4 8절(257x367)
-    qty: 2000
-    qty_yeon: 4
-    price: 284000
-  - product: 합판전단
-    paper: 아트-90g
-    paper_code: MAT:ART-90
-    color_mode: 단면4도
-    color_code: COL:40
-    size: B3
-    size_code: SIZ:LEJ-B3
-    size_label: B3 4절(367x517)
-    qty: 500
-    qty_yeon: 1
-    price: null
-  - product: 합판전단
-    paper: 아트-90g
-    paper_code: MAT:ART-90
-    color_mode: 단면4도
-    color_code: COL:40
-    size: B3
-    size_code: SIZ:LEJ-B3
-    size_label: B3 4절(367x517)
-    qty: 1000
-    qty_yeon: 2
-    price: null
-  - product: 합판전단
-    paper: 아트-90g
-    paper_code: MAT:ART-90
-    color_mode: 단면4도
-    color_code: COL:40
-    size: B3
-    size_code: SIZ:LEJ-B3
-    size_label: B3 4절(367x517)
-    qty: 2000
-    qty_yeon: 4
-    price: 248000
-  - product: 합판전단
-    paper: 아트-90g
-    paper_code: MAT:ART-90
-    color_mode: 양면8도
-    color_code: COL:44
-    size: B3
-    size_code: SIZ:LEJ-B3
-    size_label: B3 4절(367x517)
-    qty: 500
-    qty_yeon: 1
-    price: null
-  - product: 합판전단
-    paper: 아트-90g
-    paper_code: MAT:ART-90
-    color_mode: 양면8도
-    color_code: COL:44
-    size: B3
-    size_code: SIZ:LEJ-B3
-    size_label: B3 4절(367x517)
-    qty: 1000
-    qty_yeon: 2
-    price: null
-  - product: 합판전단
-    paper: 아트-90g
-    paper_code: MAT:ART-90
-    color_mode: 양면8도
-    color_code: COL:44
-    size: B3
-    size_code: SIZ:LEJ-B3
-    size_label: B3 4절(367x517)
-    qty: 2000
-    qty_yeon: 4
-    price: 284000
   - product: 합판전단
     paper: 모조-80g
     paper_code: MAT:MOJ-80
@@ -427,64 +78,42 @@ printcity:
     size: A4
     size_code: SIZ:LEJ-A4
     size_label: A4 국8절(210x297)
-    qty: 500
-    qty_yeon: 1
+    qty: 4000
+    qty_yeon: 1.0
     price: 50600
   - product: 합판전단
     paper: 모조-80g
     paper_code: MAT:MOJ-80
-    color_mode: 단면4도
-    color_code: COL:40
-    size: A4
-    size_code: SIZ:LEJ-A4
-    size_label: A4 국8절(210x297)
-    qty: 1000
-    qty_yeon: 2
-    price: 101200
-  - product: 합판전단
-    paper: 모조-80g
-    paper_code: MAT:MOJ-80
-    color_mode: 단면4도
-    color_code: COL:40
-    size: A4
-    size_code: SIZ:LEJ-A4
-    size_label: A4 국8절(210x297)
-    qty: 2000
-    qty_yeon: 4
-    price: 202400
-  - product: 합판전단
-    paper: 모조-80g
-    paper_code: MAT:MOJ-80
     color_mode: 양면8도
     color_code: COL:44
     size: A4
     size_code: SIZ:LEJ-A4
     size_label: A4 국8절(210x297)
-    qty: 500
-    qty_yeon: 1
+    qty: 4000
+    qty_yeon: 1.0
     price: 58300
   - product: 합판전단
-    paper: 모조-80g
-    paper_code: MAT:MOJ-80
-    color_mode: 양면8도
-    color_code: COL:44
-    size: A4
-    size_code: SIZ:LEJ-A4
-    size_label: A4 국8절(210x297)
-    qty: 1000
-    qty_yeon: 2
-    price: 116600
-  - product: 합판전단
-    paper: 모조-80g
-    paper_code: MAT:MOJ-80
-    color_mode: 양면8도
-    color_code: COL:44
-    size: A4
-    size_code: SIZ:LEJ-A4
-    size_label: A4 국8절(210x297)
+    paper: 아트-90g
+    paper_code: MAT:ART-90
+    color_mode: 단면4도
+    color_code: COL:40
+    size: A3
+    size_code: SIZ:LEJ-A3
+    size_label: A3 국4절(297x420)
     qty: 2000
-    qty_yeon: 4
-    price: 233200
+    qty_yeon: 1.0
+    price: 53000
+  - product: 합판전단
+    paper: 아트-90g
+    paper_code: MAT:ART-90
+    color_mode: 양면8도
+    color_code: COL:44
+    size: A3
+    size_code: SIZ:LEJ-A3
+    size_label: A3 국4절(297x420)
+    qty: 2000
+    qty_yeon: 1.0
+    price: 76000
   - product: 합판전단
     paper: 모조-80g
     paper_code: MAT:MOJ-80
@@ -493,64 +122,64 @@ printcity:
     size: A3
     size_code: SIZ:LEJ-A3
     size_label: A3 국4절(297x420)
-    qty: 500
-    qty_yeon: 1
+    qty: 2000
+    qty_yeon: 1.0
     price: 86000
   - product: 합판전단
     paper: 모조-80g
     paper_code: MAT:MOJ-80
-    color_mode: 단면4도
-    color_code: COL:40
-    size: A3
-    size_code: SIZ:LEJ-A3
-    size_label: A3 국4절(297x420)
-    qty: 1000
-    qty_yeon: 2
-    price: 101200
-  - product: 합판전단
-    paper: 모조-80g
-    paper_code: MAT:MOJ-80
-    color_mode: 단면4도
-    color_code: COL:40
-    size: A3
-    size_code: SIZ:LEJ-A3
-    size_label: A3 국4절(297x420)
-    qty: 2000
-    qty_yeon: 4
-    price: 202400
-  - product: 합판전단
-    paper: 모조-80g
-    paper_code: MAT:MOJ-80
     color_mode: 양면8도
     color_code: COL:44
     size: A3
     size_code: SIZ:LEJ-A3
     size_label: A3 국4절(297x420)
-    qty: 500
-    qty_yeon: 1
+    qty: 2000
+    qty_yeon: 1.0
     price: 99000
   - product: 합판전단
-    paper: 모조-80g
-    paper_code: MAT:MOJ-80
-    color_mode: 양면8도
-    color_code: COL:44
-    size: A3
-    size_code: SIZ:LEJ-A3
-    size_label: A3 국4절(297x420)
-    qty: 1000
-    qty_yeon: 2
-    price: 116600
+    paper: 아트-90g
+    paper_code: MAT:ART-90
+    color_mode: 단면4도
+    color_code: COL:40
+    size: A2
+    size_code: SIZ:LEJ-A2
+    size_label: A2 국2절(420x597)
+    qty: 4000
+    qty_yeon: 4.0
+    price: 168000
   - product: 합판전단
-    paper: 모조-80g
-    paper_code: MAT:MOJ-80
+    paper: 아트-90g
+    paper_code: MAT:ART-90
     color_mode: 양면8도
     color_code: COL:44
-    size: A3
-    size_code: SIZ:LEJ-A3
-    size_label: A3 국4절(297x420)
-    qty: 2000
-    qty_yeon: 4
-    price: 233200
+    size: A2
+    size_code: SIZ:LEJ-A2
+    size_label: A2 국2절(420x597)
+    qty: 4000
+    qty_yeon: 4.0
+    price: 208000
+  - product: 합판전단
+    paper: 아트-90g
+    paper_code: MAT:ART-90
+    color_mode: 단면4도
+    color_code: COL:40
+    size: B5
+    size_code: SIZ:LEJ-B5
+    size_label: B5 16절(182x257)
+    qty: 8000
+    qty_yeon: 1.0
+    price: 62000
+  - product: 합판전단
+    paper: 아트-90g
+    paper_code: MAT:ART-90
+    color_mode: 양면8도
+    color_code: COL:44
+    size: B5
+    size_code: SIZ:LEJ-B5
+    size_label: B5 16절(182x257)
+    qty: 8000
+    qty_yeon: 1.0
+    price: 71000
   - product: 합판전단
     paper: 모조-80g
     paper_code: MAT:MOJ-80
@@ -559,64 +188,42 @@ printcity:
     size: B5
     size_code: SIZ:LEJ-B5
     size_label: B5 16절(182x257)
-    qty: 500
-    qty_yeon: 1
+    qty: 8000
+    qty_yeon: 1.0
     price: 63800
   - product: 합판전단
     paper: 모조-80g
     paper_code: MAT:MOJ-80
-    color_mode: 단면4도
-    color_code: COL:40
-    size: B5
-    size_code: SIZ:LEJ-B5
-    size_label: B5 16절(182x257)
-    qty: 1000
-    qty_yeon: 2
-    price: 127600
-  - product: 합판전단
-    paper: 모조-80g
-    paper_code: MAT:MOJ-80
-    color_mode: 단면4도
-    color_code: COL:40
-    size: B5
-    size_code: SIZ:LEJ-B5
-    size_label: B5 16절(182x257)
-    qty: 2000
-    qty_yeon: 4
-    price: 255200
-  - product: 합판전단
-    paper: 모조-80g
-    paper_code: MAT:MOJ-80
     color_mode: 양면8도
     color_code: COL:44
     size: B5
     size_code: SIZ:LEJ-B5
     size_label: B5 16절(182x257)
-    qty: 500
-    qty_yeon: 1
+    qty: 8000
+    qty_yeon: 1.0
     price: 74800
   - product: 합판전단
-    paper: 모조-80g
-    paper_code: MAT:MOJ-80
-    color_mode: 양면8도
-    color_code: COL:44
-    size: B5
-    size_code: SIZ:LEJ-B5
-    size_label: B5 16절(182x257)
-    qty: 1000
-    qty_yeon: 2
-    price: 149600
+    paper: 아트-90g
+    paper_code: MAT:ART-90
+    color_mode: 단면4도
+    color_code: COL:40
+    size: B4
+    size_code: SIZ:LEJ-B4
+    size_label: B4 8절(257x367)
+    qty: 4000
+    qty_yeon: 1.0
+    price: 78000
   - product: 합판전단
-    paper: 모조-80g
-    paper_code: MAT:MOJ-80
+    paper: 아트-90g
+    paper_code: MAT:ART-90
     color_mode: 양면8도
     color_code: COL:44
-    size: B5
-    size_code: SIZ:LEJ-B5
-    size_label: B5 16절(182x257)
-    qty: 2000
-    qty_yeon: 4
-    price: 299200
+    size: B4
+    size_code: SIZ:LEJ-B4
+    size_label: B4 8절(257x367)
+    qty: 4000
+    qty_yeon: 1.0
+    price: 100000
   - product: 합판전단
     paper: 모조-80g
     paper_code: MAT:MOJ-80
@@ -625,71 +232,54 @@ printcity:
     size: B4
     size_code: SIZ:LEJ-B4
     size_label: B4 8절(257x367)
-    qty: 500
-    qty_yeon: 1
+    qty: 4000
+    qty_yeon: 1.0
     price: 91300
   - product: 합판전단
     paper: 모조-80g
     paper_code: MAT:MOJ-80
-    color_mode: 단면4도
-    color_code: COL:40
-    size: B4
-    size_code: SIZ:LEJ-B4
-    size_label: B4 8절(257x367)
-    qty: 1000
-    qty_yeon: 2
-    price: 127600
-  - product: 합판전단
-    paper: 모조-80g
-    paper_code: MAT:MOJ-80
-    color_mode: 단면4도
-    color_code: COL:40
-    size: B4
-    size_code: SIZ:LEJ-B4
-    size_label: B4 8절(257x367)
-    qty: 2000
-    qty_yeon: 4
-    price: 255200
-  - product: 합판전단
-    paper: 모조-80g
-    paper_code: MAT:MOJ-80
     color_mode: 양면8도
     color_code: COL:44
     size: B4
     size_code: SIZ:LEJ-B4
     size_label: B4 8절(257x367)
-    qty: 500
-    qty_yeon: 1
+    qty: 4000
+    qty_yeon: 1.0
     price: 113300
   - product: 합판전단
-    paper: 모조-80g
-    paper_code: MAT:MOJ-80
-    color_mode: 양면8도
-    color_code: COL:44
-    size: B4
-    size_code: SIZ:LEJ-B4
-    size_label: B4 8절(257x367)
-    qty: 1000
-    qty_yeon: 2
-    price: 149600
+    paper: 아트-90g
+    paper_code: MAT:ART-90
+    color_mode: 단면4도
+    color_code: COL:40
+    size: B3
+    size_code: SIZ:LEJ-B3
+    size_label: B3 4절(367x517)
+    qty: 8000
+    qty_yeon: 4.0
+    price: 248000
   - product: 합판전단
-    paper: 모조-80g
-    paper_code: MAT:MOJ-80
+    paper: 아트-90g
+    paper_code: MAT:ART-90
     color_mode: 양면8도
     color_code: COL:44
-    size: B4
-    size_code: SIZ:LEJ-B4
-    size_label: B4 8절(257x367)
-    qty: 2000
-    qty_yeon: 4
-    price: 299200
+    size: B3
+    size_code: SIZ:LEJ-B3
+    size_label: B3 4절(367x517)
+    qty: 8000
+    qty_yeon: 4.0
+    price: 284000
 dtpia:
 - product_name: 합판전단
   category: 합판전단
   url: https://dtpia.co.kr/Order/Flyer/Happan.aspx
   page_type: dtpia_sdiv
-  qty_value: '0.5'
-  qty_mae: 2000
+  qty_targets_by_size:    # 어댑터가 ream_cn dropdown 에서 매수 환산해 가까운 R 선택
+    A4: [2000, 4000]
+    A3: [2000]
+    A2: [4000]
+    B5: [8000]            # ★ B5 가용 여부 사이트 검증 필요
+    B4: [4000]
+    B3: [8000]
   color_modes:
   - value: '4'
     name: 단면4도
@@ -711,6 +301,9 @@ dtpia:
   - sdiv: B
     sdiv_cd: B081
     size_label: B4
+  - sdiv: B
+    sdiv_cd: B161           # ★ B5 (16절) — sdiv_cd 추정값, 실증 후 보정
+    size_label: B5
   papers:
   - mtrl_cd: RAT100
     paper_name_out: 아트지 90g
@@ -727,8 +320,13 @@ swadpia:
   category: 합판전단
   url: https://www.swadpia.co.kr/goods/goods_view/CLF1000/GLF1001
   page_type: swadpia_fside_bside
-  qty_value: '2000'
-  qty_mae: 2000
+  qty_targets_by_size:    # 어댑터가 paper_qty dropdown 옵션에서 매수 직접 매칭
+    A4: [2000, 4000]
+    A3: [2000]
+    A2: [4000]
+    B5: [8000]            # ★ paper_size B0500 추정값, 실증 후 보정
+    B4: [4000]
+    B3: [8000]
   color_modes:
   - name: 단면4도
     fside_color_amount: '4'
@@ -747,6 +345,8 @@ swadpia:
     size_label: B3
   - paper_size: B0400
     size_label: B4
+  - paper_size: B0500       # ★ B5 (16절) — paper_size 추정값, 실증 후 보정
+    size_label: B5
   paper_combos:
   - paper_type: ART
     paper_code: ART090W00
@@ -781,8 +381,13 @@ wowpress:
   url: https://wowpress.co.kr/ordr/prod/dets?ProdNo=40026
   prod_no: '40026'
   page_type: wowpress_paper_tree
-  qty_value: '4'
-  qty_mae: 2000
+  qty_targets_by_size:    # 어댑터가 매수 → 연 환산 후 ordqty dropdown 가장 가까운 옵션 선택
+    A4: [2000, 4000]
+    A3: [2000]
+    A2: [4000]
+    B4: [4000]
+    B3: [8000]
+    # B5: [8000] — sizeno 미확인, 사이트 검증 후 추가
   color_modes:
   - value: '255'
     name: 단면 칼라4도
@@ -810,8 +415,13 @@ adsland:
   url: https://www.adsland.com/shop/order.php?IC=IC00023
   ic: IC00023
   page_type: adsland_paper
-  qty_value: '2000'
-  qty_mae: 2000
+  qty_targets_by_size:    # 어댑터가 busu 옵션 텍스트의 '장' 매수로 가장 가까운 옵션 선택
+    A4: [2000, 4000]
+    A3: [2000]
+    A2: [4000]
+    B5: [8000]            # ★ size value 'B5' 추정, 실증 후 보정
+    B4: [4000]
+    B3: [8000]
   color_modes:
   - value: 4/0
     name: 단면4도
@@ -828,6 +438,8 @@ adsland:
     size_label: B3
   - value: B4
     size_label: B4
+  - value: B5             # ★ B5 (16절) — value 추정값, 실증 후 보정
+    size_label: B5
   papers:
   - paper_value: 80 모조
     paper_name_out: 모조지 80g
